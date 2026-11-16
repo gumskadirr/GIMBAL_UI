@@ -79,6 +79,7 @@ target_include_directories(ids_gimbal
 )
 
 target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2)
+target_compile_definitions(ids_gimbal PRIVATE IDS_GIMBAL_VERSION="${PROJECT_VERSION}")
 
 # Inter and JetBrains Mono (SIL OFL 1.1, license texts next to the files), loaded by loadAppFonts().
 qt_add_resources(ids_gimbal "fonts"

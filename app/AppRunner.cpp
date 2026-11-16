@@ -16,6 +16,7 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
 {
     QCoreApplication::setOrganizationName(QStringLiteral("IDS"));
     QCoreApplication::setApplicationName(config.applicationName);
+    QCoreApplication::setApplicationVersion(QStringLiteral(IDS_GIMBAL_VERSION)); // shown as GUI version
 
     // Basic is the fixed base style; light/blue/dark is handled by Theme, never by switching styles.
     QQuickStyle::setStyle(QStringLiteral("Basic"));

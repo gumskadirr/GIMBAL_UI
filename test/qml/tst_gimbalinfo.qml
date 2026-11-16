@@ -47,7 +47,8 @@ TestCase {
     function test_commandsDisabledWithoutProtocol() {
         const page = createTemporaryObject(pageComponent, testCase)
         testHelper.connectWithFullSample()
-        for (const id of ["askBootloader", "exitBootloader", "startBootBridge"]) {
+        for (const id of ["askBootloader", "exitBootloader", "startBootBridge", "openFirmware",
+                          "updateFirmware", "runBit"]) {
             const button = findChild(page, "command-" + id)
             verify(button, id)
             verify(!button.enabled, id)
