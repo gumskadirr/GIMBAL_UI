@@ -9,8 +9,11 @@ Item {
     required property DeviceViewModel viewModel
     property bool pageActive: false
     property string sampleAge: ""
+    implicitWidth: content.implicitWidth   // page roots report their size (Main.qml scrolls on it)
+    implicitHeight: content.implicitHeight
 
     ColumnLayout {
+        id: content
         anchors.left: parent.left
         anchors.top: parent.top
         spacing: Theme.spacingNormal
