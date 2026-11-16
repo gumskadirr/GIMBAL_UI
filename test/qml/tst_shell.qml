@@ -33,6 +33,36 @@ TestCase {
         testSettings.theme = "dark"
     }
 
+    // Option 2 (plan adim-08): Gimbal info keeps the reference layout and shrinks uniformly to fit a maximized
+    // window; small pages are not scaled.
+    function test_referencePageScalesToFit_data() {
+        return [
+            { tag: "1080p@125%", w: 1536, h: 786 },
+            { tag: "1080p@100%", w: 1920, h: 1050 }
+        ]
+    }
+
+    function test_referencePageScalesToFit(data) {
+        const main = createMain(true)
+        main.visibility = Window.Windowed
+        main.width = data.w
+        main.height = data.h
+        const loader = findChild(main.contentItem, "page-gimbalInfo")
+        tryVerify(() => loader.item !== null && loader.parent.height > 0)
+        waitForPolish(loader.item)
+        const slot = loader.parent
+        verify(loader.scale <= 1)
+        compare(loader.height * loader.scale, slot.height) // whole page in the area
+        // the page's own scroller is not needed: the bottom card is inside the scaled page
+        const runBit = findChild(loader.item, "command-runBit")
+        let scroller = runBit.parent
+        while (scroller && !(scroller instanceof Flickable))
+            scroller = scroller.parent
+        verify(scroller.contentHeight <= scroller.height + 0.5,
+               "needs " + scroller.contentHeight + ", has " + scroller.height)
+        compare(findChild(main.contentItem, "page-preferences").scale, 1)
+    }
+
     function test_demoOnlyPageHiddenInRealTarget() {
         const real = createMain(false)
         compare(real.pages.map(page => page.id), ["gimbalInfo", "preferences"])

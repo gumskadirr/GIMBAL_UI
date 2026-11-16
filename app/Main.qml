@@ -16,8 +16,9 @@ ApplicationWindow {
     // Titles are bindings and follow language changes. The views use pages.length as their model, so a
     // language change does not recreate the pages.
     readonly property var pages: [
+        // designHeight: page height of the reference design (1080 artboard minus frame); see the page host below.
         { id: "gimbalInfo", group: qsTr("Board"), title: qsTr("Gimbal info"), icon: Icons.info,
-          component: gimbalInfoPage },
+          component: gimbalInfoPage, designHeight: 937 },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
@@ -31,6 +32,7 @@ ApplicationWindow {
     height: 800
     minimumWidth: 800
     minimumHeight: 560
+    visibility: Window.Maximized // a fixed 1280x800 window does not fit 1080p at 125 %
     visible: true
     title: qsTr("IDS Gimbal")
     color: Theme.bg
@@ -201,10 +203,23 @@ ApplicationWindow {
             currentIndex: window.currentIndex
             Repeater {
                 model: window.pages.length
-                Loader {
+                // A page with designHeight keeps the reference layout: it is laid out at least that tall and,
+                // when the area is shorter, shrunk uniformly (never enlarged). The scale depends only on the
+                // height, so the wider layout it causes cannot feed back into it.
+                Item {
+                    id: pageSlot
                     required property int index
-                    objectName: "page-" + window.pages[index].id
-                    sourceComponent: window.pages[index].component
+                    readonly property real designHeight: window.pages[index].designHeight ?? 0
+                    readonly property real fit: designHeight > 0 && height > 0 ? Math.min(1, height / designHeight) : 1
+
+                    Loader {
+                        objectName: "page-" + window.pages[pageSlot.index].id
+                        width: pageSlot.width / pageSlot.fit
+                        height: pageSlot.height / pageSlot.fit
+                        scale: pageSlot.fit
+                        transformOrigin: Item.TopLeft
+                        sourceComponent: window.pages[pageSlot.index].component
+                    }
                 }
             }
         }
