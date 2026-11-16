@@ -27,13 +27,10 @@ ApplicationWindow {
     readonly property int currentIndex: Math.max(0, pages.findIndex(page => page.id === window.currentPageId))
     readonly property string activePageId: pages[currentIndex].id
 
-    // Screen target: pages fit without scrolling at 1536x816 (1080p at 125 %); smaller screens scroll.
-    // Sizes are logical pixels: Qt applies the OS scale factor, so nothing here depends on the screen.
     width: 1280
-    height: 720
-    minimumWidth: 1024
-    minimumHeight: 600
-    visibility: Window.Maximized
+    height: 800
+    minimumWidth: 800
+    minimumHeight: 560
     visible: true
     title: qsTr("IDS Gimbal")
     color: Theme.bg
@@ -204,25 +201,10 @@ ApplicationWindow {
             currentIndex: window.currentIndex
             Repeater {
                 model: window.pages.length
-                // Every page scrolls when its implicitHeight is larger than the window; otherwise it gets the
-                // full height (Layout.fillHeight children expand). Page roots must report implicitHeight.
-                Flickable {
-                    id: pageScroller
+                Loader {
                     required property int index
-                    objectName: "scroller-" + window.pages[index].id
-                    contentWidth: width
-                    contentHeight: Math.max(height, pageLoader.implicitHeight)
-                    boundsBehavior: Flickable.StopAtBounds
-                    clip: true
-                    ScrollBar.vertical: ScrollBar {}
-
-                    Loader {
-                        id: pageLoader
-                        objectName: "page-" + window.pages[pageScroller.index].id
-                        width: pageScroller.width
-                        height: pageScroller.contentHeight
-                        sourceComponent: window.pages[pageScroller.index].component
-                    }
+                    objectName: "page-" + window.pages[index].id
+                    sourceComponent: window.pages[index].component
                 }
             }
         }

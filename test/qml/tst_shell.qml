@@ -33,35 +33,6 @@ TestCase {
         testSettings.theme = "dark"
     }
 
-    // Screen target (plan adim-08): client area of a maximized window on 1080p at 125 % fits every page
-    // without scrolling; on 1080p at 150 % pages may scroll but never overflow sideways.
-    function test_pagesFitScreenTarget_data() {
-        return [
-            { tag: "1080p@125%", w: 1536, h: 786, mayScroll: false },
-            { tag: "1080p@150%", w: 1280, h: 690, mayScroll: true }
-        ]
-    }
-
-    function test_pagesFitScreenTarget(data) {
-        const main = createMain(true)
-        main.visibility = Window.Windowed
-        main.width = data.w
-        main.height = data.h
-        for (const page of main.pages) {
-            main.currentPageId = page.id
-            const scroller = findChild(main.contentItem, "scroller-" + page.id)
-            const loader = findChild(main.contentItem, "page-" + page.id)
-            tryVerify(() => scroller.width > 0 && loader.item !== null)
-            waitForPolish(loader.item)
-            verify(loader.implicitHeight > 0, page.id + ": page root must report implicitHeight")
-            if (!data.mayScroll)
-                verify(loader.implicitHeight <= scroller.height + 0.5,
-                       page.id + ": needs " + loader.implicitHeight + " px, has " + scroller.height)
-            verify(loader.item.implicitWidth <= scroller.width + 0.5,
-                   page.id + ": needs " + loader.item.implicitWidth + " px wide, has " + scroller.width)
-        }
-    }
-
     function test_demoOnlyPageHiddenInRealTarget() {
         const real = createMain(false)
         compare(real.pages.map(page => page.id), ["gimbalInfo", "preferences"])

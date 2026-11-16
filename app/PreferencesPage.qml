@@ -8,11 +8,8 @@ Item {
     id: page
     required property AppSettings settings
     required property Localization localization
-    implicitWidth: content.implicitWidth   // page roots report their size (Main.qml scrolls on it)
-    implicitHeight: content.implicitHeight
 
     ColumnLayout {
-        id: content
         anchors.left: parent.left
         anchors.top: parent.top
         spacing: Theme.spacingLarge
