@@ -16,6 +16,8 @@ ApplicationWindow {
     // Titles are bindings and follow language changes. The views use pages.length as their model, so a
     // language change does not recreate the pages.
     readonly property var pages: [
+        { id: "gimbalInfo", group: qsTr("Board"), title: qsTr("Gimbal info"), icon: Icons.info,
+          component: gimbalInfoPage },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
@@ -39,6 +41,12 @@ ApplicationWindow {
         value: window.settings.theme
     }
 
+    Component {
+        id: gimbalInfoPage
+        GimbalInfoPage {
+            viewModel: window.deviceViewModel
+        }
+    }
     Component {
         id: diagnosticsPage
         DiagnosticsPage {

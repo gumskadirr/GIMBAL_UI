@@ -27,8 +27,8 @@ private slots:
     {
         Fixture f;
         QVERIFY(!f.vm.connected());
-        QVERIFY(!f.vm.angleValid());
-        QVERIFY(!f.vm.temperatureValid());
+        QVERIFY(!f.vm.pan().valid);
+        QVERIFY(!f.vm.gimbalTemp().valid);
         QCOMPARE(f.vm.connectionText(), QStringLiteral("Disconnected"));
         QCOMPARE(f.vm.msSinceLastSample(), -1);
     }
@@ -39,9 +39,9 @@ private slots:
         f.connect();
         QVERIFY(f.vm.connected());
         emit f.fake->sampleReceived(1, makeSample(12.5, true, 0, false));
-        QCOMPARE(f.vm.angleDeg(), 12.5);
-        QVERIFY(f.vm.angleValid());
-        QVERIFY(!f.vm.temperatureValid()); // invalid reading is not shown as 0
+        QCOMPARE(f.vm.pan().value, 12.5);
+        QVERIFY(f.vm.pan().valid);
+        QVERIFY(!f.vm.gimbalTemp().valid); // invalid reading is not shown as 0
         QVERIFY(f.vm.msSinceLastSample() >= 0);
     }
 
@@ -51,8 +51,8 @@ private slots:
         f.connect();
         emit f.fake->sampleReceived(1, makeSample(5, true, 30, true));
         f.vm.connectDevice();
-        QVERIFY(!f.vm.angleValid());
-        QVERIFY(!f.vm.temperatureValid());
+        QVERIFY(!f.vm.pan().valid);
+        QVERIFY(!f.vm.gimbalTemp().valid);
         QVERIFY(f.vm.busy());
     }
 
@@ -62,7 +62,7 @@ private slots:
         f.connect();
         emit f.fake->sampleReceived(1, makeSample(5, true, 30, true));
         f.vm.disconnectDevice();
-        QVERIFY(!f.vm.angleValid());
+        QVERIFY(!f.vm.pan().valid);
     }
 
     void errorExposed()
@@ -75,14 +75,28 @@ private slots:
         QCOMPARE(f.vm.connectionText(), QStringLiteral("Error"));
     }
 
+    void everyFieldInvalidated()
+    {
+        Fixture f;
+        f.connect();
+        emit f.fake->sampleReceived(1, makeFullSample());
+        QVERIFY(f.vm.tiltRef().valid && f.vm.supplyVoltage().valid && f.vm.safeControl().valid);
+        QCOMPARE(f.vm.tilt().value, -8.204);
+        f.vm.connectDevice(); // new session
+        for (const Measurement &m : {f.vm.pan(), f.vm.panRef(), f.vm.tilt(), f.vm.tiltRef(), f.vm.gimbalTemp(),
+                                     f.vm.imuTemp(), f.vm.supplyVoltage()})
+            QVERIFY(!m.valid);
+        QVERIFY(!f.vm.safeControl().valid);
+    }
+
     void becomesStale()
     {
         Fixture f;
         f.connect();
         emit f.fake->sampleReceived(1, makeSample(5, true, 30, true));
-        QVERIFY(f.vm.angleValid());
-        QTRY_VERIFY_WITH_TIMEOUT(!f.vm.angleValid(), DeviceViewModel::kStaleAfterMs + 1000);
-        QVERIFY(!f.vm.temperatureValid());
+        QVERIFY(f.vm.pan().valid);
+        QTRY_VERIFY_WITH_TIMEOUT(!f.vm.pan().valid, DeviceViewModel::kStaleAfterMs + 1000);
+        QVERIFY(!f.vm.gimbalTemp().valid);
         QCOMPARE(f.vm.msSinceLastSample(), -1);
     }
 

@@ -35,12 +35,12 @@ TestCase {
 
     function test_demoOnlyPageHiddenInRealTarget() {
         const real = createMain(false)
-        compare(real.pages.map(page => page.id), ["preferences"])
+        compare(real.pages.map(page => page.id), ["gimbalInfo", "preferences"])
         compare(findChild(real.contentItem, "nav-diagnostics"), null)
-        compare(real.activePageId, "preferences")
+        compare(real.activePageId, "gimbalInfo")
 
         const demo = createMain(true)
-        compare(demo.pages.map(page => page.id), ["diagnostics", "preferences"])
+        compare(demo.pages.map(page => page.id), ["gimbalInfo", "diagnostics", "preferences"])
         verify(findChild(demo.contentItem, "nav-diagnostics"))
     }
 
@@ -49,8 +49,10 @@ TestCase {
         const diagnostics = pageItem(main, "diagnostics")
         const preferences = pageItem(main, "preferences")
         verify(diagnostics && preferences)
-        verify(diagnostics.pageActive)
+        verify(!diagnostics.pageActive) // Gimbal info is the start page
 
+        mouseClick(findChild(main.contentItem, "nav-diagnostics"), 20, 20)
+        verify(diagnostics.pageActive)
         mouseClick(findChild(main.contentItem, "nav-preferences"), 20, 20)
         compare(main.activePageId, "preferences")
         verify(!diagnostics.pageActive)

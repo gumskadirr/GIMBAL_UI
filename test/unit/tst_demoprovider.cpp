@@ -27,8 +27,22 @@ private slots:
         QCOMPARE(states.at(0).at(1).value<ConnectionState>(), ConnectionState::Connected);
         for (const auto &args : samples)
             QCOMPARE(args.at(0).toULongLong(), 1u);
-        QCOMPARE(sampleAt(samples, 0).angleDeg.value, 0.0);
-        QVERIFY(sampleAt(samples, 0).angleDeg.valid);
+        const DeviceSample first = sampleAt(samples, 0);
+        QCOMPARE(first.panDeg.value, 0.0);
+        for (const Measurement &m : {first.panDeg, first.panRefDeg, first.tiltDeg, first.tiltRefDeg,
+                                     first.gimbalTempC, first.imuTempC, first.supplyVoltageV})
+            QVERIFY(m.valid);
+        QVERIFY(first.safeControlLocked.valid);
+    }
+
+    void valuesInDisplayRange()
+    {
+        for (int n = 0; n < 200; ++n) {
+            const DeviceSample s = DemoProvider::sampleAt(n);
+            QVERIFY2(qAbs(s.panDeg.value) <= 180.0, qPrintable(QString::number(n)));
+            QVERIFY2(qAbs(s.tiltDeg.value) <= 90.0, qPrintable(QString::number(n)));
+            QVERIFY(s.supplyVoltageV.value > 0.0);
+        }
     }
 
     void temperatureDropout()
@@ -37,9 +51,9 @@ private slots:
         QSignalSpy samples(&p, &IDeviceProvider::sampleReceived);
         p.start(1);
         QTRY_VERIFY_WITH_TIMEOUT(samples.count() >= 50, 5000);
-        QVERIFY(sampleAt(samples, 39).temperatureC.valid);
-        QVERIFY(!sampleAt(samples, 40).temperatureC.valid);
-        QVERIFY(!sampleAt(samples, 49).temperatureC.valid);
+        QVERIFY(sampleAt(samples, 39).gimbalTempC.valid);
+        QVERIFY(!sampleAt(samples, 40).gimbalTempC.valid);
+        QVERIFY(!sampleAt(samples, 49).gimbalTempC.valid);
     }
 
     void linkLoss()

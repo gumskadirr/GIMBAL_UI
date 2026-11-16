@@ -28,6 +28,7 @@ qt_add_qml_module(ids_gimbal
         device/api/DeviceTypes.h device/api/IDeviceProvider.h
         device/session/DeviceSession.h device/session/DeviceSession.cpp
         device/presentation/DeviceViewModel.h device/presentation/DeviceViewModel.cpp
+        device/presentation/DeviceValueTypes.h
         shared/ui/Fonts.h shared/ui/Fonts.cpp
     QML_FILES
         app/Main.qml
@@ -53,8 +54,13 @@ qt_add_qml_module(ids_gimbal
         shared/ui/StatusDot.qml
         shared/ui/Badge.qml
         shared/ui/IdsPopup.qml
+        shared/ui/CardBackground.qml
+        shared/ui/StatStrip.qml
+        shared/ui/StatCell.qml
+        shared/ui/ArcGauge.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
+        features/gimbalinfo/GimbalInfoPage.qml
     RESOURCES
         assets/icons/ids_logo.png
 )
@@ -62,7 +68,7 @@ qt_add_qml_module(ids_gimbal
 target_include_directories(ids_gimbal
     PUBLIC ${PROJECT_SOURCE_DIR}
     # The generated QML type registration includes headers by file name.
-    PRIVATE shared/settings shared/localization shared/notifications device/presentation
+    PRIVATE shared/settings shared/localization shared/notifications device/presentation device/api
 )
 
 target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2)

@@ -47,6 +47,16 @@ void DemoProvider::tick()
 DeviceSample DemoProvider::sampleAt(int n)
 {
     constexpr double kPi = 3.14159265358979323846;
-    const bool tempValid = !(n % 100 >= 40 && n % 100 < 50);
-    return DeviceSample{{30.0 * std::sin(2.0 * kPi * n / 50.0), true}, {35.0 + 0.01 * n, tempValid}};
+    const double phase = 2.0 * kPi * n / 50.0;
+    const bool tempValid = !(n % 100 >= 40 && n % 100 < 50); // repeatable sensor dropout
+    DeviceSample s;
+    s.panRefDeg = {150.0 * std::sin(phase), true};
+    s.panDeg = {0.999 * s.panRefDeg.value, true}; // small tracking error
+    s.tiltRefDeg = {-8.2 + 20.0 * std::sin(phase / 2.0), true};
+    s.tiltDeg = {s.tiltRefDeg.value - 0.004, true};
+    s.gimbalTempC = {41.0 + 0.01 * n, tempValid};
+    s.imuTempC = {38.6 + 0.01 * n, tempValid};
+    s.supplyVoltageV = {24.1 + 0.05 * std::sin(phase), true};
+    s.safeControlLocked = {(n / 100) % 2 == 0, true};
+    return s;
 }

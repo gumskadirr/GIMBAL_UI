@@ -28,6 +28,16 @@ public:
         m_notifications->add(code, {}, NotificationModel::Error, detail);
     }
 
+    // Connects through the fake provider and delivers makeFullSample() to the real session/view model.
+    Q_INVOKABLE void connectWithFullSample()
+    {
+        m_session->connectDevice();
+        const quint64 id = m_session->activeSessionId();
+        emit m_fake->stateChanged(id, ConnectionState::Connected, {});
+        emit m_fake->sampleReceived(id, makeFullSample());
+    }
+    Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
+
 public slots:
     void applicationAvailable()
     {
@@ -36,7 +46,9 @@ public slots:
         m_settings = std::make_unique<AppSettings>(m_dir.filePath(QStringLiteral("settings.ini")));
         m_notifications = std::make_unique<NotificationModel>();
         m_localization = std::make_unique<Localization>();
-        m_session = std::make_unique<DeviceSession>(std::make_unique<FakeProvider>());
+        auto fake = std::make_unique<FakeProvider>();
+        m_fake = fake.get();
+        m_session = std::make_unique<DeviceSession>(std::move(fake));
         m_viewModel = std::make_unique<DeviceViewModel>(m_session.get());
         // Same C++ retranslation as AppRunner.
         QObject::connect(m_localization.get(), &Localization::languageChanged, m_notifications.get(),
@@ -64,6 +76,7 @@ private:
     std::unique_ptr<AppSettings> m_settings;
     std::unique_ptr<NotificationModel> m_notifications;
     std::unique_ptr<Localization> m_localization;
+    FakeProvider *m_fake = nullptr; // owned by m_session
     std::unique_ptr<DeviceSession> m_session;
     std::unique_ptr<DeviceViewModel> m_viewModel;
 };

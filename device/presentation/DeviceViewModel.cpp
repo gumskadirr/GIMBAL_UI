@@ -4,6 +4,18 @@
 
 #include <QCoreApplication>
 
+namespace {
+bool anyValid(const DeviceSample &s)
+{
+    for (const Measurement &m : {s.panDeg, s.panRefDeg, s.tiltDeg, s.tiltRefDeg, s.gimbalTempC, s.imuTempC,
+                                 s.supplyVoltageV}) {
+        if (m.valid)
+            return true;
+    }
+    return s.safeControlLocked.valid;
+}
+} // namespace
+
 DeviceViewModel::DeviceViewModel(DeviceSession *session, QObject *parent)
     : QObject(parent), m_session(session)
 {
@@ -62,9 +74,8 @@ void DeviceViewModel::invalidate()
 {
     m_staleCheck.stop();
     m_sinceSample.invalidate();
-    if (!m_sample.angleDeg.valid && !m_sample.temperatureC.valid)
+    if (!anyValid(m_sample))
         return;
-    m_sample.angleDeg.valid = false;
-    m_sample.temperatureC.valid = false;
+    m_sample = DeviceSample{}; // every field invalid
     emit measurementsChanged();
 }

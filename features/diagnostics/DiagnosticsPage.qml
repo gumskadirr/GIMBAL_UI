@@ -28,13 +28,13 @@ Item {
             color: Theme.muted
         }
         Label {
-            text: qsTr("Angle: %1").arg(page.viewModel.angleValid
-                                        ? page.viewModel.angleDeg.toFixed(2) + " °" : "—")
+            text: qsTr("Pan: %1").arg(page.viewModel.pan.valid
+                                      ? page.viewModel.pan.value.toFixed(2) + " °" : "—")
             color: Theme.text
         }
         Label {
-            text: qsTr("Temperature: %1").arg(page.viewModel.temperatureValid
-                                              ? page.viewModel.temperatureC.toFixed(2) + " °C" : "—")
+            text: qsTr("Temperature: %1").arg(page.viewModel.gimbalTemp.valid
+                                              ? page.viewModel.gimbalTemp.value.toFixed(2) + " °C" : "—")
             color: Theme.text
         }
         Label {

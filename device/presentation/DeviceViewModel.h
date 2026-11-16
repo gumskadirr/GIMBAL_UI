@@ -21,10 +21,15 @@ class DeviceViewModel : public QObject
     Q_PROPERTY(bool busy READ busy NOTIFY connectionChanged)
     Q_PROPERTY(bool hasError READ hasError NOTIFY connectionChanged)
     Q_PROPERTY(QString errorDetail READ errorDetail NOTIFY connectionChanged)
-    Q_PROPERTY(double angleDeg READ angleDeg NOTIFY measurementsChanged)
-    Q_PROPERTY(bool angleValid READ angleValid NOTIFY measurementsChanged)
-    Q_PROPERTY(double temperatureC READ temperatureC NOTIFY measurementsChanged)
-    Q_PROPERTY(bool temperatureValid READ temperatureValid NOTIFY measurementsChanged)
+    // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
+    Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement panRef READ panRef NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement tilt READ tilt NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement tiltRef READ tiltRef NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement gimbalTemp READ gimbalTemp NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement imuTemp READ imuTemp NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement supplyVoltage READ supplyVoltage NOTIFY measurementsChanged)
+    Q_PROPERTY(Flag safeControl READ safeControl NOTIFY measurementsChanged)
 
 public:
     static constexpr int kStaleAfterMs = 1000;
@@ -36,10 +41,14 @@ public:
     bool busy() const;
     bool hasError() const;
     QString errorDetail() const;
-    double angleDeg() const { return m_sample.angleDeg.value; }
-    bool angleValid() const { return m_sample.angleDeg.valid; }
-    double temperatureC() const { return m_sample.temperatureC.value; }
-    bool temperatureValid() const { return m_sample.temperatureC.valid; }
+    Measurement pan() const { return m_sample.panDeg; }
+    Measurement panRef() const { return m_sample.panRefDeg; }
+    Measurement tilt() const { return m_sample.tiltDeg; }
+    Measurement tiltRef() const { return m_sample.tiltRefDeg; }
+    Measurement gimbalTemp() const { return m_sample.gimbalTempC; }
+    Measurement imuTemp() const { return m_sample.imuTempC; }
+    Measurement supplyVoltage() const { return m_sample.supplyVoltageV; }
+    Flag safeControl() const { return m_sample.safeControlLocked; }
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();

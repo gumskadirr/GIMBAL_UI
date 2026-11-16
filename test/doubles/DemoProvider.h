@@ -19,9 +19,11 @@ public:
     void start(quint64 sessionId) override;
     void stop() override;
 
+    // Deterministic sample number n (pure; public for tests).
+    static DeviceSample sampleAt(int n);
+
 private:
     void tick();
-    static DeviceSample sampleAt(int n);
 
     QTimer m_timer;
     quint64 m_sessionId = 0;

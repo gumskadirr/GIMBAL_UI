@@ -46,7 +46,7 @@ private slots:
         QSignalSpy accepted(&f.session, &DeviceSession::sampleAccepted);
         emit f.fake->sampleReceived(1, makeSample(1.5, true, 30, true));
         QCOMPARE(accepted.count(), 1);
-        QCOMPARE(accepted.at(0).at(0).value<DeviceSample>().angleDeg.value, 1.5);
+        QCOMPARE(accepted.at(0).at(0).value<DeviceSample>().panDeg.value, 1.5);
     }
 
     void staleSampleDropped()
