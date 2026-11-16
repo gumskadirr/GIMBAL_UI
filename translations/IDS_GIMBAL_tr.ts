@@ -2,6 +2,74 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="tr" sourcelanguage="en">
 <context>
+    <name>ControlPageFrame</name>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="23"/>
+        <source>REF %1 · %2</source>
+        <translation>REF %1 · %2</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="50"/>
+        <source>Safe control</source>
+        <translation>Güvenli kontrol</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="52"/>
+        <source>Locked</source>
+        <translation>Kilitli</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="52"/>
+        <source>Unlocked</source>
+        <translation>Kilitli değil</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="58"/>
+        <source>Gimbal / IMU temp.</source>
+        <translation>Gimbal / IMU sıc.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="60"/>
+        <source>IMU %1</source>
+        <translation>IMU %1</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="64"/>
+        <source>Supply voltage</source>
+        <translation>Besleme gerilimi</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="69"/>
+        <source>Pan angle</source>
+        <translation>Pan açısı</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="83"/>
+        <source>Tilt angle</source>
+        <translation>Tilt açısı</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="106"/>
+        <source>Gimbal</source>
+        <translation>Gimbal</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="107"/>
+        <source>3D model, follows live pan and tilt</source>
+        <translation>Canlı pan ve tilt açısını izleyen 3B model</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="115"/>
+        <source>3D gimbal model</source>
+        <translation>3B gimbal modeli</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="116"/>
+        <source>Reserved area for the interactive 3D view</source>
+        <translation>Etkileşimli 3B görünüm için ayrılmış alan</translation>
+    </message>
+</context>
+<context>
     <name>Detail</name>
     <message>
         <location filename="../app/DisconnectedProvider.h" line="20"/>
@@ -73,228 +141,163 @@
 <context>
     <name>GimbalInfoPage</name>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="22"/>
-        <source>REF %1 · %2</source>
-        <translation>REF %1 · %2</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="49"/>
-        <source>Safe control</source>
-        <translation>Güvenli kontrol</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="51"/>
-        <source>Locked</source>
-        <translation>Kilitli</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="51"/>
-        <source>Unlocked</source>
-        <translation>Kilitli değil</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="57"/>
-        <source>Gimbal / IMU temp.</source>
-        <translation>Gimbal / IMU sıc.</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="59"/>
-        <source>IMU %1</source>
-        <translation>IMU %1</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="63"/>
-        <source>Supply voltage</source>
-        <translation>Besleme gerilimi</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="68"/>
-        <source>Pan angle</source>
-        <translation>Pan açısı</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="82"/>
-        <source>Tilt angle</source>
-        <translation>Tilt açısı</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="105"/>
-        <source>Gimbal</source>
-        <translation>Gimbal</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="106"/>
-        <source>3D model, follows live pan and tilt</source>
-        <translation>Canlı pan ve tilt açısını izleyen 3B model</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="114"/>
-        <source>3D gimbal model</source>
-        <translation>3B gimbal modeli</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="115"/>
-        <source>Reserved area for the interactive 3D view</source>
-        <translation>Etkileşimli 3B görünüm için ayrılmış alan</translation>
-    </message>
-    <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="128"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="13"/>
         <source>Board info</source>
         <translation>Kart bilgisi</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="135"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="20"/>
         <source>Identity, firmware and bootloader of the target board</source>
         <translation>Hedef kartın kimliği, yazılımı ve önyükleyicisi</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="144"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="29"/>
         <source>Board identity and commands become available once the device protocol is integrated.</source>
         <translation>Kart kimliği ve komutlar, cihaz protokolü eklendiğinde kullanılabilir olacak.</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="151"/>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="172"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="36"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="57"/>
         <source>Device ID</source>
         <translation>Cihaz kimliği</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="152"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="37"/>
         <source>Firmware</source>
         <translation>Yazılım</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="153"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="38"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="154"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="39"/>
         <source>On time</source>
         <translation>Çalışma süresi</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="168"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="53"/>
         <source>Microcontroller details</source>
         <translation>Mikrodenetleyici ayrıntıları</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="174"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="59"/>
         <source>Flash size, KB</source>
         <translation>Flash boyutu, KB</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="175"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="60"/>
         <source>Bootloader version</source>
         <translation>Önyükleyici sürümü</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="176"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="61"/>
         <source>Board ID</source>
         <translation>Kart kimliği</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="184"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="69"/>
         <source>Bootloader</source>
         <translation>Önyükleyici</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="185"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="70"/>
         <source>Enter or leave the bootloader</source>
         <translation>Önyükleyiciye gir veya çık</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="189"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="74"/>
         <source>State unknown</source>
         <translation>Durum bilinmiyor</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="194"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="79"/>
         <source>Ask bootloader</source>
         <translation>Önyükleyiciyi iste</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="195"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="80"/>
         <source>Exit bootloader</source>
         <translation>Önyükleyiciden çık</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="199"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="84"/>
         <source>The board restarts into the bootloader. Motors are disabled until you exit it.</source>
         <translation>Kart önyükleyicide yeniden başlar. Çıkana kadar motorlar devre dışıdır.</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="207"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="92"/>
         <source>Boot bridge</source>
         <translation>Önyükleme köprüsü</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="208"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="93"/>
         <source>Program a sub-board through this board</source>
         <translation>Bu kart üzerinden bir alt kartı programla</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="211"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="96"/>
         <source>Target</source>
         <translation>Hedef</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="214"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="99"/>
         <source>Start boot bridge</source>
         <translation>Önyükleme köprüsünü başlat</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="217"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="102"/>
         <source>Forwards the bootloader link to the selected sub-board.</source>
         <translation>Önyükleyici bağlantısını seçilen alt karta iletir.</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="224"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="109"/>
         <source>Firmware update</source>
         <translation>Yazılım güncelleme</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="225"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="110"/>
         <source>Board firmware — · GUI version %1</source>
         <translation>Kart yazılımı — · Arayüz sürümü %1</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="230"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="115"/>
         <source>Open file</source>
         <translation>Dosya aç</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="235"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="120"/>
         <source>No file selected</source>
         <translation>Dosya seçilmedi</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="242"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="127"/>
         <source>Keep the board powered and connected until the update finishes.</source>
         <translation>Güncelleme bitene kadar kartın enerjisini ve bağlantısını kesmeyin.</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="248"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="133"/>
         <source>Update firmware</source>
         <translation>Yazılımı güncelle</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="256"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="141"/>
         <source>Built-in test</source>
         <translation>Yerleşik test</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="257"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="142"/>
         <source>Results come from the BIT report of the board</source>
         <translation>Sonuçlar kartın BIT raporundan gelir</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="262"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="147"/>
         <source>Run BIT</source>
         <translation>BIT çalıştır</translation>
     </message>
     <message>
-        <location filename="../features/gimbalinfo/GimbalInfoPage.qml" line="267"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="152"/>
         <source>No result</source>
         <translation>Sonuç yok</translation>
     </message>

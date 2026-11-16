@@ -67,7 +67,8 @@ qt_add_qml_module(ids_gimbal
         shared/ui/VideoViewport.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
-        features/gimbalinfo/GimbalInfoPage.qml
+        features/maincontrol/ControlPageFrame.qml
+        features/maincontrol/GimbalInfoPage.qml
     RESOURCES
         assets/icons/ids_logo.png
 )
