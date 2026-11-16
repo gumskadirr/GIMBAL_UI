@@ -13,7 +13,10 @@ Item {
     readonly property bool expanded: pinned || hover.hovered || focusWithin
     default property alias items: column.data
 
-    implicitWidth: collapsedWidth
+    implicitWidth: collapsedWidth   // the space reserved in the layout
+    // Clicks only reached items inside the root's bounds (verified on Qt 6.12), so the root grows with the
+    // panel; otherwise the expanded part of every NavItem ignored the mouse.
+    width: panel.width
     z: 20
     Accessible.role: Accessible.Pane
     Accessible.name: qsTr("Main navigation")

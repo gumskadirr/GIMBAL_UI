@@ -64,6 +64,29 @@ TestCase {
         verify(diagnostics.pageActive)
     }
 
+    // A mouse click must not keep the rail open: it would cover the page that was just selected.
+    function test_railClosesAfterMouseSelection() {
+        const main = createMain(false)
+        const navItem = findChild(main.contentItem, "nav-preferences")
+        const rail = navItem.rail
+        mouseMove(navItem, 100, 20)
+        tryCompare(rail, "expanded", true)
+        wait(300) // expand animation (160 ms); the user clicks the fully opened rail
+        mouseClick(navItem, 100, 20)
+        compare(main.activePageId, "preferences")
+        mouseMove(main.contentItem, 900, 400)
+        tryCompare(rail, "expanded", false)
+    }
+
+    // Keyboard users still get the expanded rail while focus is inside it.
+    function test_railStaysOpenForKeyboardFocus() {
+        const main = createMain(false)
+        const navItem = findChild(main.contentItem, "nav-preferences")
+        mouseMove(main.contentItem, 900, 400)
+        navItem.forceActiveFocus(Qt.TabFocusReason)
+        tryCompare(navItem.rail, "expanded", true)
+    }
+
     function test_languageChangeKeepsPagesAndUpdatesTitles() {
         const main = createMain(true)
         main.currentPageId = "preferences"

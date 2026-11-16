@@ -21,7 +21,14 @@ Rectangle {
     function _place(item, host) {
         if (!item) return
         item.parent = host
-        item.anchors.fill = host
+        if (item === navigation) {
+            // Only the height is tied to the 64 px slot: the rail sets its own width while it is expanded.
+            item.anchors.left = host.left
+            item.anchors.top = host.top
+            item.anchors.bottom = host.bottom
+        } else {
+            item.anchors.fill = host
+        }
     }
     onNavigationChanged: _place(navigation, navHost)
     onTopBarChanged: _place(topBar, topHost)

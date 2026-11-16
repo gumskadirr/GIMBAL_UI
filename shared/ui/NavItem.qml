@@ -24,7 +24,8 @@ T.AbstractButton {
     Accessible.name: text
     Accessible.selected: current
 
-    onActiveFocusChanged: if (rail) rail.focusWithin = activeFocus
+    // Keyboard focus only: focus from a mouse click would keep the rail open over the selected page.
+    onVisualFocusChanged: if (rail) rail.focusWithin = visualFocus
 
     contentItem: Row {
         spacing: 14

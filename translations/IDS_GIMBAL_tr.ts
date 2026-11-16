@@ -195,7 +195,7 @@
 <context>
     <name>NavRail</name>
     <message>
-        <location filename="../shared/ui/NavRail.qml" line="19"/>
+        <location filename="../shared/ui/NavRail.qml" line="22"/>
         <source>Main navigation</source>
         <translation>Ana menü</translation>
     </message>
