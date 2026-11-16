@@ -1,3 +1,4 @@
+#include <QDir>
 #include <QFile>
 #include <QSettings>
 #include <QSignalSpy>
@@ -68,6 +69,21 @@ private slots:
         QCOMPARE(spy.count(), 1);
         QCOMPARE(spy.at(0).at(0).toString(), QStringLiteral("theme"));
         QCOMPARE(s.theme(), QStringLiteral("light")); // app stays usable
+    }
+
+    void writeRecoversAfterFailure()
+    {
+        const QString blocked = m_dir.filePath(QStringLiteral("blocked.ini"));
+        QVERIFY(QDir().mkdir(blocked)); // a directory where the settings file should be
+        AppSettings s(blocked);
+        QSignalSpy spy(&s, &AppSettings::writeFailed);
+        s.setTheme(QStringLiteral("light"));
+        QCOMPARE(spy.count(), 1);
+
+        QVERIFY(QDir().rmdir(blocked));
+        s.setTheme(QStringLiteral("blue"));
+        QCOMPARE(spy.count(), 1); // an earlier failure does not taint later writes
+        QCOMPARE(AppSettings(blocked).theme(), QStringLiteral("blue"));
     }
 };
 

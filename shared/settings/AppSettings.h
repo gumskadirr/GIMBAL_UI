@@ -18,7 +18,7 @@ public:
     explicit AppSettings(QObject *parent = nullptr); // platform store, keyed by org/app name
     explicit AppSettings(const QString &iniFilePath, QObject *parent = nullptr);
 
-    QString theme() const { return m_theme; }      // "dark" | "light"
+    QString theme() const { return m_theme; }      // "dark" | "light" | "blue"
     void setTheme(const QString &theme);
     QString language() const { return m_language; } // "tr" | "en"
     void setLanguage(const QString &language);
@@ -30,9 +30,10 @@ signals:
 
 private:
     void load();
+    std::unique_ptr<QSettings> open() const;
     void write(const QString &key, const QString &value);
 
-    std::unique_ptr<QSettings> m_settings;
+    QString m_iniFilePath; // empty = platform store
     QString m_theme;
     QString m_language;
 };

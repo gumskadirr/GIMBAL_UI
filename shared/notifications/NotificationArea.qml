@@ -9,9 +9,9 @@ Rectangle {
     id: area
     required property NotificationModel model
 
-    color: Theme.surface
-    border.color: Theme.border
-    radius: Theme.radius
+    color: Theme.card
+    border.color: Theme.line2
+    radius: Theme.rSmall
 
     ColumnLayout {
         anchors.fill: parent
@@ -22,8 +22,8 @@ Rectangle {
             Layout.fillWidth: true
             Label {
                 text: qsTr("Notifications")
-                color: Theme.textPrimary
-                font.pixelSize: Theme.fontSizeNormal
+                color: Theme.text
+                font.pixelSize: Theme.fsBody
                 Layout.fillWidth: true
             }
             AppButton {
@@ -52,11 +52,11 @@ Rectangle {
 
                 width: ListView.view.width
                 implicitHeight: content.implicitHeight + 2 * Theme.spacingNormal
-                color: Theme.background
-                radius: Theme.radius
-                border.color: row.severity === NotificationModel.Error ? Theme.error
-                            : row.severity === NotificationModel.Warning ? Theme.warning
-                            : Theme.border
+                color: Theme.bg
+                radius: Theme.rSmall
+                border.color: row.severity === NotificationModel.Error ? Theme.critTx
+                            : row.severity === NotificationModel.Warning ? Theme.warnTx
+                            : Theme.line2
 
                 RowLayout {
                     id: content
@@ -68,22 +68,22 @@ Rectangle {
                         spacing: 2
                         Label {
                             text: row.count > 1 ? row.text + "  ×" + row.count : row.text
-                            color: Theme.textPrimary
+                            color: Theme.text
                             wrapMode: Text.Wrap
                             Layout.fillWidth: true
                         }
                         Label {
                             text: row.detail
                             visible: row.detail.length > 0
-                            color: Theme.textSecondary
-                            font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.muted
+                            font.pixelSize: Theme.fsSmall
                             wrapMode: Text.Wrap
                             Layout.fillWidth: true
                         }
                         Label {
                             text: Qt.formatTime(row.timestamp, "HH:mm:ss")
-                            color: Theme.textSecondary
-                            font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.muted
+                            font.pixelSize: Theme.fsSmall
                         }
                     }
                     AppButton {

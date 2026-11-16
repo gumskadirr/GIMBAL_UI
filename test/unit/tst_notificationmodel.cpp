@@ -1,6 +1,7 @@
 #include <QSignalSpy>
 #include <QTest>
 
+#include "shared/localization/Localization.h"
 #include "shared/notifications/NotificationModel.h"
 
 class tst_NotificationModel : public QObject
@@ -55,9 +56,22 @@ private slots:
     void textFormatting()
     {
         NotificationModel m;
-        m.add("settings.writeFailed", {"theme"}, NotificationModel::Error);
+        m.add("language.loadFailed", {"de"}, NotificationModel::Warning);
         QCOMPARE(at(m, 0, NotificationModel::TextRole).toString(),
-                 QStringLiteral("Preferences could not be saved (theme)"));
+                 QStringLiteral("Language could not be loaded: de"));
+    }
+
+    void appDetailFollowsLanguage()
+    {
+        NotificationModel m;
+        m.add("device.error", {}, NotificationModel::Error, "No device transport in this build");
+        m.add("device.error", {}, NotificationModel::Error, "RAW-ERR 0x12");
+        Localization l;
+        QVERIFY(l.setLanguage("tr"));
+        QCOMPARE(at(m, 1, NotificationModel::DetailRole).toString(),
+                 QStringLiteral("Bu sürümde cihaz bağlantı katmanı yok"));
+        QCOMPARE(at(m, 0, NotificationModel::DetailRole).toString(), QStringLiteral("RAW-ERR 0x12"));
+        l.setLanguage("en");
     }
 
     void unknownCodeShowsCode()

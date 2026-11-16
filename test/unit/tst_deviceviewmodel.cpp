@@ -89,7 +89,7 @@ private slots:
     void retranslateUpdatesText()
     {
         Fixture f;
-        Localization l(nullptr);
+        Localization l;
         QVERIFY(l.setLanguage("tr"));
         QSignalSpy spy(&f.vm, &DeviceViewModel::connectionChanged);
         f.vm.retranslate();

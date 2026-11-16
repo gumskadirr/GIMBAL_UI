@@ -2,24 +2,32 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="tr" sourcelanguage="en">
 <context>
+    <name>Detail</name>
+    <message>
+        <location filename="../app/DisconnectedProvider.h" line="20"/>
+        <source>No device transport in this build</source>
+        <translation>Bu sürümde cihaz bağlantı katmanı yok</translation>
+    </message>
+</context>
+<context>
     <name>DeviceViewModel</name>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="22"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="24"/>
         <source>Disconnected</source>
         <translation>Bağlantı yok</translation>
     </message>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="23"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="25"/>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
     </message>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="24"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="26"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="25"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="27"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
@@ -106,17 +114,22 @@
 <context>
     <name>NotificationModel</name>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="8"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="9"/>
         <source>Device error</source>
         <translation>Cihaz hatası</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="10"/>
-        <source>Preferences could not be saved (%1)</source>
-        <translation>Tercihler kaydedilemedi (%1)</translation>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="11"/>
+        <source>Preferences could not be saved</source>
+        <translation>Tercihler kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="12"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="15"/>
+        <source>Fonts could not be loaded: %1</source>
+        <translation>Yazı tipleri yüklenemedi: %1</translation>
+    </message>
+    <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="13"/>
         <source>Language could not be loaded: %1</source>
         <translation>Dil yüklenemedi: %1</translation>
     </message>
@@ -124,22 +137,27 @@
 <context>
     <name>PreferencesPage</name>
     <message>
-        <location filename="../app/PreferencesPage.qml" line="17"/>
+        <location filename="../app/PreferencesPage.qml" line="18"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../app/PreferencesPage.qml" line="21"/>
-        <source>Switch to light theme</source>
-        <translation>Açık temaya geç</translation>
-    </message>
-    <message>
-        <location filename="../app/PreferencesPage.qml" line="21"/>
-        <source>Switch to dark theme</source>
-        <translation>Koyu temaya geç</translation>
+        <location filename="../app/PreferencesPage.qml" line="25"/>
+        <source>Light</source>
+        <translation>Açık</translation>
     </message>
     <message>
         <location filename="../app/PreferencesPage.qml" line="26"/>
+        <source>Blue</source>
+        <translation>Mavi</translation>
+    </message>
+    <message>
+        <location filename="../app/PreferencesPage.qml" line="27"/>
+        <source>Dark</source>
+        <translation>Koyu</translation>
+    </message>
+    <message>
+        <location filename="../app/PreferencesPage.qml" line="39"/>
         <source>Language</source>
         <translation>Dil</translation>
     </message>

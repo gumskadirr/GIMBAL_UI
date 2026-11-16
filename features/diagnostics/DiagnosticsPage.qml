@@ -17,29 +17,29 @@ Item {
 
         Label {
             text: qsTr("Connection: %1").arg(page.viewModel.connectionText)
-            color: page.viewModel.hasError ? Theme.error
-                 : page.viewModel.connected ? Theme.accent
-                 : Theme.textPrimary
-            font.pixelSize: Theme.fontSizeLarge
+            color: page.viewModel.hasError ? Theme.critTx
+                 : page.viewModel.connected ? Theme.acc
+                 : Theme.text
+            font.pixelSize: Theme.fsH2
         }
         Label {
             visible: page.viewModel.errorDetail.length > 0
             text: page.viewModel.errorDetail
-            color: Theme.textSecondary
+            color: Theme.muted
         }
         Label {
             text: qsTr("Angle: %1").arg(page.viewModel.angleValid
                                         ? page.viewModel.angleDeg.toFixed(2) + " °" : "—")
-            color: Theme.textPrimary
+            color: Theme.text
         }
         Label {
             text: qsTr("Temperature: %1").arg(page.viewModel.temperatureValid
                                               ? page.viewModel.temperatureC.toFixed(2) + " °C" : "—")
-            color: Theme.textPrimary
+            color: Theme.text
         }
         Label {
             text: page.sampleAge
-            color: Theme.textSecondary
+            color: Theme.muted
         }
 
         RowLayout {

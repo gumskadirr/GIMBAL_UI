@@ -1,7 +1,7 @@
 #include "AppSettings.h"
 
 namespace {
-const QStringList kThemes{QStringLiteral("dark"), QStringLiteral("light")};
+const QStringList kThemes{QStringLiteral("dark"), QStringLiteral("light"), QStringLiteral("blue")};
 const QStringList kLanguages{QStringLiteral("tr"), QStringLiteral("en")};
 const QString kThemeKey = QStringLiteral("ui/theme");
 const QString kLanguageKey = QStringLiteral("ui/language");
@@ -12,22 +12,28 @@ QString validOr(const QString &value, const QStringList &allowed)
 }
 } // namespace
 
-AppSettings::AppSettings(QObject *parent)
-    : QObject(parent), m_settings(std::make_unique<QSettings>())
+AppSettings::AppSettings(QObject *parent) : QObject(parent)
 {
     load();
 }
 
 AppSettings::AppSettings(const QString &iniFilePath, QObject *parent)
-    : QObject(parent), m_settings(std::make_unique<QSettings>(iniFilePath, QSettings::IniFormat))
+    : QObject(parent), m_iniFilePath(iniFilePath)
 {
     load();
 }
 
+std::unique_ptr<QSettings> AppSettings::open() const
+{
+    return m_iniFilePath.isEmpty() ? std::make_unique<QSettings>()
+                                   : std::make_unique<QSettings>(m_iniFilePath, QSettings::IniFormat);
+}
+
 void AppSettings::load()
 {
-    m_theme = validOr(m_settings->value(kThemeKey).toString(), kThemes);
-    m_language = validOr(m_settings->value(kLanguageKey).toString(), kLanguages);
+    const auto settings = open();
+    m_theme = validOr(settings->value(kThemeKey).toString(), kThemes);
+    m_language = validOr(settings->value(kLanguageKey).toString(), kLanguages);
 }
 
 void AppSettings::setTheme(const QString &theme)
@@ -50,8 +56,10 @@ void AppSettings::setLanguage(const QString &language)
 
 void AppSettings::write(const QString &key, const QString &value)
 {
-    m_settings->setValue(key, value);
-    m_settings->sync();
-    if (m_settings->status() != QSettings::NoError)
+    // QSettings::status() keeps the first error forever, so every write gets a fresh object.
+    const auto settings = open();
+    settings->setValue(key, value);
+    settings->sync();
+    if (settings->status() != QSettings::NoError)
         emit writeFailed(key.section(QLatin1Char('/'), -1));
 }

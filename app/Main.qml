@@ -22,12 +22,12 @@ ApplicationWindow {
     minimumHeight: 320
     visible: true
     title: qsTr("IDS Gimbal")
-    color: Theme.background
+    color: Theme.bg
 
     Binding {
         target: Theme
-        property: "dark"
-        value: window.settings.theme === "dark"
+        property: "mode"
+        value: window.settings.theme
     }
 
     ColumnLayout {
@@ -36,15 +36,15 @@ ApplicationWindow {
 
         Rectangle {
             visible: window.demoMode
-            color: Theme.warning
+            color: Theme.warnBg
             Layout.fillWidth: true
             implicitHeight: bannerText.implicitHeight + 2 * Theme.spacingNormal
             Label {
                 id: bannerText
                 anchors.centerIn: parent
                 text: qsTr("Sample data — no real device connection")
-                color: Theme.background
-                font.pixelSize: Theme.fontSizeNormal
+                color: Theme.warnTx
+                font.pixelSize: Theme.fsBody
                 font.bold: true
             }
         }

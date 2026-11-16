@@ -1,10 +1,9 @@
 #include "Localization.h"
 
 #include <QCoreApplication>
-#include <QQmlEngine>
 
-Localization::Localization(QQmlEngine *engine, const QString &qmDirectory, QObject *parent)
-    : QObject(parent), m_engine(engine), m_qmDirectory(qmDirectory)
+Localization::Localization(const QString &qmDirectory, QObject *parent)
+    : QObject(parent), m_qmDirectory(qmDirectory)
 {
 }
 
@@ -38,8 +37,6 @@ bool Localization::setLanguage(const QString &code)
         QCoreApplication::installTranslator(m_translator.get());
 
     m_language = code;
-    if (m_engine)
-        m_engine->retranslate();
     emit languageChanged();
     return true;
 }

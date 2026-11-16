@@ -1,5 +1,6 @@
 #include "NotificationModel.h"
 
+#include <QCoreApplication>
 #include <QHash>
 
 namespace {
@@ -7,9 +8,11 @@ namespace {
 const QHash<QString, const char *> kMessages{
     {QStringLiteral("device.error"), QT_TRANSLATE_NOOP("NotificationModel", "Device error")},
     {QStringLiteral("settings.writeFailed"),
-     QT_TRANSLATE_NOOP("NotificationModel", "Preferences could not be saved (%1)")},
+     QT_TRANSLATE_NOOP("NotificationModel", "Preferences could not be saved")},
     {QStringLiteral("language.loadFailed"),
      QT_TRANSLATE_NOOP("NotificationModel", "Language could not be loaded: %1")},
+    {QStringLiteral("fonts.loadFailed"),
+     QT_TRANSLATE_NOOP("NotificationModel", "Fonts could not be loaded: %1")},
 };
 } // namespace
 
@@ -65,7 +68,7 @@ void NotificationModel::clear()
 void NotificationModel::retranslate()
 {
     if (!m_entries.isEmpty())
-        emit dataChanged(index(0), index(int(m_entries.size()) - 1), {TextRole});
+        emit dataChanged(index(0), index(int(m_entries.size()) - 1), {TextRole, DetailRole});
 }
 
 int NotificationModel::rowCount(const QModelIndex &parent) const
@@ -92,7 +95,8 @@ QVariant NotificationModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case CodeRole: return e.code;
     case TextRole: return text(e);
-    case DetailRole: return e.detail;
+    // Details are raw technical text; only app-generated ones have a "Detail" translation.
+    case DetailRole: return QCoreApplication::translate("Detail", e.detail.toUtf8().constData());
     case SeverityRole: return e.severity;
     case TimestampRole: return e.time;
     case CountRole: return e.count;

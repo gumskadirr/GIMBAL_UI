@@ -5,7 +5,7 @@ project(IDS_GIMBAL VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 Test LinguistTools)
+find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 Test QuickTest LinguistTools)
 
 qt_standard_project_setup(REQUIRES 6.12)
 
@@ -28,6 +28,7 @@ qt_add_qml_module(ids_gimbal
         device/api/DeviceTypes.h device/api/IDeviceProvider.h
         device/session/DeviceSession.h device/session/DeviceSession.cpp
         device/presentation/DeviceViewModel.h device/presentation/DeviceViewModel.cpp
+        shared/ui/Fonts.h shared/ui/Fonts.cpp
     QML_FILES
         app/Main.qml
         app/PreferencesPage.qml
@@ -44,6 +45,17 @@ target_include_directories(ids_gimbal
 )
 
 target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2)
+
+# Inter and JetBrains Mono (SIL OFL 1.1, license texts next to the files), loaded by loadAppFonts().
+qt_add_resources(ids_gimbal "fonts"
+    PREFIX "/fonts"
+    BASE assets/fonts
+    FILES
+        assets/fonts/Inter-Regular.ttf assets/fonts/Inter-Medium.ttf
+        assets/fonts/Inter-SemiBold.ttf assets/fonts/Inter-Bold.ttf
+        assets/fonts/JetBrainsMono-Regular.ttf assets/fonts/JetBrainsMono-Medium.ttf
+        assets/fonts/JetBrainsMono-SemiBold.ttf assets/fonts/JetBrainsMono-Bold.ttf
+)
 
 # Real target: no device transport yet, so it stays disconnected and never shows sample data.
 qt_add_executable(appIDS_GIMBAL
@@ -65,7 +77,7 @@ add_subdirectory(test)
 # .qm files are embedded under :/i18n in ids_gimbal and so reach every target that links it.
 qt_add_translations(
     TARGETS ids_gimbal
-    SOURCE_TARGETS ids_gimbal
+    SOURCE_TARGETS ids_gimbal appIDS_GIMBAL
     TS_FILES translations/IDS_GIMBAL_tr.ts
     NO_GENERATE_PLURALS_TS_FILE
 )

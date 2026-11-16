@@ -2,6 +2,8 @@
 
 #include "device/session/DeviceSession.h"
 
+#include <QCoreApplication>
+
 DeviceViewModel::DeviceViewModel(DeviceSession *session, QObject *parent)
     : QObject(parent), m_session(session)
 {
@@ -30,7 +32,11 @@ QString DeviceViewModel::connectionText() const
 bool DeviceViewModel::connected() const { return m_session->state() == ConnectionState::Connected; }
 bool DeviceViewModel::busy() const { return m_session->state() == ConnectionState::Connecting; }
 bool DeviceViewModel::hasError() const { return m_session->state() == ConnectionState::Error; }
-QString DeviceViewModel::errorDetail() const { return m_session->detail(); }
+QString DeviceViewModel::errorDetail() const
+{
+    // Same "Detail" context as NotificationModel: raw device text has no entry and stays as is.
+    return QCoreApplication::translate("Detail", m_session->detail().toUtf8().constData());
+}
 
 void DeviceViewModel::connectDevice() { m_session->connectDevice(); }
 void DeviceViewModel::disconnectDevice() { m_session->disconnectDevice(); }

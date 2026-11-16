@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
@@ -15,16 +16,28 @@ Item {
 
         Label {
             text: qsTr("Theme")
-            color: Theme.textSecondary
+            color: Theme.muted
         }
-        AppButton {
-            text: Theme.dark ? qsTr("Switch to light theme") : qsTr("Switch to dark theme")
-            onClicked: page.settings.theme = Theme.dark ? "light" : "dark"
+        RowLayout {
+            spacing: Theme.spacingNormal
+            Repeater {
+                model: [
+                    { code: "light", name: qsTr("Light") },
+                    { code: "blue", name: qsTr("Blue") },
+                    { code: "dark", name: qsTr("Dark") }
+                ]
+                AppButton {
+                    required property var modelData
+                    text: modelData.name
+                    checked: page.settings.theme === modelData.code
+                    onClicked: page.settings.theme = modelData.code
+                }
+            }
         }
 
         Label {
             text: qsTr("Language")
-            color: Theme.textSecondary
+            color: Theme.muted
         }
         RowLayout {
             spacing: Theme.spacingNormal

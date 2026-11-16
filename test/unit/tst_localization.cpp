@@ -21,14 +21,14 @@ class tst_Localization : public QObject
 private slots:
     void startsInEnglish()
     {
-        Localization l(nullptr);
+        Localization l;
         QCOMPARE(l.language(), QStringLiteral("en"));
         QCOMPARE(sample(), kEnglish);
     }
 
     void switchToTurkishAndBack()
     {
-        Localization l(nullptr);
+        Localization l;
         QSignalSpy spy(&l, &Localization::languageChanged);
         QVERIFY(l.setLanguage("tr"));
         QCOMPARE(l.language(), QStringLiteral("tr"));
@@ -41,7 +41,7 @@ private slots:
 
     void unsupportedKeepsCurrent()
     {
-        Localization l(nullptr);
+        Localization l;
         QVERIFY(l.setLanguage("tr"));
         QSignalSpy failed(&l, &Localization::languageLoadFailed);
         QVERIFY(!l.setLanguage("de"));
@@ -54,7 +54,7 @@ private slots:
     void missingQmKeepsCurrent()
     {
         QTemporaryDir empty;
-        Localization l(nullptr, empty.path());
+        Localization l(empty.path());
         QSignalSpy failed(&l, &Localization::languageLoadFailed);
         QVERIFY(!l.setLanguage("tr"));
         QCOMPARE(l.language(), QStringLiteral("en"));
@@ -64,7 +64,7 @@ private slots:
 
     void sameLanguageNoSignal()
     {
-        Localization l(nullptr);
+        Localization l;
         QSignalSpy spy(&l, &Localization::languageChanged);
         QVERIFY(l.setLanguage("en"));
         QCOMPARE(spy.count(), 0);

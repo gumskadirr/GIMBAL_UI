@@ -15,8 +15,9 @@ public:
     void start(quint64 sessionId) override
     {
         QTimer::singleShot(0, this, [this, sessionId] {
+            // Translated where it is shown (context "Detail"), so it follows language changes.
             emit stateChanged(sessionId, ConnectionState::Error,
-                              QStringLiteral("No device transport in this build"));
+                              QString::fromUtf8(QT_TRANSLATE_NOOP("Detail", "No device transport in this build")));
         });
     }
     void stop() override {}
