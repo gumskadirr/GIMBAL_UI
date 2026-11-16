@@ -1,0 +1,38 @@
+#pragma once
+
+#include <QObject>
+#include <QSettings>
+#include <QtQml/qqmlregistration.h>
+#include <memory>
+
+// Typed application preferences (not gimbal parameters). Invalid stored values fall back to defaults.
+class AppSettings : public QObject
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Owned by the application")
+    Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)
+    Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+
+public:
+    explicit AppSettings(QObject *parent = nullptr); // platform store, keyed by org/app name
+    explicit AppSettings(const QString &iniFilePath, QObject *parent = nullptr);
+
+    QString theme() const { return m_theme; }      // "dark" | "light"
+    void setTheme(const QString &theme);
+    QString language() const { return m_language; } // "tr" | "en"
+    void setLanguage(const QString &language);
+
+signals:
+    void themeChanged();
+    void languageChanged();
+    void writeFailed(const QString &key);
+
+private:
+    void load();
+    void write(const QString &key, const QString &value);
+
+    std::unique_ptr<QSettings> m_settings;
+    QString m_theme;
+    QString m_language;
+};
