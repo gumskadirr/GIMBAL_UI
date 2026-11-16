@@ -43,6 +43,11 @@ ApplicationWindow {
         property: "mode"
         value: window.settings.theme
     }
+    Binding {
+        target: NumberFormat
+        property: "language"
+        value: window.localization.language
+    }
 
     Component {
         id: gimbalInfoPage

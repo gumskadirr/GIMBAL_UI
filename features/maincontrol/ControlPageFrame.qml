@@ -14,16 +14,16 @@ Item {
     default property alias content: pageContent.data
 
     function degrees(m: measurement): string {
-        return m.valid ? m.value.toFixed(3) + "°" : "—"
+        return m.valid ? NumberFormat.fixed(m.value, 3) + "°" : "—"
     }
     function radians(m: measurement): string {
-        return m.valid ? (m.value * Math.PI / 180).toFixed(4) + " rad" : ""
+        return m.valid ? NumberFormat.fixed(m.value * Math.PI / 180, 4) + " rad" : ""
     }
     function reference(m: measurement): string {
         return m.valid ? qsTr("REF %1 · %2").arg(page.degrees(m)).arg(page.radians(m)) : ""
     }
     function celsius(m: measurement): string {
-        return m.valid ? m.value.toFixed(1) + " °C" : "—"
+        return m.valid ? NumberFormat.fixed(m.value, 1) + " °C" : "—"
     }
 
     // Scrolls when the window is shorter than the content; otherwise the 3D area takes the spare height.
@@ -62,7 +62,7 @@ Item {
                 StatCell {
                     objectName: "cell-supply"
                     label: qsTr("Supply voltage")
-                    value: page.viewModel.supplyVoltage.valid ? page.viewModel.supplyVoltage.value.toFixed(1) + " V" : "—"
+                    value: page.viewModel.supplyVoltage.valid ? NumberFormat.fixed(page.viewModel.supplyVoltage.value, 1) + " V" : "—"
                 }
                 StatCell {
                     objectName: "cell-pan"

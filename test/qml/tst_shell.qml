@@ -129,6 +129,7 @@ TestCase {
         compare(connection.text, "Disconnected")
 
         verify(testLocalization.setLanguage("tr"))
+        compare(NumberFormat.language, "tr") // numbers follow the language too
         compare(navItem.text, "Tercihler")
         compare(connection.text, "Bağlantı yok") // live C++ state, not only qsTr bindings
         compare(main.pages[main.currentIndex].title, "Tercihler")

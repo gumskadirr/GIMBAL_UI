@@ -25,6 +25,19 @@ TestCase {
 
     function cleanup() {
         testHelper.disconnectDevice()
+        NumberFormat.language = "en"
+    }
+
+    // Decimal separator follows the UI language (user decision 2026-11-17).
+    function test_turkishDecimalComma() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        NumberFormat.language = "tr"
+        testHelper.connectWithFullSample()
+        compare(cell(page, "pan").value, "124,496°")
+        compare(cell(page, "pan").secondary, "2,1729 rad")
+        compare(cell(page, "tilt").value, "-8,204°")
+        compare(cell(page, "temperature").value, "41,2 °C")
+        compare(cell(page, "supply").value, "24,1 V")
     }
 
     function test_showsSampleValues() {

@@ -29,12 +29,12 @@ Item {
         }
         Label {
             text: qsTr("Pan: %1").arg(page.viewModel.pan.valid
-                                      ? page.viewModel.pan.value.toFixed(2) + " °" : "—")
+                                      ? NumberFormat.fixed(page.viewModel.pan.value, 2) + " °" : "—")
             color: Theme.text
         }
         Label {
             text: qsTr("Temperature: %1").arg(page.viewModel.gimbalTemp.valid
-                                              ? page.viewModel.gimbalTemp.value.toFixed(2) + " °C" : "—")
+                                              ? NumberFormat.fixed(page.viewModel.gimbalTemp.value, 2) + " °C" : "—")
             color: Theme.text
         }
         Label {

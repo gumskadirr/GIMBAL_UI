@@ -340,38 +340,38 @@
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="76"/>
-        <location filename="../app/Main.qml" line="106"/>
+        <location filename="../app/Main.qml" line="81"/>
+        <location filename="../app/Main.qml" line="111"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="110"/>
+        <location filename="../app/Main.qml" line="115"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="150"/>
+        <location filename="../app/Main.qml" line="155"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="151"/>
+        <location filename="../app/Main.qml" line="156"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="152"/>
+        <location filename="../app/Main.qml" line="157"/>
         <source>Info</source>
         <translation>Bilgi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="168"/>
+        <location filename="../app/Main.qml" line="173"/>
         <source>No notifications</source>
         <translation>Bildirim yok</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="179"/>
+        <location filename="../app/Main.qml" line="184"/>
         <source>Notifications (%1)</source>
         <translation>Bildirimler (%1)</translation>
     </message>
