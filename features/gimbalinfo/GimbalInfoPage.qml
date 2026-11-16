@@ -39,7 +39,7 @@ Item {
             id: content
             width: scroller.width
             height: scroller.contentHeight
-            spacing: 14
+            spacing: 10
 
             StatStrip {
                 Layout.fillWidth: true
@@ -95,7 +95,7 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 16
+                spacing: 12
 
                 Card {
                     Layout.fillWidth: true
@@ -120,7 +120,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredWidth: 2
-                    spacing: 12
+                    spacing: 8
 
                     ColumnLayout {
                         spacing: 2
@@ -185,10 +185,10 @@ Item {
                             subtitle: qsTr("Enter or leave the bootloader")
                             Zone {
                                 Layout.fillWidth: true
-                                padding: 12
+                                padding: 8
                                 StatusLabel { status: "idle"; text: qsTr("State unknown") }
                             }
-                            ColumnLayout { // stacked: the Turkish labels do not fit side by side
+                            RowLayout {
                                 Layout.fillWidth: true
                                 spacing: 8
                                 IdsButton { objectName: "command-askBootloader"; Layout.fillWidth: true; enabled: false; text: qsTr("Ask bootloader") }
@@ -231,7 +231,7 @@ Item {
                         }
                         Zone {
                             Layout.fillWidth: true
-                            padding: 12
+                            padding: 8
                             StatusLabel { status: "idle"; text: qsTr("No file selected") }
                         }
                         RowLayout {
@@ -263,7 +263,7 @@ Item {
                         }
                         Zone {
                             Layout.fillWidth: true
-                            padding: 12
+                            padding: 8
                             StatusLabel { status: "idle"; text: qsTr("No result") }
                         }
                     }

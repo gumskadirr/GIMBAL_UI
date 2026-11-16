@@ -16,9 +16,10 @@ ApplicationWindow {
     // Titles are bindings and follow language changes. The views use pages.length as their model, so a
     // language change does not recreate the pages.
     readonly property var pages: [
-        // designHeight: page height of the reference design (1080 artboard minus frame); see the page host below.
+        // designHeight: natural height of the page's (reference) layout, measured; tst_shell fails if the content
+        // outgrows it. Used by the page host below to scale the page to fit.
         { id: "gimbalInfo", group: qsTr("Board"), title: qsTr("Gimbal info"), icon: Icons.info,
-          component: gimbalInfoPage, designHeight: 937 },
+          component: gimbalInfoPage, designHeight: 768 },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,

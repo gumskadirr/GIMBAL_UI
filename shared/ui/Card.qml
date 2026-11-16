@@ -23,8 +23,9 @@ T.Control {
 
     implicitWidth: Math.max(implicitBackgroundWidth, implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight, implicitContentHeight + topPadding + bottomPadding)
-    padding: flush ? 0 : (compact ? 16 : 20)
-    spacing: compact ? 12 : 14
+    // compact is tighter than the design (16 / 12) so dense pages fit 1080p at 125 % with less scaling.
+    padding: flush ? 0 : (compact ? 12 : 20)
+    spacing: compact ? 8 : 14
 
     property bool _moving: false
     function _keepSpacerLast() {

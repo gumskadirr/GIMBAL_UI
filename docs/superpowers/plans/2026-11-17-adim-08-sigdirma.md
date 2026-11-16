@@ -27,3 +27,14 @@
 - Derleme, lint uyarısız, tüm CTest'ler.
 - İki uygulama açılıp kapanır.
 - 1536×786 ve 1920×1050'de ekran dışı görüntü alınır.
+
+## Ek: seçenek 3 (2026-11-17, kullanıcı kararı)
+- **Yerleşim** yine referansla aynı: kartlar yerinde, sütunlar ve sıra değişmedi.
+- **Sıkılaştırma:**
+  - Sayfa içi boşluklar küçüldü: 14 → 10, 16 → 12, 12 → 8.
+  - Durum kutularının iç boşluğu 12 → 8.
+  - Kompakt `Card` iç boşluğu 16 → 12, aralığı 12 → 8.
+  - Önyükleyici düğmeleri yan yana (referanstaki gibi).
+- **`designHeight`:** 937 → **768**. Bu, sıkılaşmış içeriğin ölçülen yüksekliği (767) + 1.
+- **Sonuç:** Küçültme oranı %125'te ~%69 → ~%85 oldu; %100'de küçültme yok.
+- **Koruma:** İçerik 768'i aşarsa `tst_shell` başarısız olur.
