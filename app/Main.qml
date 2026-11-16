@@ -22,6 +22,8 @@ ApplicationWindow {
           component: gimbalInfoPage, designHeight: 768 },
         { id: "motorControl", group: qsTr("Control"), title: qsTr("Motor control"), icon: Icons.motor,
           component: motorControlPage, designHeight: 850 },
+        { id: "heater", group: qsTr("Hardware"), title: qsTr("Heater"), icon: Icons.heater,
+          component: heaterPage, designHeight: 500 },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
@@ -60,6 +62,12 @@ ApplicationWindow {
     Component {
         id: motorControlPage
         MotorControlPage {
+            viewModel: window.deviceViewModel
+        }
+    }
+    Component {
+        id: heaterPage
+        HeaterPage {
             viewModel: window.deviceViewModel
         }
     }

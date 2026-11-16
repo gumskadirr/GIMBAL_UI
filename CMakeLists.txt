@@ -71,11 +71,15 @@ qt_add_qml_module(ids_gimbal
         shared/ui/IdsTextField.qml
         shared/ui/ToggleRow.qml
         shared/ui/IdsSwitch.qml
+        shared/ui/IdsProgressBar.qml
+        shared/ui/IdsSlider.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
         features/maincontrol/ControlPageFrame.qml
+        features/maincontrol/SectionHeading.qml
         features/maincontrol/GimbalInfoPage.qml
         features/maincontrol/MotorControlPage.qml
+        features/maincontrol/HeaterPage.qml
     RESOURCES
         assets/icons/ids_logo.png
 )

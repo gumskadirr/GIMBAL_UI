@@ -8,21 +8,9 @@ import IDS_GIMBAL
 // command buttons stay disabled (architecture §7) until it is integrated.
 ControlPageFrame {
     id: page
-    ColumnLayout {
-        spacing: 2
-        Text {
-            text: qsTr("Board info")
-            font.family: Theme.fontSans
-            font.pixelSize: Theme.fsH2
-            font.weight: Font.Bold
-            color: Theme.text
-        }
-        Text {
-            text: qsTr("Identity, firmware and bootloader of the target board")
-            font.family: Theme.fontSans
-            font.pixelSize: Theme.fsSmall
-            color: Theme.muted
-        }
+    SectionHeading {
+        title: qsTr("Board info")
+        subtitle: qsTr("Identity, firmware and bootloader of the target board")
     }
     Hint {
         Layout.fillWidth: true

@@ -11,25 +11,6 @@ import IDS_GIMBAL
 ControlPageFrame {
     id: page
 
-    component SectionHeading: ColumnLayout {
-        id: heading
-        property string title
-        property string subtitle
-        spacing: 2
-        Text {
-            text: heading.title
-            font.family: Theme.fontSans
-            font.pixelSize: Theme.fsH2
-            font.weight: Font.Bold
-            color: Theme.text
-        }
-        Text {
-            text: heading.subtitle
-            font.family: Theme.fontSans
-            font.pixelSize: Theme.fsSmall
-            color: Theme.muted
-        }
-    }
     component GainHeader: Text {
         font.family: Theme.fontSans
         font.pixelSize: Theme.fsOverline

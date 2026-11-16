@@ -73,12 +73,12 @@ TestCase {
 
     function test_demoOnlyPageHiddenInRealTarget() {
         const real = createMain(false)
-        compare(real.pages.map(page => page.id), ["gimbalInfo", "motorControl", "preferences"])
+        compare(real.pages.map(page => page.id), ["gimbalInfo", "motorControl", "heater", "preferences"])
         compare(findChild(real.contentItem, "nav-diagnostics"), null)
         compare(real.activePageId, "gimbalInfo")
 
         const demo = createMain(true)
-        compare(demo.pages.map(page => page.id), ["gimbalInfo", "motorControl", "diagnostics", "preferences"])
+        compare(demo.pages.map(page => page.id), ["gimbalInfo", "motorControl", "heater", "diagnostics", "preferences"])
         verify(findChild(demo.contentItem, "nav-diagnostics"))
     }
 
