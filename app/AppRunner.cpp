@@ -12,6 +12,28 @@
 #include "shared/settings/AppSettings.h"
 #include "shared/ui/Fonts.h"
 
+void connectServices(AppSettings &settings, NotificationModel &notifications, Localization &localization,
+                     DeviceSession &session, DeviceViewModel &deviceViewModel)
+{
+    QObject::connect(&settings, &AppSettings::writeFailed, &notifications, [&](const QString &key) {
+        notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error, key);
+    });
+    QObject::connect(&localization, &Localization::languageLoadFailed, &notifications,
+                     [&](const QString &code) {
+                         notifications.add(QStringLiteral("language.loadFailed"), {code},
+                                           NotificationModel::Warning);
+                     });
+    QObject::connect(&localization, &Localization::languageChanged, &settings, [&] {
+        notifications.retranslate();
+        deviceViewModel.retranslate();
+        settings.setLanguage(localization.language());
+    });
+    QObject::connect(&session, &DeviceSession::stateChanged, &notifications, [&] {
+        if (session.state() == ConnectionState::Error)
+            notifications.add(QStringLiteral("device.error"), {}, NotificationModel::Error, session.detail());
+    });
+}
+
 int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDeviceProvider> provider)
 {
     QCoreApplication::setOrganizationName(QStringLiteral("IDS"));
@@ -35,26 +57,10 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
     // First languageChanged handler: QML bindings are refreshed before the C++ models.
     QObject::connect(&localization, &Localization::languageChanged, &engine, &QQmlEngine::retranslate);
 
-    QObject::connect(&settings, &AppSettings::writeFailed, &notifications, [&](const QString &key) {
-        notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error, key);
-    });
-    QObject::connect(&localization, &Localization::languageLoadFailed, &notifications,
-                     [&](const QString &code) {
-                         notifications.add(QStringLiteral("language.loadFailed"), {code},
-                                           NotificationModel::Warning);
-                     });
-    QObject::connect(&localization, &Localization::languageChanged, &app, [&] {
-        notifications.retranslate();
-        deviceViewModel.retranslate();
-        settings.setLanguage(localization.language());
-    });
+    connectServices(settings, notifications, localization, session, deviceViewModel);
     if (!missingFonts.isEmpty())
         notifications.add(QStringLiteral("fonts.loadFailed"), {missingFonts.join(QStringLiteral(", "))},
                           NotificationModel::Warning);
-    QObject::connect(&session, &DeviceSession::stateChanged, &notifications, [&] {
-        if (session.state() == ConnectionState::Error)
-            notifications.add(QStringLiteral("device.error"), {}, NotificationModel::Error, session.detail());
-    });
     // Stop data production before services and engine go away.
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &session, &DeviceSession::disconnectDevice);
 

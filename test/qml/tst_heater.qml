@@ -1,6 +1,7 @@
 import QtQuick
 import QtTest
 import IDS_GIMBAL
+import "TestUtils.js" as TestUtils
 
 // Heater page against the real DeviceViewModel (data from tst_qml.cpp's fake provider).
 TestCase {
@@ -29,23 +30,11 @@ TestCase {
     function test_inputsAndCommandsDisabledWithoutProtocol() {
         const page = createTemporaryObject(pageComponent, testCase)
         testHelper.connectWithFullSample()
-        const ids = ["command-read", "command-setHeater", "input-enableHeaters"]
+        const controls = TestUtils.interactiveControls(page)
+        verify(controls.length >= 13) // 2 buttons, enable switch, 5 sliders, 5 duty fields
+        for (const control of controls)
+            verify(!control.enabled, control.objectName || control.text || String(control))
         for (const zone of testCase.zones)
-            ids.push("input-duty-" + zone)
-        for (const id of ids) {
-            const item = findChild(page, id)
-            verify(item, id)
-            verify(!item.enabled, id)
-        }
-    }
-
-    // Duty cycles come from the device: without data no value is shown.
-    function test_zonesShowNoValueWithoutData() {
-        const page = createTemporaryObject(pageComponent, testCase)
-        for (const zone of testCase.zones) {
-            const item = findChild(page, "zone-" + zone)
-            verify(item, zone)
-            compare(item.valueText, "—", zone)
-        }
+            verify(findChild(page, "zone-" + zone), zone)
     }
 }

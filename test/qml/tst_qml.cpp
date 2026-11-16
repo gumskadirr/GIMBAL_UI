@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "../unit/FakeProvider.h"
+#include "app/AppRunner.h"
 #include "device/presentation/DeviceViewModel.h"
 #include "device/session/DeviceSession.h"
 #include "shared/localization/Localization.h"
@@ -50,11 +51,8 @@ public slots:
         m_fake = fake.get();
         m_session = std::make_unique<DeviceSession>(std::move(fake));
         m_viewModel = std::make_unique<DeviceViewModel>(m_session.get());
-        // Same C++ retranslation as AppRunner.
-        QObject::connect(m_localization.get(), &Localization::languageChanged, m_notifications.get(),
-                         &NotificationModel::retranslate);
-        QObject::connect(m_localization.get(), &Localization::languageChanged, m_viewModel.get(),
-                         &DeviceViewModel::retranslate);
+        // The application's own service wiring (AppRunner), not a copy of it.
+        connectServices(*m_settings, *m_notifications, *m_localization, *m_session, *m_viewModel);
     }
 
     void qmlEngineAvailable(QQmlEngine *engine)

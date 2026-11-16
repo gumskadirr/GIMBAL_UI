@@ -37,24 +37,33 @@ TestCase {
     // window; small pages are not scaled.
     function test_referencePageScalesToFit_data() {
         return [
-            { tag: "1080p@125%", w: 1536, h: 786 },
-            { tag: "1080p@100%", w: 1920, h: 1050 },
-            { tag: "1080p@150%", w: 1280, h: 690 },
-            { tag: "1366x768@100%", w: 1366, h: 698 }
+            { tag: "1080p@125% en", w: 1536, h: 786, lang: "en" },
+            { tag: "1080p@100% en", w: 1920, h: 1050, lang: "en" },
+            { tag: "1080p@150% en", w: 1280, h: 690, lang: "en" },
+            { tag: "1366x768@100% en", w: 1366, h: 698, lang: "en" },
+            // Turkish labels are longer and wrap earlier (Motor control toolbar).
+            { tag: "1080p@125% tr", w: 1536, h: 786, lang: "tr" },
+            { tag: "1080p@100% tr", w: 1920, h: 1050, lang: "tr" },
+            { tag: "1080p@150% tr", w: 1280, h: 690, lang: "tr" },
+            { tag: "1366x768@100% tr", w: 1366, h: 698, lang: "tr" }
         ]
     }
 
     function test_referencePageScalesToFit(data) {
+        verify(testLocalization.setLanguage(data.lang))
         const main = createMain(true)
         main.visibility = Window.Windowed
         main.width = data.w
         main.height = data.h
-        const referencePages = main.pages.filter(page => page.designHeight)
-        verify(referencePages.length >= 2)
-        for (const page of referencePages) {
+        let framePages = 0
+        for (const page of main.pages) {
             main.currentPageId = page.id
             const loader = findChild(main.contentItem, "page-" + page.id)
             tryVerify(() => loader.item !== null)
+            const scroller = findChild(loader.item, "pageScroller")
+            if (!scroller)
+                continue // not a ControlPageFrame page
+            ++framePages
             // Layouts update on the next frame after a resize; without waiting the old geometry is measured.
             waitForRendering(main.contentItem)
             const slot = loader.parent
@@ -62,12 +71,12 @@ TestCase {
             verify(slot.width > main.width / 2 && area.y + slot.height < main.height,
                    page.id + ": slot " + slot.width + "x" + slot.height + " not laid out for window " + main.width + "x" + main.height)
             verify(loader.scale <= 1, page.id)
-            compare(loader.height * loader.scale, loader.parent.height, page.id) // whole page in the area
-            // the frame's own scroller is not needed: the content fits designHeight
-            const scroller = findChild(loader.item, "pageScroller")
+            // The whole page is visible without the frame's own scroller (contentHeight is
+            // max(height, natural height), so this fails exactly when the content does not fit).
             verify(scroller.contentHeight <= scroller.height + 0.5,
                    page.id + " needs " + scroller.contentHeight + ", has " + scroller.height)
         }
+        verify(framePages >= 3)
         compare(findChild(main.contentItem, "page-preferences").scale, 1)
     }
 

@@ -1,6 +1,7 @@
 import QtQuick
 import QtTest
 import IDS_GIMBAL
+import "TestUtils.js" as TestUtils
 
 // Gimbal info summary strip against the real DeviceViewModel (data from tst_qml.cpp's fake provider).
 TestCase {
@@ -60,12 +61,10 @@ TestCase {
     function test_commandsDisabledWithoutProtocol() {
         const page = createTemporaryObject(pageComponent, testCase)
         testHelper.connectWithFullSample()
-        for (const id of ["askBootloader", "exitBootloader", "startBootBridge", "openFirmware",
-                          "updateFirmware", "runBit"]) {
-            const button = findChild(page, "command-" + id)
-            verify(button, id)
-            verify(!button.enabled, id)
-        }
+        const controls = TestUtils.interactiveControls(page)
+        verify(controls.length >= 7) // 6 command buttons + boot bridge target list
+        for (const control of controls)
+            verify(!control.enabled, control.objectName || control.text || String(control))
     }
 
     // No data is never shown as a value (architecture §7).

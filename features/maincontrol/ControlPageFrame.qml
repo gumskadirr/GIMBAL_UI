@@ -76,7 +76,7 @@ Item {
                         from: -180
                         to: 180
                         value: page.viewModel.pan.value
-                        fillColor: page.viewModel.pan.valid ? Theme.gauge : "transparent"
+                        valid: page.viewModel.pan.valid
                     }
                 }
                 StatCell {
@@ -90,7 +90,7 @@ Item {
                         from: -90
                         to: 90
                         value: page.viewModel.tilt.value
-                        fillColor: page.viewModel.tilt.valid ? Theme.gauge : "transparent"
+                        valid: page.viewModel.tilt.valid
                     }
                 }
             }

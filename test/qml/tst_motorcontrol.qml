@@ -1,6 +1,7 @@
 import QtQuick
 import QtTest
 import IDS_GIMBAL
+import "TestUtils.js" as TestUtils
 
 // Motor control page against the real DeviceViewModel (data from tst_qml.cpp's fake provider).
 TestCase {
@@ -27,13 +28,10 @@ TestCase {
     function test_inputsAndCommandsDisabledWithoutProtocol() {
         const page = createTemporaryObject(pageComponent, testCase)
         testHelper.connectWithFullSample()
-        for (const id of ["command-read", "command-write", "command-saveToFlash", "command-defaults",
-                          "command-toggleLatch", "command-startControl", "command-stopControl",
-                          "command-set", "command-reset", "input-torqueKp"]) {
-            const item = findChild(page, id)
-            verify(item, id)
-            verify(!item.enabled, id)
-        }
+        const controls = TestUtils.interactiveControls(page)
+        verify(controls.length >= 30) // buttons, gain/offset fields, lists, switches, segments
+        for (const control of controls)
+            verify(!control.enabled, control.objectName || control.text || String(control))
     }
 
     // The latch line shows the real safe-control state; no data is never shown as a state.

@@ -3,11 +3,15 @@ import QtQuick
 
 // Number display in the UI language: Turkish 124,496 / English 124.496 (architecture §10).
 // Only for the screen; files and device messages keep a language independent format.
+// No thousands separator: in Turkish "1.234" would read as a decimal in English and vice versa.
 QtObject {
     property string language: "en" // bound to Localization.language in Main.qml
-    readonly property var _locale: Qt.locale(language === "tr" ? "tr_TR" : "en_US")
 
     function fixed(value: real, decimals: int): string {
-        return value.toLocaleString(_locale, "f", decimals)
+        let rounded = Number(value.toFixed(decimals))
+        if (rounded === 0)
+            rounded = 0 // -0.0001 shows as 0.000, never -0.000
+        const text = rounded.toFixed(decimals)
+        return language === "tr" ? text.replace(".", ",") : text
     }
 }

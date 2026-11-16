@@ -10,6 +10,7 @@ Item {
     property real from: 0
     property real to: 1
     property real value: 0
+    property bool valid: true // false: no fill and no value for screen readers (no data is never 0)
     property real sweep: 270
     property real thickness: Math.max(3, Math.min(width, height) * 0.107)
     property color trackColor: Theme.track
@@ -23,7 +24,7 @@ Item {
     implicitWidth: 40
     implicitHeight: 40
     Accessible.role: Accessible.Indicator
-    Accessible.name: value.toString()
+    Accessible.name: valid ? value.toString() : "—"
 
     Shape {
         anchors.fill: parent
@@ -43,7 +44,7 @@ Item {
         }
         ShapePath {
             fillColor: "transparent"
-            strokeColor: root.progress > 0 ? root.fillColor : "transparent"
+            strokeColor: root.valid && root.progress > 0 ? root.fillColor : "transparent"
             strokeWidth: root.thickness
             capStyle: ShapePath.RoundCap
             PathAngleArc {
