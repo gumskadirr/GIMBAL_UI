@@ -39,7 +39,7 @@ private:
         QString code;
         QStringList args;
         Severity severity;
-        QString detail; // raw, never translated
+        QString detail; // raw; app-generated ones are translated at display time (context "Detail")
         QDateTime time;
         int count = 1;
     };

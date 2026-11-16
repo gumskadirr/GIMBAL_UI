@@ -38,8 +38,25 @@ qt_add_qml_module(ids_gimbal
         shared/ui/FocusRing.qml
         shared/ui/IdsButton.qml
         shared/ui/IdsComboBox.qml
+        shared/ui/AppShell.qml
+        shared/ui/BrandStripe.qml
+        shared/ui/NavRail.qml
+        shared/ui/NavItem.qml
+        shared/ui/NavSection.qml
+        shared/ui/RailBrand.qml
+        shared/ui/Shadow.qml
+        shared/ui/TopBar.qml
+        shared/ui/StatusBar.qml
+        shared/ui/StatusBarSection.qml
+        shared/ui/StatusBarButton.qml
+        shared/ui/StatusLabel.qml
+        shared/ui/StatusDot.qml
+        shared/ui/Badge.qml
+        shared/ui/IdsPopup.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
+    RESOURCES
+        assets/icons/ids_logo.png
 )
 
 target_include_directories(ids_gimbal

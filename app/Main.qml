@@ -12,14 +12,23 @@ ApplicationWindow {
     required property DeviceViewModel deviceViewModel
     required property bool demoMode
 
-    // Page registry: titles are bindings, so they follow language changes. Order matches the StackLayout.
-    readonly property list<string> pageTitles: [qsTr("Diagnostics"), qsTr("Preferences")]
-    property int currentPage: 0
+    // Page registry (architecture §11): the only place a page is listed; menu and content are built from it.
+    // Titles are bindings and follow language changes. The views use pages.length as their model, so a
+    // language change does not recreate the pages.
+    readonly property var pages: [
+        { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
+          component: diagnosticsPage, demoOnly: true },
+        { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
+          component: preferencesPage }
+    ].filter(page => window.demoMode || !page.demoOnly)
+    property string currentPageId: ""
+    readonly property int currentIndex: Math.max(0, pages.findIndex(page => page.id === window.currentPageId))
+    readonly property string activePageId: pages[currentIndex].id
 
-    width: 1024
-    height: 700
-    minimumWidth: 480
-    minimumHeight: 320
+    width: 1280
+    height: 800
+    minimumWidth: 800
+    minimumHeight: 560
     visible: true
     title: qsTr("IDS Gimbal")
     color: Theme.bg
@@ -30,67 +39,165 @@ ApplicationWindow {
         value: window.settings.theme
     }
 
-    ColumnLayout {
+    Component {
+        id: diagnosticsPage
+        DiagnosticsPage {
+            viewModel: window.deviceViewModel
+            pageActive: window.activePageId === "diagnostics"
+        }
+    }
+    Component {
+        id: preferencesPage
+        PreferencesPage {
+            settings: window.settings
+            localization: window.localization
+        }
+    }
+
+    AppShell {
         anchors.fill: parent
-        spacing: 0
 
-        Rectangle {
-            visible: window.demoMode
-            color: Theme.warnBg
-            Layout.fillWidth: true
-            implicitHeight: bannerText.implicitHeight + 2 * Theme.spacingNormal
-            Label {
-                id: bannerText
-                anchors.centerIn: parent
-                text: qsTr("Sample data — no real device connection")
-                color: Theme.warnTx
-                font.pixelSize: Theme.fsBody
-                font.bold: true
+        navigation: NavRail {
+            id: navRail
+            RailBrand {
+                logoSource: Qt.resolvedUrl("../assets/icons/ids_logo.png")
+                title: "IDS Control"
+                subtitle: qsTr("Main control service")
+                connected: window.deviceViewModel.connected
+                connectionLabel: window.deviceViewModel.connectionText
             }
-        }
-
-        RowLayout {
-            spacing: Theme.spacingNormal
-            Layout.margins: Theme.spacingLarge
-            Layout.bottomMargin: 0
             Repeater {
-                // An int model keeps the buttons when only the titles change.
-                model: window.pageTitles.length
-                IdsButton {
+                model: window.pages.length
+                Column {
+                    id: navEntry
                     required property int index
-                    variant: "quiet"
-                    text: window.pageTitles[index]
-                    checked: window.currentPage === index
-                    onClicked: window.currentPage = index
+                    readonly property var page: window.pages[index]
+                    width: navRail.expandedWidth - 24
+                    NavSection {
+                        rail: navRail
+                        visible: navEntry.index === 0
+                                 || window.pages[navEntry.index - 1].group !== navEntry.page.group
+                        text: navEntry.page.group
+                    }
+                    NavItem {
+                        objectName: "nav-" + navEntry.page.id
+                        rail: navRail
+                        text: navEntry.page.title
+                        iconPath: navEntry.page.icon
+                        current: window.currentIndex === navEntry.index
+                        onClicked: window.currentPageId = navEntry.page.id
+                    }
                 }
             }
         }
 
-        RowLayout {
-            spacing: Theme.spacingLarge
-            Layout.margins: Theme.spacingLarge
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        topBar: TopBar {
+            crumbs: [qsTr("Main control service"), window.pages[window.currentIndex].title]
+            Badge {
+                visible: window.demoMode
+                kind: "warn"
+                text: qsTr("Sample data")
+            }
+            StatusLabel {
+                objectName: "connectionStatus"
+                framed: true
+                status: window.deviceViewModel.hasError ? "crit"
+                      : window.deviceViewModel.connected ? "ok"
+                      : window.deviceViewModel.busy ? "warn"
+                      : "idle"
+                text: window.deviceViewModel.connectionText
+            }
+        }
 
-            StackLayout {
-                currentIndex: window.currentPage
+        statusBar: StatusBar {
+            StatusBarSection {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 24
 
-                DiagnosticsPage {
-                    viewModel: window.deviceViewModel
-                    pageActive: StackLayout.isCurrentItem
-                }
-                PreferencesPage {
-                    settings: window.settings
-                    localization: window.localization
+                    // Newest notification (row 0) in one line; the model stays the single source.
+                    ListView {
+                        id: latestNotification
+                        objectName: "latestNotification"
+                        anchors.fill: parent
+                        model: window.notifications
+                        interactive: false
+                        clip: true
+                        delegate: RowLayout {
+                            id: latestRow
+                            required property string text
+                            required property int severity
+                            required property int count
+                            width: ListView.view.width
+                            height: 24
+                            spacing: Theme.spacingNormal
+                            Badge {
+                                kind: latestRow.severity === NotificationModel.Error ? "crit"
+                                    : latestRow.severity === NotificationModel.Warning ? "warn"
+                                    : "info"
+                                text: latestRow.severity === NotificationModel.Error ? qsTr("Error")
+                                    : latestRow.severity === NotificationModel.Warning ? qsTr("Warning")
+                                    : qsTr("Info")
+                            }
+                            Text {
+                                Layout.fillWidth: true
+                                text: latestRow.count > 1 ? latestRow.text + "  ×" + latestRow.count : latestRow.text
+                                elide: Text.ElideRight
+                                font.family: Theme.fontSans
+                                font.pixelSize: Theme.fsSmall
+                                color: Theme.text2
+                            }
+                        }
+                    }
+                    Text {
+                        visible: latestNotification.count === 0
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        text: qsTr("No notifications")
+                        font.family: Theme.fontSans
+                        font.pixelSize: Theme.fsSmall
+                        color: Theme.label
+                    }
                 }
             }
+            StatusBarSection {
+                StatusBarButton {
+                    id: notificationsButton
+                    objectName: "notificationsButton"
+                    text: qsTr("Notifications (%1)").arg(latestNotification.count)
+                    trailingIconPath: Icons.chevronUp
+                    expanded: notificationsPopup.opened
+                    onClicked: notificationsPopup.opened ? notificationsPopup.close() : notificationsPopup.open()
 
-            NotificationArea {
-                model: window.notifications
-                Layout.preferredWidth: 340
-                Layout.fillHeight: true
+                    IdsPopup {
+                        id: notificationsPopup
+                        objectName: "notificationsPopup"
+                        x: notificationsButton.width - width
+                        y: -height - 14
+                        width: 400
+                        NotificationArea {
+                            model: window.notifications
+                            color: "transparent"
+                            border.width: 0
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 400
+                        }
+                    }
+                }
+            }
+        }
+
+        StackLayout {
+            anchors.fill: parent
+            currentIndex: window.currentIndex
+            Repeater {
+                model: window.pages.length
+                Loader {
+                    required property int index
+                    objectName: "page-" + window.pages[index].id
+                    sourceComponent: window.pages[index].component
+                }
             }
         }
     }

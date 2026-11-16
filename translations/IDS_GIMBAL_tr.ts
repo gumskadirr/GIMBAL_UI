@@ -73,24 +73,73 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/Main.qml" line="16"/>
+        <location filename="../app/Main.qml" line="19"/>
         <source>Diagnostics</source>
         <translation>Tanılama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="16"/>
+        <location filename="../app/Main.qml" line="19"/>
+        <source>Developer</source>
+        <translation>Geliştirici</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="21"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="24"/>
+        <location filename="../app/Main.qml" line="21"/>
+        <source>Application</source>
+        <translation>Uygulama</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="33"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="45"/>
-        <source>Sample data — no real device connection</source>
-        <translation>Örnek veri — gerçek cihaz bağlantısı yok</translation>
+        <location filename="../app/Main.qml" line="65"/>
+        <location filename="../app/Main.qml" line="95"/>
+        <source>Main control service</source>
+        <translation>Ana kontrol servisi</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="99"/>
+        <source>Sample data</source>
+        <translation>Örnek veri</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="139"/>
+        <source>Error</source>
+        <translation>Hata</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="140"/>
+        <source>Warning</source>
+        <translation>Uyarı</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="141"/>
+        <source>Info</source>
+        <translation>Bilgi</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="157"/>
+        <source>No notifications</source>
+        <translation>Bildirim yok</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="168"/>
+        <source>Notifications (%1)</source>
+        <translation>Bildirimler (%1)</translation>
+    </message>
+</context>
+<context>
+    <name>NavRail</name>
+    <message>
+        <location filename="../shared/ui/NavRail.qml" line="19"/>
+        <source>Main navigation</source>
+        <translation>Ana menü</translation>
     </message>
 </context>
 <context>
@@ -162,6 +211,19 @@
         <location filename="../app/PreferencesPage.qml" line="41"/>
         <source>Language</source>
         <translation>Dil</translation>
+    </message>
+</context>
+<context>
+    <name>RailBrand</name>
+    <message>
+        <location filename="../shared/ui/RailBrand.qml" line="13"/>
+        <source>Connected</source>
+        <translation>Bağlı</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/RailBrand.qml" line="13"/>
+        <source>Disconnected</source>
+        <translation>Bağlantı yok</translation>
     </message>
 </context>
 </TS>
