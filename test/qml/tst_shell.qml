@@ -38,7 +38,9 @@ TestCase {
     function test_referencePageScalesToFit_data() {
         return [
             { tag: "1080p@125%", w: 1536, h: 786 },
-            { tag: "1080p@100%", w: 1920, h: 1050 }
+            { tag: "1080p@100%", w: 1920, h: 1050 },
+            { tag: "1080p@150%", w: 1280, h: 690 },
+            { tag: "1366x768@100%", w: 1366, h: 698 }
         ]
     }
 
