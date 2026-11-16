@@ -56,8 +56,9 @@ ApplicationWindow {
             Repeater {
                 // An int model keeps the buttons when only the titles change.
                 model: window.pageTitles.length
-                AppButton {
+                IdsButton {
                     required property int index
+                    variant: "quiet"
                     text: window.pageTitles[index]
                     checked: window.currentPage === index
                     onClicked: window.currentPage = index

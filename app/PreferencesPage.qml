@@ -18,40 +18,36 @@ Item {
             text: qsTr("Theme")
             color: Theme.muted
         }
-        RowLayout {
-            spacing: Theme.spacingNormal
-            Repeater {
-                model: [
-                    { code: "light", name: qsTr("Light") },
-                    { code: "blue", name: qsTr("Blue") },
-                    { code: "dark", name: qsTr("Dark") }
-                ]
-                AppButton {
-                    required property var modelData
-                    text: modelData.name
-                    checked: page.settings.theme === modelData.code
-                    onClicked: page.settings.theme = modelData.code
-                }
-            }
+        IdsComboBox {
+            Layout.preferredWidth: 220
+            Accessible.name: qsTr("Theme")
+            textRole: "name"
+            valueRole: "code"
+            model: [
+                { code: "light", name: qsTr("Light") },
+                { code: "blue", name: qsTr("Blue") },
+                { code: "dark", name: qsTr("Dark") }
+            ]
+            selectedValue: page.settings.theme
+            onActivated: page.settings.theme = currentValue
         }
 
         Label {
             text: qsTr("Language")
             color: Theme.muted
         }
-        RowLayout {
-            spacing: Theme.spacingNormal
+        IdsComboBox {
+            Layout.preferredWidth: 220
+            Accessible.name: qsTr("Language")
+            textRole: "name"
+            valueRole: "code"
             // Language names are endonyms and intentionally not translated.
-            AppButton {
-                text: "Türkçe"
-                checked: page.localization.language === "tr"
-                onClicked: page.localization.setLanguage("tr")
-            }
-            AppButton {
-                text: "English"
-                checked: page.localization.language === "en"
-                onClicked: page.localization.setLanguage("en")
-            }
+            model: [
+                { code: "tr", name: "Türkçe" },
+                { code: "en", name: "English" }
+            ]
+            selectedValue: page.localization.language
+            onActivated: page.localization.setLanguage(currentValue)
         }
     }
 }

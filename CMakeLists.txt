@@ -16,7 +16,7 @@ set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/qml)
 # Executables link ids_gimbal + ids_gimbalplugin and call Q_IMPORT_QML_PLUGIN(IDS_GIMBALPlugin).
 qt_add_library(ids_gimbal STATIC)
 
-set_source_files_properties(shared/ui/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(shared/ui/Theme.qml shared/ui/Icons.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(ids_gimbal
     URI IDS_GIMBAL
@@ -33,7 +33,11 @@ qt_add_qml_module(ids_gimbal
         app/Main.qml
         app/PreferencesPage.qml
         shared/ui/Theme.qml
-        shared/ui/AppButton.qml
+        shared/ui/Icons.qml
+        shared/ui/Icon.qml
+        shared/ui/FocusRing.qml
+        shared/ui/IdsButton.qml
+        shared/ui/IdsComboBox.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
 )

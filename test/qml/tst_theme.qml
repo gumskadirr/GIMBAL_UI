@@ -10,7 +10,7 @@ TestCase {
 
     Component {
         id: buttonComponent
-        AppButton { text: "x" }
+        IdsButton { text: "x"; variant: "primary" }
     }
     Component {
         id: notificationAreaComponent

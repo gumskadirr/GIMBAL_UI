@@ -50,22 +50,22 @@
         <translation>Sıcaklık: %1</translation>
     </message>
     <message>
-        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="48"/>
+        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="49"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="53"/>
+        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="54"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı kes</translation>
     </message>
     <message>
-        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="68"/>
+        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="69"/>
         <source>No recent sample</source>
         <translation>Güncel örnek yok</translation>
     </message>
     <message>
-        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="68"/>
+        <location filename="../features/diagnostics/DiagnosticsPage.qml" line="69"/>
         <source>Last sample: %1 ms ago</source>
         <translation>Son örnek: %1 ms önce</translation>
     </message>
@@ -101,12 +101,12 @@
         <translation>Bildirimler</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationArea.qml" line="30"/>
+        <location filename="../shared/notifications/NotificationArea.qml" line="32"/>
         <source>Clear</source>
         <translation>Temizle</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationArea.qml" line="91"/>
+        <location filename="../shared/notifications/NotificationArea.qml" line="95"/>
         <source>Dismiss</source>
         <translation>Kapat</translation>
     </message>
@@ -138,26 +138,28 @@
     <name>PreferencesPage</name>
     <message>
         <location filename="../app/PreferencesPage.qml" line="18"/>
+        <location filename="../app/PreferencesPage.qml" line="23"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../app/PreferencesPage.qml" line="25"/>
+        <location filename="../app/PreferencesPage.qml" line="27"/>
         <source>Light</source>
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../app/PreferencesPage.qml" line="26"/>
+        <location filename="../app/PreferencesPage.qml" line="28"/>
         <source>Blue</source>
         <translation>Mavi</translation>
     </message>
     <message>
-        <location filename="../app/PreferencesPage.qml" line="27"/>
+        <location filename="../app/PreferencesPage.qml" line="29"/>
         <source>Dark</source>
         <translation>Koyu</translation>
     </message>
     <message>
-        <location filename="../app/PreferencesPage.qml" line="39"/>
+        <location filename="../app/PreferencesPage.qml" line="36"/>
+        <location filename="../app/PreferencesPage.qml" line="41"/>
         <source>Language</source>
         <translation>Dil</translation>
     </message>

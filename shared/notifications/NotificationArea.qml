@@ -26,7 +26,9 @@ Rectangle {
                 font.pixelSize: Theme.fsBody
                 Layout.fillWidth: true
             }
-            AppButton {
+            IdsButton {
+                variant: "quiet"
+                compact: true
                 text: qsTr("Clear")
                 enabled: list.count > 0
                 onClicked: area.model.clear()
@@ -86,12 +88,14 @@ Rectangle {
                             font.pixelSize: Theme.fsSmall
                         }
                     }
-                    AppButton {
-                        text: "×"
+                    IdsButton {
+                        variant: "quiet"
+                        compact: true
+                        iconPath: Icons.close
                         Accessible.name: qsTr("Dismiss")
-                        implicitWidth: Theme.controlHeight
                         leftPadding: 0
                         rightPadding: 0
+                        Layout.alignment: Qt.AlignTop
                         onClicked: area.model.dismiss(row.index)
                     }
                 }

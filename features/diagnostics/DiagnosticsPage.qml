@@ -44,12 +44,13 @@ Item {
 
         RowLayout {
             spacing: Theme.spacingNormal
-            AppButton {
+            IdsButton {
+                variant: "primary"
                 text: qsTr("Connect")
                 enabled: !page.viewModel.connected && !page.viewModel.busy
                 onClicked: page.viewModel.connectDevice()
             }
-            AppButton {
+            IdsButton {
                 text: qsTr("Disconnect")
                 enabled: page.viewModel.connected || page.viewModel.busy
                 onClicked: page.viewModel.disconnectDevice()
