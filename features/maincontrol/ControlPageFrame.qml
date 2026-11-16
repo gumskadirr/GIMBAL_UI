@@ -29,6 +29,7 @@ Item {
     // Scrolls when the window is shorter than the content; otherwise the 3D area takes the spare height.
     Flickable {
         id: scroller
+        objectName: "pageScroller"
         anchors.fill: parent
         contentWidth: width
         contentHeight: Math.max(height, content.implicitHeight)

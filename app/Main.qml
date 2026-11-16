@@ -20,6 +20,8 @@ ApplicationWindow {
         // outgrows it. Used by the page host below to scale the page to fit.
         { id: "gimbalInfo", group: qsTr("Board"), title: qsTr("Gimbal info"), icon: Icons.info,
           component: gimbalInfoPage, designHeight: 768 },
+        { id: "motorControl", group: qsTr("Control"), title: qsTr("Motor control"), icon: Icons.motor,
+          component: motorControlPage, designHeight: 850 },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
@@ -52,6 +54,12 @@ ApplicationWindow {
     Component {
         id: gimbalInfoPage
         GimbalInfoPage {
+            viewModel: window.deviceViewModel
+        }
+    }
+    Component {
+        id: motorControlPage
+        MotorControlPage {
             viewModel: window.deviceViewModel
         }
     }

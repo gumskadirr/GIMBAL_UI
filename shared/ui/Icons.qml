@@ -24,4 +24,6 @@ QtObject {
     readonly property string bug: "M8 9a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0zM12 9v9M4 13h4M16 13h4M5 7l3 2M19 7l-3 2M5 19l3-2M19 19l-3-2"
     readonly property string check: "M5 12l5 5L20 7"
     readonly property string close: "M6 6l12 12M18 6L6 18"
+    readonly property string play: "M8 5l11 7-11 7z"
+    readonly property string stop: "M7.5 6h9a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1 -1.5 1.5h-9a1.5 1.5 0 0 1 -1.5 -1.5v-9a1.5 1.5 0 0 1 1.5 -1.5z"
 }

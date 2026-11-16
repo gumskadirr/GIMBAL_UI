@@ -49,30 +49,36 @@ TestCase {
         main.visibility = Window.Windowed
         main.width = data.w
         main.height = data.h
-        const loader = findChild(main.contentItem, "page-gimbalInfo")
-        tryVerify(() => loader.item !== null && loader.parent.height > 0)
-        waitForPolish(loader.item)
-        const slot = loader.parent
-        verify(loader.scale <= 1)
-        compare(loader.height * loader.scale, slot.height) // whole page in the area
-        // the page's own scroller is not needed: the bottom card is inside the scaled page
-        const runBit = findChild(loader.item, "command-runBit")
-        let scroller = runBit.parent
-        while (scroller && !(scroller instanceof Flickable))
-            scroller = scroller.parent
-        verify(scroller.contentHeight <= scroller.height + 0.5,
-               "needs " + scroller.contentHeight + ", has " + scroller.height)
+        const referencePages = main.pages.filter(page => page.designHeight)
+        verify(referencePages.length >= 2)
+        for (const page of referencePages) {
+            main.currentPageId = page.id
+            const loader = findChild(main.contentItem, "page-" + page.id)
+            tryVerify(() => loader.item !== null)
+            // Layouts update on the next frame after a resize; without waiting the old geometry is measured.
+            waitForRendering(main.contentItem)
+            const slot = loader.parent
+            const area = slot.mapToItem(main.contentItem, 0, 0)
+            verify(slot.width > main.width / 2 && area.y + slot.height < main.height,
+                   page.id + ": slot " + slot.width + "x" + slot.height + " not laid out for window " + main.width + "x" + main.height)
+            verify(loader.scale <= 1, page.id)
+            compare(loader.height * loader.scale, loader.parent.height, page.id) // whole page in the area
+            // the frame's own scroller is not needed: the content fits designHeight
+            const scroller = findChild(loader.item, "pageScroller")
+            verify(scroller.contentHeight <= scroller.height + 0.5,
+                   page.id + " needs " + scroller.contentHeight + ", has " + scroller.height)
+        }
         compare(findChild(main.contentItem, "page-preferences").scale, 1)
     }
 
     function test_demoOnlyPageHiddenInRealTarget() {
         const real = createMain(false)
-        compare(real.pages.map(page => page.id), ["gimbalInfo", "preferences"])
+        compare(real.pages.map(page => page.id), ["gimbalInfo", "motorControl", "preferences"])
         compare(findChild(real.contentItem, "nav-diagnostics"), null)
         compare(real.activePageId, "gimbalInfo")
 
         const demo = createMain(true)
-        compare(demo.pages.map(page => page.id), ["gimbalInfo", "diagnostics", "preferences"])
+        compare(demo.pages.map(page => page.id), ["gimbalInfo", "motorControl", "diagnostics", "preferences"])
         verify(findChild(demo.contentItem, "nav-diagnostics"))
     }
 

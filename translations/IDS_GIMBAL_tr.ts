@@ -9,62 +9,62 @@
         <translation>REF %1 · %2</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="50"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="51"/>
         <source>Safe control</source>
         <translation>Güvenli kontrol</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="52"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="53"/>
         <source>Locked</source>
         <translation>Kilitli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="52"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="53"/>
         <source>Unlocked</source>
         <translation>Kilitli değil</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="58"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="59"/>
         <source>Gimbal / IMU temp.</source>
         <translation>Gimbal / IMU sıc.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="60"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="61"/>
         <source>IMU %1</source>
         <translation>IMU %1</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="64"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="65"/>
         <source>Supply voltage</source>
         <translation>Besleme gerilimi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="69"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="70"/>
         <source>Pan angle</source>
         <translation>Pan açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="83"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="84"/>
         <source>Tilt angle</source>
         <translation>Tilt açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="106"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="107"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="107"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="108"/>
         <source>3D model, follows live pan and tilt</source>
         <translation>Canlı pan ve tilt açısını izleyen 3B model</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="115"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="116"/>
         <source>3D gimbal model</source>
         <translation>3B gimbal modeli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="116"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="117"/>
         <source>Reserved area for the interactive 3D view</source>
         <translation>Etkileşimli 3B görünüm için ayrılmış alan</translation>
     </message>
@@ -316,64 +316,373 @@
     </message>
     <message>
         <location filename="../app/Main.qml" line="23"/>
+        <source>Control</source>
+        <translation>Kontrol</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="23"/>
+        <source>Motor control</source>
+        <translation>Motor kontrolü</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="25"/>
         <source>Diagnostics</source>
         <translation>Tanılama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="23"/>
+        <location filename="../app/Main.qml" line="25"/>
         <source>Developer</source>
         <translation>Geliştirici</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="25"/>
+        <location filename="../app/Main.qml" line="27"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="25"/>
+        <location filename="../app/Main.qml" line="27"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="38"/>
+        <location filename="../app/Main.qml" line="40"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="81"/>
-        <location filename="../app/Main.qml" line="111"/>
+        <location filename="../app/Main.qml" line="89"/>
+        <location filename="../app/Main.qml" line="119"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="115"/>
+        <location filename="../app/Main.qml" line="123"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="155"/>
+        <location filename="../app/Main.qml" line="163"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="156"/>
+        <location filename="../app/Main.qml" line="164"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="157"/>
+        <location filename="../app/Main.qml" line="165"/>
         <source>Info</source>
         <translation>Bilgi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="173"/>
+        <location filename="../app/Main.qml" line="181"/>
         <source>No notifications</source>
         <translation>Bildirim yok</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="184"/>
+        <location filename="../app/Main.qml" line="192"/>
         <source>Notifications (%1)</source>
         <translation>Bildirimler (%1)</translation>
+    </message>
+</context>
+<context>
+    <name>MotorControlPage</name>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="67"/>
+        <source>Motor configuration</source>
+        <translation>Motor yapılandırması</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="68"/>
+        <source>Gains, limits and wiring of the selected motor</source>
+        <translation>Seçili motorun kazançları, sınırları ve bağlantısı</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="76"/>
+        <source>Configure</source>
+        <translation>Yapılandır</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="81"/>
+        <source>Pan</source>
+        <translation>Pan</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="81"/>
+        <source>Tilt</source>
+        <translation>Tilt</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="82"/>
+        <source>Read</source>
+        <translation>Oku</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="83"/>
+        <source>Write</source>
+        <translation>Yaz</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="84"/>
+        <source>Save to flash</source>
+        <translation>Flash&apos;a kaydet</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="85"/>
+        <source>Defaults</source>
+        <translation>Varsayılanlar</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="90"/>
+        <source>Read loads from the board · Write applies until restart · Save to flash keeps after restart</source>
+        <translation>Oku karttan yükler · Yaz yeniden başlatmaya kadar uygular · Flash&apos;a kaydet yeniden başlatmadan sonra da korur</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="99"/>
+        <source>PID controllers</source>
+        <translation>PID denetleyicileri</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="100"/>
+        <source>Gains for each control loop</source>
+        <translation>Her kontrol döngüsünün kazançları</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="110"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="234"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="238"/>
+        <source>Torque</source>
+        <translation>Tork</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="111"/>
+        <source>Torque Kp</source>
+        <translation>Tork Kp</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="112"/>
+        <source>Torque Ki</source>
+        <translation>Tork Ki</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="113"/>
+        <source>Torque Kd</source>
+        <translation>Tork Kd</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="114"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="234"/>
+        <source>Speed</source>
+        <translation>Hız</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="115"/>
+        <source>Speed Kp</source>
+        <translation>Hız Kp</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="116"/>
+        <source>Speed Ki</source>
+        <translation>Hız Ki</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="117"/>
+        <source>Speed Kd</source>
+        <translation>Hız Kd</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="118"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="139"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="234"/>
+        <source>Position</source>
+        <translation>Konum</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="119"/>
+        <source>Position Kp</source>
+        <translation>Konum Kp</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="120"/>
+        <source>Position Ki</source>
+        <translation>Konum Ki</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="121"/>
+        <source>Position Kd</source>
+        <translation>Konum Kd</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="122"/>
+        <source>Tracker</source>
+        <translation>İzleyici</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="123"/>
+        <source>Tracker Kp</source>
+        <translation>İzleyici Kp</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="124"/>
+        <source>Tracker Ki</source>
+        <translation>İzleyici Ki</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="125"/>
+        <source>Tracker Kd</source>
+        <translation>İzleyici Kd</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="130"/>
+        <source>Model serial number</source>
+        <translation>Model seri numarası</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="140"/>
+        <source>Limits, offsets and motor wiring</source>
+        <translation>Sınırlar, ofsetler ve motor bağlantısı</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="146"/>
+        <source>Position offset, deg</source>
+        <translation>Konum ofseti, derece</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="147"/>
+        <source>Electrical offset, deg</source>
+        <translation>Elektriksel ofset, derece</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="148"/>
+        <source>Forward border, deg</source>
+        <translation>İleri sınır, derece</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="149"/>
+        <source>Backward border, deg</source>
+        <translation>Geri sınır, derece</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="152"/>
+        <source>Encoder rotation</source>
+        <translation>Enkoder dönüş yönü</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="153"/>
+        <source>Forward</source>
+        <translation>İleri</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="153"/>
+        <source>Reverse</source>
+        <translation>Geri</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="155"/>
+        <source>Phase rotation</source>
+        <translation>Faz sırası</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="157"/>
+        <source>Slip ring</source>
+        <translation>Kayar halka</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="169"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="176"/>
+        <source>Control</source>
+        <translation>Kontrol</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="170"/>
+        <source>Drive the active motor</source>
+        <translation>Etkin motoru sür</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="177"/>
+        <source>Mode, active motor and keyboard input</source>
+        <translation>Mod, etkin motor ve klavye girişi</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="182"/>
+        <source>Control mode</source>
+        <translation>Kontrol modu</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="183"/>
+        <source>Current motor</source>
+        <translation>Geçerli motor</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="194"/>
+        <source>State unknown</source>
+        <translation>Durum bilinmiyor</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="195"/>
+        <source>Locked · toggle latch to send</source>
+        <translation>Kilitli · göndermek için mandalı değiştirin</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="196"/>
+        <source>Unlocked</source>
+        <translation>Kilitli değil</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="199"/>
+        <source>Toggle latch</source>
+        <translation>Mandalı değiştir</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="202"/>
+        <source>Keyboard control</source>
+        <translation>Klavye kontrolü</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="213"/>
+        <source>Start control</source>
+        <translation>Kontrolü başlat</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="220"/>
+        <source>Stop control</source>
+        <translation>Kontrolü durdur</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="228"/>
+        <source>Command</source>
+        <translation>Komut</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="229"/>
+        <source>Send a reference to the active motor</source>
+        <translation>Etkin motora referans gönder</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="238"/>
+        <source>Speed, deg/s</source>
+        <translation>Hız, derece/s</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="238"/>
+        <source>Position, deg</source>
+        <translation>Konum, derece</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="242"/>
+        <source>Set</source>
+        <translation>Ayarla</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="243"/>
+        <source>Reset</source>
+        <translation>Sıfırla</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="247"/>
+        <source>Enter sends the value.</source>
+        <translation>Enter değeri gönderir.</translation>
     </message>
 </context>
 <context>
