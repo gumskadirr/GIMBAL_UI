@@ -58,6 +58,13 @@ qt_add_qml_module(ids_gimbal
         shared/ui/StatStrip.qml
         shared/ui/StatCell.qml
         shared/ui/ArcGauge.qml
+        shared/ui/Card.qml
+        shared/ui/KpiTile.qml
+        shared/ui/InfoRow.qml
+        shared/ui/Zone.qml
+        shared/ui/Hint.qml
+        shared/ui/FormField.qml
+        shared/ui/VideoViewport.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
         features/gimbalinfo/GimbalInfoPage.qml

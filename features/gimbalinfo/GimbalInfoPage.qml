@@ -3,8 +3,10 @@ import QtQuick
 import QtQuick.Layouts
 import IDS_GIMBAL
 
-// Gimbal info page of the final design. So far only the summary strip; display only, no commands.
+// Gimbal info page of the final design; display only.
 // No "NORMAL" badges: temperature and voltage limits are not known yet and are not invented.
+// Board identity, bootloader state and commands need the device protocol: values show "—" and
+// command buttons stay disabled (architecture §7) until it is integrated.
 Item {
     id: page
     required property DeviceViewModel viewModel
@@ -23,9 +25,7 @@ Item {
     }
 
     ColumnLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.fill: parent
         spacing: 14
 
         StatStrip {
@@ -77,6 +77,135 @@ Item {
                     value: page.viewModel.tilt.value
                     fillColor: page.viewModel.tilt.valid ? Theme.gauge : "transparent"
                 }
+            }
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: 16
+
+            Card {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredWidth: 1
+                flush: true
+                title: qsTr("Gimbal")
+                subtitle: qsTr("3D model, follows live pan and tilt")
+
+                VideoViewport {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    topRadius: 0
+                    bottomRadius: Theme.rCard - 1
+                    placeholderIcon: Icons.cube
+                    placeholderTitle: qsTr("3D gimbal model")
+                    placeholderText: qsTr("Reserved area for the interactive 3D view")
+                }
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredWidth: 2
+                spacing: 12
+
+                ColumnLayout {
+                    spacing: 2
+                    Text {
+                        text: qsTr("Board info")
+                        font.family: Theme.fontSans
+                        font.pixelSize: Theme.fsH2
+                        font.weight: Font.Bold
+                        color: Theme.text
+                    }
+                    Text {
+                        text: qsTr("Identity, firmware and bootloader of the target board")
+                        font.family: Theme.fontSans
+                        font.pixelSize: Theme.fsSmall
+                        color: Theme.muted
+                    }
+                }
+                Hint {
+                    Layout.fillWidth: true
+                    kind: "warning"
+                    text: qsTr("Board identity and commands become available once the device protocol is integrated.")
+                }
+
+                GridLayout {
+                    Layout.fillWidth: true
+                    columns: 4
+                    columnSpacing: 12
+                    KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("Device ID"); value: "—" }
+                    KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("Firmware"); value: "—" }
+                    KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("Model"); value: "—" }
+                    KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("On time"); value: "—" }
+                }
+
+                GridLayout {
+                    Layout.fillWidth: true
+                    columns: 3
+                    columnSpacing: 12
+
+                    Card {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: 1
+                        compact: true
+                        title: "MCU"
+                        subtitle: qsTr("Microcontroller details")
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 0
+                            InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Device ID"); value: "—" }
+                            InfoRow { Layout.fillWidth: true; compact: true; label: "UID"; value: "—" }
+                            InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Flash size, KB"); value: "—" }
+                            InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Bootloader version"); value: "—" }
+                            InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Board ID"); value: "—"; showDivider: false }
+                        }
+                    }
+                    Card {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: 1
+                        compact: true
+                        title: qsTr("Bootloader")
+                        subtitle: qsTr("Enter or leave the bootloader")
+                        Zone {
+                            Layout.fillWidth: true
+                            padding: 12
+                            StatusLabel { status: "idle"; text: qsTr("State unknown") }
+                        }
+                        ColumnLayout { // stacked: the Turkish labels do not fit side by side
+                            Layout.fillWidth: true
+                            spacing: 8
+                            IdsButton { objectName: "command-askBootloader"; Layout.fillWidth: true; enabled: false; text: qsTr("Ask bootloader") }
+                            IdsButton { objectName: "command-exitBootloader"; Layout.fillWidth: true; enabled: false; variant: "quiet"; text: qsTr("Exit bootloader") }
+                        }
+                        Hint {
+                            Layout.fillWidth: true
+                            text: qsTr("The board restarts into the bootloader. Motors are disabled until you exit it.")
+                        }
+                    }
+                    Card {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: 1
+                        compact: true
+                        title: qsTr("Boot bridge")
+                        subtitle: qsTr("Program a sub-board through this board")
+                        FormField {
+                            Layout.fillWidth: true
+                            label: qsTr("Target")
+                            IdsComboBox { enabled: false } // the sub-board list comes from the protocol
+                        }
+                        IdsButton { objectName: "command-startBootBridge"; Layout.fillWidth: true; enabled: false; text: qsTr("Start boot bridge") }
+                        Hint {
+                            Layout.fillWidth: true
+                            text: qsTr("Forwards the bootloader link to the selected sub-board.")
+                        }
+                    }
+                }
+                Item { Layout.fillHeight: true }
             }
         }
     }

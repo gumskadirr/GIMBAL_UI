@@ -43,6 +43,17 @@ TestCase {
         compare(cell(page, "tilt").note, "REF -8.200° · -0.1431 rad")
     }
 
+    // No command may reach the device before the protocol is integrated (architecture §7).
+    function test_commandsDisabledWithoutProtocol() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        testHelper.connectWithFullSample()
+        for (const id of ["askBootloader", "exitBootloader", "startBootBridge"]) {
+            const button = findChild(page, "command-" + id)
+            verify(button, id)
+            verify(!button.enabled, id)
+        }
+    }
+
     // No data is never shown as a value (architecture §7).
     function test_disconnectShowsNoValues() {
         const page = createTemporaryObject(pageComponent, testCase)
