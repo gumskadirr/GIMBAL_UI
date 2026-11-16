@@ -7,6 +7,7 @@ import IDS_GIMBAL
 // Board identity, bootloader state and commands need the device protocol: values show "—" and
 // command buttons stay disabled (architecture §7) until it is integrated.
 ControlPageFrame {
+    id: page
     ColumnLayout {
         spacing: 2
         Text {
@@ -76,8 +77,8 @@ ControlPageFrame {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 8
-                IdsButton { objectName: "command-askBootloader"; Layout.fillWidth: true; enabled: false; text: qsTr("Ask bootloader") }
-                IdsButton { objectName: "command-exitBootloader"; Layout.fillWidth: true; enabled: false; variant: "quiet"; text: qsTr("Exit bootloader") }
+                IdsButton { objectName: "command-askBootloader"; Layout.fillWidth: true; enabled: page.viewModel.commandsAvailable; text: qsTr("Ask bootloader") }
+                IdsButton { objectName: "command-exitBootloader"; Layout.fillWidth: true; enabled: page.viewModel.commandsAvailable; variant: "quiet"; text: qsTr("Exit bootloader") }
             }
             Hint {
                 Layout.fillWidth: true
@@ -94,9 +95,9 @@ ControlPageFrame {
             FormField {
                 Layout.fillWidth: true
                 label: qsTr("Target")
-                IdsComboBox { enabled: false } // the sub-board list comes from the protocol
+                IdsComboBox { enabled: page.viewModel.commandsAvailable } // the sub-board list comes from the protocol
             }
-            IdsButton { objectName: "command-startBootBridge"; Layout.fillWidth: true; enabled: false; text: qsTr("Start boot bridge") }
+            IdsButton { objectName: "command-startBootBridge"; Layout.fillWidth: true; enabled: page.viewModel.commandsAvailable; text: qsTr("Start boot bridge") }
             Hint {
                 Layout.fillWidth: true
                 text: qsTr("Forwards the bootloader link to the selected sub-board.")
@@ -111,7 +112,7 @@ ControlPageFrame {
         actions: IdsButton {
             objectName: "command-openFirmware"
             compact: true
-            enabled: false
+            enabled: page.viewModel.commandsAvailable
             text: qsTr("Open file")
         }
         Zone {
@@ -129,7 +130,7 @@ ControlPageFrame {
             IdsButton {
                 objectName: "command-updateFirmware"
                 variant: "primary"
-                enabled: false
+                enabled: page.viewModel.commandsAvailable
                 text: qsTr("Update firmware")
             }
         }
@@ -143,7 +144,7 @@ ControlPageFrame {
         actions: IdsButton {
             objectName: "command-runBit"
             compact: true
-            enabled: false
+            enabled: page.viewModel.commandsAvailable
             text: qsTr("Run BIT")
         }
         Zone {

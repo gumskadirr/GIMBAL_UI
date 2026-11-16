@@ -20,6 +20,8 @@ class DeviceViewModel : public QObject
     Q_PROPERTY(bool connected READ connected NOTIFY connectionChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY connectionChanged)
     Q_PROPERTY(bool hasError READ hasError NOTIFY connectionChanged)
+    // Every button that sends a command to the device binds its enabled state to this.
+    Q_PROPERTY(bool commandsAvailable READ commandsAvailable NOTIFY connectionChanged)
     Q_PROPERTY(QString errorDetail READ errorDetail NOTIFY connectionChanged)
     // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
     Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
@@ -40,6 +42,9 @@ public:
     bool connected() const;
     bool busy() const;
     bool hasError() const;
+    // shortcut: always false (architecture §7, no protocol yet); make it connected() && protocol ready
+    // when the transport/protocol layer lands.
+    bool commandsAvailable() const { return false; }
     QString errorDetail() const;
     Measurement pan() const { return m_sample.panDeg; }
     Measurement panRef() const { return m_sample.panRefDeg; }

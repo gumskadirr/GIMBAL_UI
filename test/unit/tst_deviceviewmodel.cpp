@@ -75,6 +75,15 @@ private slots:
         QCOMPARE(f.vm.connectionText(), QStringLiteral("Error"));
     }
 
+    void noCommandsWithoutProtocol()
+    {
+        Fixture f;
+        QVERIFY(!f.vm.commandsAvailable());
+        f.connect();
+        QVERIFY(f.vm.connected());
+        QVERIFY(!f.vm.commandsAvailable()); // connected is not enough while there is no protocol
+    }
+
     void everyFieldInvalidated()
     {
         Fixture f;
