@@ -2,6 +2,7 @@
 
 #include <QMetaType>
 #include <QObject>
+#include <optional>
 
 enum class ConnectionState { Disconnected, Connecting, Connected, Error };
 
@@ -101,7 +102,32 @@ struct ConnectionTarget
     int stopBits = 1;    // 1 or 2
     QString host;        // UDP: address of the device
     quint16 port = 0;    // UDP: port of the device
+
+    // Enough to try a connection; the transport still reports Error for an unusable port or address.
+    bool configured() const { return transport == Transport::Udp ? !host.isEmpty() && port != 0 : !serialPort.isEmpty(); }
 };
+
+// Stored / QML names of the parity values: "none", "even", "odd".
+inline QString parityName(ConnectionTarget::Parity parity)
+{
+    switch (parity) {
+    case ConnectionTarget::Parity::Even: return QStringLiteral("even");
+    case ConnectionTarget::Parity::Odd: return QStringLiteral("odd");
+    case ConnectionTarget::Parity::None: break;
+    }
+    return QStringLiteral("none");
+}
+
+inline std::optional<ConnectionTarget::Parity> parityFromName(const QString &name)
+{
+    if (name == QLatin1String("none"))
+        return ConnectionTarget::Parity::None;
+    if (name == QLatin1String("even"))
+        return ConnectionTarget::Parity::Even;
+    if (name == QLatin1String("odd"))
+        return ConnectionTarget::Parity::Odd;
+    return std::nullopt;
+}
 
 Q_DECLARE_METATYPE(ConnectionState)
 Q_DECLARE_METATYPE(DeviceSample)

@@ -3,6 +3,7 @@
 #include <QElapsedTimer>
 #include <QObject>
 #include <QTimer>
+#include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
 
 #include "device/api/DeviceTypes.h"
@@ -23,6 +24,9 @@ class DeviceViewModel : public QObject
     // Every button that sends a command to the device binds its enabled state to this.
     Q_PROPERTY(bool commandsAvailable READ commandsAvailable NOTIFY connectionChanged)
     Q_PROPERTY(QString errorDetail READ errorDetail NOTIFY connectionChanged)
+    // Status bar text of the connection settings, e.g. "UART · COM3 · 115200 8N1" (architecture §12).
+    Q_PROPERTY(QString connectionSummary READ connectionSummary NOTIFY connectionChanged)
+    Q_PROPERTY(bool connectionConfigured READ connectionConfigured NOTIFY connectionChanged)
     // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
     Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement panRef READ panRef NOTIFY measurementsChanged)
@@ -48,6 +52,8 @@ public:
     // when the transport/protocol layer lands.
     bool commandsAvailable() const { return false; }
     QString errorDetail() const;
+    QString connectionSummary() const;
+    bool connectionConfigured() const;
     Measurement pan() const { return m_sample.panDeg; }
     Measurement panRef() const { return m_sample.panRefDeg; }
     Measurement tilt() const { return m_sample.tiltDeg; }
@@ -60,6 +66,12 @@ public:
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
+    // Settings map of ConnectionPopup.qml: transport ("serial" | "udp"), serialPort, baudRate, dataBits,
+    // parity ("none" | "even" | "odd"), stopBits, host, port.
+    Q_INVOKABLE QVariantMap connectionTarget() const;
+    // Sets the target, asks the owner to save it (connectionApplied) and connects (architecture §12, rule 5).
+    Q_INVOKABLE void applyConnection(const QVariantMap &settings);
+    Q_INVOKABLE QStringList availableSerialPorts() const;
     // -1 when there is no current (non-stale) sample.
     Q_INVOKABLE qint64 msSinceLastSample() const { return m_sinceSample.isValid() ? m_sinceSample.elapsed() : -1; }
 
@@ -70,6 +82,7 @@ signals:
     void connectionChanged();
     void measurementsChanged();
     void boardInfoChanged();
+    void connectionApplied(); // the session target changed from the UI; the owner saves it
 
 private:
     void invalidate();       // telemetry only (also on stale timeout)

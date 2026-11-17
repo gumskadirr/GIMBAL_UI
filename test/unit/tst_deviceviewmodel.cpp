@@ -132,6 +132,36 @@ private slots:
         QVERIFY(!f.vm.boardInfo().deviceId.valid);
     }
 
+    void connectionSettingsFromUi()
+    {
+        Fixture f;
+        QVERIFY(!f.vm.connectionConfigured());
+        QCOMPARE(f.vm.connectionSummary(), QStringLiteral("Not configured"));
+        QSignalSpy applied(&f.vm, &DeviceViewModel::connectionApplied);
+
+        f.vm.applyConnection({{QStringLiteral("transport"), QStringLiteral("serial")},
+                              {QStringLiteral("serialPort"), QStringLiteral("COM3")},
+                              {QStringLiteral("baudRate"), 115200},
+                              {QStringLiteral("dataBits"), 8},
+                              {QStringLiteral("parity"), QStringLiteral("none")},
+                              {QStringLiteral("stopBits"), 1}});
+        QCOMPARE(applied.count(), 1);
+        QCOMPARE(f.fake->lastTarget.serialPort, QStringLiteral("COM3")); // connected with the new target
+        QVERIFY(f.vm.busy());
+        QCOMPARE(f.vm.connectionSummary(), QStringLiteral("UART · COM3 · 115200 8N1"));
+
+        const QVariantMap map = f.vm.connectionTarget();
+        QCOMPARE(map.value(QStringLiteral("transport")).toString(), QStringLiteral("serial"));
+        QCOMPARE(map.value(QStringLiteral("parity")).toString(), QStringLiteral("none"));
+
+        f.vm.applyConnection({{QStringLiteral("transport"), QStringLiteral("udp")},
+                              {QStringLiteral("host"), QStringLiteral(" 192.168.1.89 ")},
+                              {QStringLiteral("port"), 5000}});
+        QCOMPARE(f.vm.connectionSummary(), QStringLiteral("IP/UDP · 192.168.1.89:5000"));
+        QCOMPARE(f.fake->lastTarget.host, QStringLiteral("192.168.1.89"));
+        QVERIFY(f.vm.connectionConfigured());
+    }
+
     void becomesStale()
     {
         Fixture f;

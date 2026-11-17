@@ -9,16 +9,6 @@ std::unique_ptr<QSettings> open(const QString &iniFilePath)
     return iniFilePath.isEmpty() ? std::make_unique<QSettings>()
                                  : std::make_unique<QSettings>(iniFilePath, QSettings::IniFormat);
 }
-
-const char *parityName(ConnectionTarget::Parity parity)
-{
-    switch (parity) {
-    case ConnectionTarget::Parity::Even: return "even";
-    case ConnectionTarget::Parity::Odd: return "odd";
-    case ConnectionTarget::Parity::None: break;
-    }
-    return "none";
-}
 } // namespace
 
 ConnectionStore::ConnectionStore(QObject *parent) : QObject(parent) {}
@@ -40,13 +30,10 @@ std::optional<ConnectionTarget> ConnectionStore::load(const QString &service) co
         t.baudRate = settings->value(QStringLiteral("baudRate")).toInt();
         t.dataBits = settings->value(QStringLiteral("dataBits")).toInt();
         t.stopBits = settings->value(QStringLiteral("stopBits")).toInt();
-        const QString parity = settings->value(QStringLiteral("parity")).toString();
-        if (parity == QLatin1String("even"))
-            t.parity = ConnectionTarget::Parity::Even;
-        else if (parity == QLatin1String("odd"))
-            t.parity = ConnectionTarget::Parity::Odd;
-        else if (parity != QLatin1String("none"))
+        const auto parity = parityFromName(settings->value(QStringLiteral("parity")).toString());
+        if (!parity)
             return std::nullopt;
+        t.parity = *parity;
         if (t.serialPort.isEmpty() || t.baudRate <= 0 || (t.dataBits != 7 && t.dataBits != 8)
             || (t.stopBits != 1 && t.stopBits != 2))
             return std::nullopt;
@@ -73,7 +60,7 @@ bool ConnectionStore::save(const QString &service, const ConnectionTarget &targe
         settings->setValue(QStringLiteral("serialPort"), target.serialPort);
         settings->setValue(QStringLiteral("baudRate"), target.baudRate);
         settings->setValue(QStringLiteral("dataBits"), target.dataBits);
-        settings->setValue(QStringLiteral("parity"), QString::fromLatin1(parityName(target.parity)));
+        settings->setValue(QStringLiteral("parity"), parityName(target.parity));
         settings->setValue(QStringLiteral("stopBits"), target.stopBits);
     } else {
         settings->setValue(QStringLiteral("transport"), QStringLiteral("udp"));

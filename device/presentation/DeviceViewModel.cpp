@@ -3,6 +3,7 @@
 #include "device/session/DeviceSession.h"
 
 #include <QCoreApplication>
+#include <QSerialPortInfo>
 
 namespace {
 bool anyValid(const DeviceSample &s)
@@ -53,6 +54,63 @@ QString DeviceViewModel::errorDetail() const
 {
     // Same "Detail" context as NotificationModel: raw device text has no entry and stays as is.
     return QCoreApplication::translate("Detail", m_session->detail().toUtf8().constData());
+}
+
+QString DeviceViewModel::connectionSummary() const
+{
+    const ConnectionTarget t = m_session->target();
+    if (!t.configured())
+        return tr("Not configured");
+    if (t.transport == ConnectionTarget::Transport::Udp)
+        return QStringLiteral("IP/UDP · %1:%2").arg(t.host).arg(t.port);
+    const QChar parity = parityName(t.parity).at(0).toUpper(); // N / E / O
+    return QStringLiteral("UART · %1 · %2 %3%4%5").arg(t.serialPort).arg(t.baudRate).arg(t.dataBits).arg(parity).arg(t.stopBits);
+}
+
+bool DeviceViewModel::connectionConfigured() const { return m_session->target().configured(); }
+
+QVariantMap DeviceViewModel::connectionTarget() const
+{
+    const ConnectionTarget t = m_session->target();
+    return {
+        {QStringLiteral("transport"), t.transport == ConnectionTarget::Transport::Udp ? QStringLiteral("udp") : QStringLiteral("serial")},
+        {QStringLiteral("serialPort"), t.serialPort},
+        {QStringLiteral("baudRate"), t.baudRate},
+        {QStringLiteral("dataBits"), t.dataBits},
+        {QStringLiteral("parity"), parityName(t.parity)},
+        {QStringLiteral("stopBits"), t.stopBits},
+        {QStringLiteral("host"), t.host},
+        {QStringLiteral("port"), int(t.port)},
+    };
+}
+
+void DeviceViewModel::applyConnection(const QVariantMap &settings)
+{
+    ConnectionTarget t;
+    t.transport = settings.value(QStringLiteral("transport")).toString() == QLatin1String("udp")
+                      ? ConnectionTarget::Transport::Udp
+                      : ConnectionTarget::Transport::Serial;
+    t.serialPort = settings.value(QStringLiteral("serialPort")).toString();
+    t.baudRate = settings.value(QStringLiteral("baudRate"), t.baudRate).toInt();
+    t.dataBits = settings.value(QStringLiteral("dataBits"), t.dataBits).toInt() == 7 ? 7 : 8;
+    t.parity = parityFromName(settings.value(QStringLiteral("parity")).toString()).value_or(ConnectionTarget::Parity::None);
+    t.stopBits = settings.value(QStringLiteral("stopBits"), t.stopBits).toInt() == 2 ? 2 : 1;
+    t.host = settings.value(QStringLiteral("host")).toString().trimmed();
+    const int port = settings.value(QStringLiteral("port")).toInt();
+    t.port = port > 0 && port <= 65535 ? quint16(port) : 0;
+    m_session->setTarget(t);
+    emit connectionChanged();
+    emit connectionApplied();
+    m_session->connectDevice();
+}
+
+QStringList DeviceViewModel::availableSerialPorts() const
+{
+    QStringList ports;
+    for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
+        ports << info.portName();
+    ports.sort();
+    return ports;
 }
 
 void DeviceViewModel::connectDevice() { m_session->connectDevice(); }

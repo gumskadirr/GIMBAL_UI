@@ -2,6 +2,90 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="tr" sourcelanguage="en">
 <context>
+    <name>ConnectionPopup</name>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="39"/>
+        <source>Connection</source>
+        <translation>Bağlantı</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="42"/>
+        <source>Connected</source>
+        <translation>Bağlı</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="42"/>
+        <source>Disconnected</source>
+        <translation>Bağlantı yok</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="49"/>
+        <source>Transport</source>
+        <translation>Taşıma</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="59"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="88"/>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="60"/>
+        <source>Baud rate</source>
+        <translation>Baud hızı</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="61"/>
+        <source>Data bits</source>
+        <translation>Veri bitleri</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="64"/>
+        <source>Parity</source>
+        <translation>Eşlik</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
+        <source>None</source>
+        <translation>Yok</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
+        <source>Even</source>
+        <translation>Çift</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
+        <source>Odd</source>
+        <translation>Tek</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="67"/>
+        <source>Stop bits</source>
+        <translation>Dur bitleri</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="73"/>
+        <source>No serial ports found</source>
+        <translation>Seri port bulunamadı</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="83"/>
+        <source>IP address</source>
+        <translation>IP adresi</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="106"/>
+        <source>Disconnect</source>
+        <translation>Bağlantıyı kes</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="113"/>
+        <source>Apply</source>
+        <translation>Uygula</translation>
+    </message>
+</context>
+<context>
     <name>ControlPageFrame</name>
     <message>
         <location filename="../features/maincontrol/ControlPageFrame.qml" line="26"/>
@@ -85,24 +169,29 @@
 <context>
     <name>DeviceViewModel</name>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="41"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="42"/>
         <source>Disconnected</source>
         <translation>Bağlantı yok</translation>
     </message>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="42"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="43"/>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
     </message>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="43"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="44"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="44"/>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="45"/>
         <source>Error</source>
         <translation>Hata</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/DeviceViewModel.cpp" line="63"/>
+        <source>Not configured</source>
+        <translation>Ayarlanmadı</translation>
     </message>
 </context>
 <context>
@@ -424,37 +513,37 @@
     </message>
     <message>
         <location filename="../app/Main.qml" line="19"/>
-        <location filename="../app/Main.qml" line="99"/>
+        <location filename="../app/Main.qml" line="110"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="135"/>
+        <location filename="../app/Main.qml" line="146"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="175"/>
+        <location filename="../app/Main.qml" line="186"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="176"/>
+        <location filename="../app/Main.qml" line="187"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="177"/>
+        <location filename="../app/Main.qml" line="188"/>
         <source>Info</source>
         <translation>Bilgi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="193"/>
+        <location filename="../app/Main.qml" line="204"/>
         <source>No notifications</source>
         <translation>Bildirim yok</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="204"/>
+        <location filename="../app/Main.qml" line="215"/>
         <source>Notifications (%1)</source>
         <translation>Bildirimler (%1)</translation>
     </message>

@@ -39,6 +39,18 @@ public:
         emit m_fake->boardInfoReceived(id, makeBoardInfo());
     }
     Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
+    // Tests start with saved settings (so Main does not open the connection settings by itself); this
+    // brings back the "never configured" state for the test of rule 1.
+    Q_INVOKABLE void forgetConnection() { m_session->setTarget({}); }
+    Q_INVOKABLE void restoreConnection() { m_session->setTarget(loopbackTarget()); }
+    static ConnectionTarget loopbackTarget()
+    {
+        ConnectionTarget t;
+        t.transport = ConnectionTarget::Transport::Udp;
+        t.host = QStringLiteral("127.0.0.1");
+        t.port = 5000;
+        return t;
+    }
 
 public slots:
     void applicationAvailable()
@@ -51,6 +63,7 @@ public slots:
         auto fake = std::make_unique<FakeProvider>();
         m_fake = fake.get();
         m_session = std::make_unique<DeviceSession>(std::move(fake));
+        m_session->setTarget(loopbackTarget());
         m_viewModel = std::make_unique<DeviceViewModel>(m_session.get());
         // The application's own service wiring (AppRunner), not a copy of it.
         connectServices(*m_settings, *m_notifications, *m_localization, *m_session, *m_viewModel);

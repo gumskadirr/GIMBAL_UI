@@ -50,6 +50,17 @@ ApplicationWindow {
         property: "mode"
         value: window.settings.theme
     }
+    // Architecture §12, rule 1: without saved settings the connection settings open at startup (real target).
+    Component.onCompleted: {
+        if (!window.demoMode && !window.deviceViewModel.connectionConfigured)
+            Qt.callLater(window.openConnectionSettings)
+    }
+    function openConnectionSettings() {
+        connectionPopup.prepare(window.deviceViewModel.connectionTarget(),
+                                window.deviceViewModel.availableSerialPorts())
+        connectionPopup.open()
+    }
+
     Binding {
         target: NumberFormat
         property: "language"
@@ -219,6 +230,28 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 400
                         }
+                    }
+                }
+            }
+            StatusBarSection {
+                StatusBarButton {
+                    id: connectionButton
+                    objectName: "connectionButton"
+                    text: window.deviceViewModel.connectionSummary
+                    trailingIconPath: Icons.chevronUp
+                    expanded: connectionPopup.opened
+                    onClicked: connectionPopup.opened ? connectionPopup.close() : window.openConnectionSettings()
+
+                    ConnectionPopup {
+                        id: connectionPopup
+                        objectName: "connectionPopup"
+                        x: connectionButton.width - width
+                        y: -height - 14
+                        width: 400
+                        connected: window.deviceViewModel.connected
+                        canDisconnect: window.deviceViewModel.connected || window.deviceViewModel.busy
+                        onApplyRequested: settings => window.deviceViewModel.applyConnection(settings)
+                        onDisconnectRequested: window.deviceViewModel.disconnectDevice()
                     }
                 }
             }

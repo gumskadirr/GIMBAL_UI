@@ -75,6 +75,7 @@ qt_add_qml_module(ids_gimbal
         shared/ui/IdsSwitch.qml
         shared/ui/IdsProgressBar.qml
         shared/ui/IdsSlider.qml
+        shared/ui/ConnectionPopup.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
         features/maincontrol/ControlPageFrame.qml

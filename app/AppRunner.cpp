@@ -72,6 +72,8 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
         notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error,
                           QStringLiteral("connection/") + service);
     });
+    QObject::connect(&deviceViewModel, &DeviceViewModel::connectionApplied, &connections,
+                     [&] { connections.save(QString::fromLatin1(kMainControlService), session.target()); });
     // Startup (architecture §12, rule 2): connect when settings were saved; the demo needs none.
     const QString service = QString::fromLatin1(kMainControlService);
     if (const auto target = connections.load(service)) {

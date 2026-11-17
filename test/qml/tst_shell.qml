@@ -28,6 +28,8 @@ TestCase {
     }
 
     function cleanup() {
+        testHelper.disconnectDevice()
+        testHelper.restoreConnection()
         testLocalization.setLanguage("en")
         testNotifications.clear()
         testSettings.theme = "dark"
@@ -132,6 +134,48 @@ TestCase {
         mouseMove(main.contentItem, 900, 400)
         navItem.forceActiveFocus(Qt.TabFocusReason)
         tryCompare(navItem.rail, "expanded", true)
+    }
+
+    // The status bar button opens the settings; Apply sets the target and connects (architecture §12).
+    function test_connectionSettingsApplied() {
+        const main = createMain(true)
+        const button = findChild(main.contentItem, "connectionButton")
+        compare(button.text, "IP/UDP · 127.0.0.1:5000")
+        mouseClick(button)
+        const popup = findChild(button, "connectionPopup")
+        tryCompare(popup, "opened", true)
+        findChild(popup.contentItem, "connection-transport").currentIndex = 1
+        const host = findChild(popup.contentItem, "connection-host")
+        const port = findChild(popup.contentItem, "connection-port")
+        host.text = "10.0.0.7"
+        port.text = "70000" // out of range: Apply stays disabled
+        const apply = findChild(popup.contentItem, "connection-apply")
+        verify(!apply.enabled)
+        port.text = "6000"
+        verify(apply.enabled)
+        mouseClick(apply)
+        tryCompare(popup, "opened", false)
+        const target = testDeviceViewModel.connectionTarget()
+        compare(target.transport, "udp")
+        compare(target.host, "10.0.0.7")
+        compare(target.port, 6000)
+        compare(button.text, "IP/UDP · 10.0.0.7:6000")
+        verify(testDeviceViewModel.busy) // connecting
+    }
+
+    // Rule 1: the real application without saved settings opens them at startup; the demo does not.
+    function test_connectionSettingsOpenWhenNotConfigured() {
+        testHelper.forgetConnection()
+        const demo = createMain(true)
+        const demoPopup = findChild(findChild(demo.contentItem, "connectionButton"), "connectionPopup")
+        wait(50)
+        verify(!demoPopup.opened)
+        compare(findChild(demo.contentItem, "connectionButton").text, "Not configured")
+
+        const real = createMain(false)
+        const popup = findChild(findChild(real.contentItem, "connectionButton"), "connectionPopup")
+        tryCompare(popup, "opened", true)
+        popup.close()
     }
 
     // Only the visible page is active; switching hands the activity over (architecture §11).
