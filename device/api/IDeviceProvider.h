@@ -19,5 +19,6 @@ public:
 
 signals:
     void stateChanged(quint64 sessionId, ConnectionState state, const QString &detail);
-    void sampleReceived(quint64 sessionId, const DeviceSample &sample);
+    void sampleReceived(quint64 sessionId, const DeviceSample &sample); // streamed telemetry
+    void boardInfoReceived(quint64 sessionId, const BoardInfo &info);   // read-once data, any time in a session
 };

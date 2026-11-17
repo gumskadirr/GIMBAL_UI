@@ -8,6 +8,10 @@ import IDS_GIMBAL
 // command buttons stay disabled (architecture §7) until it is integrated.
 ControlPageFrame {
     id: page
+
+    function text(t: textValue): string {
+        return t.valid ? t.value : "—"
+    }
     SectionHeading {
         title: qsTr("Board info")
         subtitle: qsTr("Identity, firmware and bootloader of the target board")
@@ -22,10 +26,10 @@ ControlPageFrame {
         Layout.fillWidth: true
         columns: 4
         columnSpacing: 12
-        KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("Device ID"); value: "—" }
-        KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("Firmware"); value: "—" }
-        KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("Model"); value: "—" }
-        KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("On time"); value: "—" }
+        KpiTile { objectName: "kpi-deviceId"; Layout.fillWidth: true; compact: true; label: qsTr("Device ID"); value: page.text(page.viewModel.boardInfo.deviceId) }
+        KpiTile { objectName: "kpi-firmware"; Layout.fillWidth: true; compact: true; label: qsTr("Firmware"); value: page.text(page.viewModel.boardInfo.firmware) }
+        KpiTile { objectName: "kpi-model"; Layout.fillWidth: true; compact: true; label: qsTr("Model"); value: page.text(page.viewModel.boardInfo.model) }
+        KpiTile { Layout.fillWidth: true; compact: true; label: qsTr("On time"); value: "—" } // changes continuously: telemetry, not BoardInfo
     }
 
     GridLayout {
@@ -43,11 +47,11 @@ ControlPageFrame {
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 0
-                InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Device ID"); value: "—" }
-                InfoRow { Layout.fillWidth: true; compact: true; label: "UID"; value: "—" }
-                InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Flash size, KB"); value: "—" }
-                InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Bootloader version"); value: "—" }
-                InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Board ID"); value: "—"; showDivider: false }
+                InfoRow { objectName: "mcu-deviceId"; Layout.fillWidth: true; compact: true; label: qsTr("Device ID"); value: page.text(page.viewModel.boardInfo.mcuDeviceId) }
+                InfoRow { objectName: "mcu-uid"; Layout.fillWidth: true; compact: true; label: "UID"; value: page.text(page.viewModel.boardInfo.uid) }
+                InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Flash size, KB"); value: page.text(page.viewModel.boardInfo.flashSizeKb) }
+                InfoRow { Layout.fillWidth: true; compact: true; label: qsTr("Bootloader version"); value: page.text(page.viewModel.boardInfo.bootloaderVersion) }
+                InfoRow { objectName: "mcu-boardId"; Layout.fillWidth: true; compact: true; label: qsTr("Board ID"); value: page.text(page.viewModel.boardInfo.boardId); showDivider: false }
             }
         }
         Card {

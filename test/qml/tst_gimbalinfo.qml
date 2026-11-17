@@ -67,6 +67,22 @@ TestCase {
             verify(!control.enabled, control.objectName || control.text || String(control))
     }
 
+    // Read-once board data is shown and cleared with the session; "On time" is telemetry and stays "—".
+    function test_boardInfoShownForTheSession() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        compare(findChild(page, "kpi-deviceId").value, "—")
+        testHelper.connectWithFullSample()
+        compare(findChild(page, "kpi-deviceId").value, "0x1A42")
+        compare(findChild(page, "kpi-firmware").value, "v2.4.1")
+        compare(findChild(page, "kpi-model").value, "MCB-2")
+        compare(findChild(page, "mcu-deviceId").value, "0x0451")
+        compare(findChild(page, "mcu-uid").value, "3A00 2F14 5133 3532")
+        compare(findChild(page, "mcu-boardId").value, "0x07")
+        testHelper.disconnectDevice()
+        compare(findChild(page, "kpi-deviceId").value, "—")
+        compare(findChild(page, "mcu-uid").value, "—")
+    }
+
     // No data is never shown as a value (architecture §7).
     function test_disconnectShowsNoValues() {
         const page = createTemporaryObject(pageComponent, testCase)

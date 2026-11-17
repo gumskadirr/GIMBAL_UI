@@ -29,6 +29,20 @@ inline DeviceSample makeSample(double pan, bool panValid, double temp, bool temp
     return s;
 }
 
+inline BoardInfo makeBoardInfo()
+{
+    BoardInfo info;
+    info.deviceId = {QStringLiteral("0x1A42"), true};
+    info.firmware = {QStringLiteral("v2.4.1"), true};
+    info.model = {QStringLiteral("MCB-2"), true};
+    info.mcuDeviceId = {QStringLiteral("0x0451"), true};
+    info.uid = {QStringLiteral("3A00 2F14 5133 3532"), true};
+    info.flashSizeKb = {QStringLiteral("1024"), true};
+    info.bootloaderVersion = {QStringLiteral("1.3.0"), true};
+    info.boardId = {QStringLiteral("0x07"), true};
+    return info;
+}
+
 // Every field valid (the "full" sample the Gimbal info page shows).
 inline DeviceSample makeFullSample()
 {

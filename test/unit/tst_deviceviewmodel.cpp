@@ -98,6 +98,40 @@ private slots:
         QVERIFY(!f.vm.safeControl().valid);
     }
 
+    // Read-once data must not disappear with the telemetry stale timeout.
+    void boardInfoSurvivesTelemetryStaleTimeout()
+    {
+        Fixture f;
+        f.connect();
+        emit f.fake->sampleReceived(1, makeSample(5, true, 30, true));
+        emit f.fake->boardInfoReceived(1, makeBoardInfo());
+        QVERIFY(f.vm.boardInfo().deviceId.valid);
+        QTRY_VERIFY_WITH_TIMEOUT(!f.vm.pan().valid, DeviceViewModel::kStaleAfterMs + 1000);
+        QVERIFY(f.vm.boardInfo().deviceId.valid);
+        QCOMPARE(f.vm.boardInfo().firmware.value, QStringLiteral("v2.4.1"));
+    }
+
+    void boardInfoClearedWhenSessionEnds()
+    {
+        Fixture f;
+        f.connect();
+        emit f.fake->boardInfoReceived(1, makeBoardInfo());
+        QSignalSpy changed(&f.vm, &DeviceViewModel::boardInfoChanged);
+        f.vm.disconnectDevice();
+        QVERIFY(!f.vm.boardInfo().deviceId.valid);
+        QCOMPARE(changed.count(), 1);
+
+        f.vm.connectDevice(); // session 2
+        emit f.fake->stateChanged(2, ConnectionState::Connected, {});
+        emit f.fake->boardInfoReceived(2, makeBoardInfo());
+        QVERIFY(f.vm.boardInfo().deviceId.valid);
+        emit f.fake->stateChanged(2, ConnectionState::Error, QStringLiteral("link lost"));
+        QVERIFY(!f.vm.boardInfo().deviceId.valid);
+
+        f.vm.connectDevice(); // a new session never starts with the old identity
+        QVERIFY(!f.vm.boardInfo().deviceId.valid);
+    }
+
     void becomesStale()
     {
         Fixture f;

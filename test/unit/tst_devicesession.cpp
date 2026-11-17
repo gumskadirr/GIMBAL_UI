@@ -36,6 +36,20 @@ private slots:
         QCOMPARE(f.session.activeSessionId(), 2u);
     }
 
+    void boardInfoOfActiveSessionOnly()
+    {
+        Fixture f;
+        QSignalSpy accepted(&f.session, &DeviceSession::boardInfoAccepted);
+        f.session.connectDevice();
+        emit f.fake->boardInfoReceived(1, makeBoardInfo());
+        QCOMPARE(accepted.count(), 1);
+        QCOMPARE(accepted.at(0).at(0).value<BoardInfo>().deviceId.value, QStringLiteral("0x1A42"));
+
+        f.session.connectDevice(); // session 2
+        emit f.fake->boardInfoReceived(1, makeBoardInfo()); // late answer of session 1
+        QCOMPARE(accepted.count(), 1);
+    }
+
     void connectedAndSampleAccepted()
     {
         Fixture f;

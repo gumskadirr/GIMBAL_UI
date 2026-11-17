@@ -32,6 +32,8 @@ class DeviceViewModel : public QObject
     Q_PROPERTY(Measurement imuTemp READ imuTemp NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement supplyVoltage READ supplyVoltage NOTIFY measurementsChanged)
     Q_PROPERTY(Flag safeControl READ safeControl NOTIFY measurementsChanged)
+    // Read once per session; not affected by the telemetry stale timeout.
+    Q_PROPERTY(BoardInfo boardInfo READ boardInfo NOTIFY boardInfoChanged)
 
 public:
     static constexpr int kStaleAfterMs = 1000;
@@ -54,6 +56,7 @@ public:
     Measurement imuTemp() const { return m_sample.imuTempC; }
     Measurement supplyVoltage() const { return m_sample.supplyVoltageV; }
     Flag safeControl() const { return m_sample.safeControlLocked; }
+    BoardInfo boardInfo() const { return m_boardInfo; }
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
@@ -66,9 +69,11 @@ public slots:
 signals:
     void connectionChanged();
     void measurementsChanged();
+    void boardInfoChanged();
 
 private:
-    void invalidate();
+    void invalidate();       // telemetry only (also on stale timeout)
+    void clearSessionData(); // telemetry and read-once data (new session, disconnect, error)
     void onSample(const DeviceSample &sample);
     void onSessionState();
 
@@ -76,4 +81,6 @@ private:
     DeviceSample m_sample; // default-constructed = all invalid
     QElapsedTimer m_sinceSample;
     QTimer m_staleCheck;
+    BoardInfo m_boardInfo; // default-constructed = all invalid
+    bool m_hasBoardInfo = false;
 };

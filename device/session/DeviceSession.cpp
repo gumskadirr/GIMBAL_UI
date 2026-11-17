@@ -5,6 +5,7 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
 {
     connect(m_provider.get(), &IDeviceProvider::stateChanged, this, &DeviceSession::onProviderState);
     connect(m_provider.get(), &IDeviceProvider::sampleReceived, this, &DeviceSession::onProviderSample);
+    connect(m_provider.get(), &IDeviceProvider::boardInfoReceived, this, &DeviceSession::onProviderBoardInfo);
 }
 
 DeviceSession::~DeviceSession()
@@ -55,6 +56,12 @@ void DeviceSession::onProviderSample(quint64 sessionId, const DeviceSample &samp
 {
     if (isActive(sessionId))
         emit sampleAccepted(sample);
+}
+
+void DeviceSession::onProviderBoardInfo(quint64 sessionId, const BoardInfo &info)
+{
+    if (isActive(sessionId))
+        emit boardInfoAccepted(info);
 }
 
 void DeviceSession::setState(ConnectionState state, const QString &detail)

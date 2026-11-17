@@ -27,10 +27,12 @@ signals:
     void stateChanged();
     void sessionStarted(quint64 sessionId);
     void sampleAccepted(const DeviceSample &sample);
+    void boardInfoAccepted(const BoardInfo &info);
 
 private:
     void onProviderState(quint64 sessionId, ConnectionState state, const QString &detail);
     void onProviderSample(quint64 sessionId, const DeviceSample &sample);
+    void onProviderBoardInfo(quint64 sessionId, const BoardInfo &info);
     void setState(ConnectionState state, const QString &detail);
     bool isActive(quint64 sessionId);
 

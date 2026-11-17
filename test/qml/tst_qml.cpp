@@ -36,6 +36,7 @@ public:
         const quint64 id = m_session->activeSessionId();
         emit m_fake->stateChanged(id, ConnectionState::Connected, {});
         emit m_fake->sampleReceived(id, makeFullSample());
+        emit m_fake->boardInfoReceived(id, makeBoardInfo());
     }
     Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
 

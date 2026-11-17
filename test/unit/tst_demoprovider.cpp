@@ -35,6 +35,19 @@ private slots:
         QVERIFY(first.safeControlLocked.valid);
     }
 
+    void sendsBoardInfoOnceAfterConnecting()
+    {
+        DemoProvider p(5, 1000, 50);
+        QSignalSpy info(&p, &IDeviceProvider::boardInfoReceived);
+        p.start(1);
+        QCOMPARE(info.count(), 0); // never synchronously from start()
+        QTRY_COMPARE(info.count(), 1);
+        QCOMPARE(info.at(0).at(0).toULongLong(), 1u);
+        QVERIFY(info.at(0).at(1).value<BoardInfo>().uid.valid);
+        QTest::qWait(50);
+        QCOMPARE(info.count(), 1);
+    }
+
     void valuesInDisplayRange()
     {
         for (int n = 0; n < 200; ++n) {

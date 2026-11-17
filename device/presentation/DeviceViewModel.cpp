@@ -20,8 +20,13 @@ DeviceViewModel::DeviceViewModel(DeviceSession *session, QObject *parent)
     : QObject(parent), m_session(session)
 {
     connect(m_session, &DeviceSession::stateChanged, this, &DeviceViewModel::onSessionState);
-    connect(m_session, &DeviceSession::sessionStarted, this, &DeviceViewModel::invalidate);
+    connect(m_session, &DeviceSession::sessionStarted, this, &DeviceViewModel::clearSessionData);
     connect(m_session, &DeviceSession::sampleAccepted, this, &DeviceViewModel::onSample);
+    connect(m_session, &DeviceSession::boardInfoAccepted, this, [this](const BoardInfo &info) {
+        m_boardInfo = info;
+        m_hasBoardInfo = true;
+        emit boardInfoChanged();
+    });
 
     m_staleCheck.setInterval(kStaleAfterMs / 4);
     connect(&m_staleCheck, &QTimer::timeout, this, [this] {
@@ -58,7 +63,7 @@ void DeviceViewModel::retranslate() { emit connectionChanged(); }
 void DeviceViewModel::onSessionState()
 {
     if (m_session->state() != ConnectionState::Connected)
-        invalidate();
+        clearSessionData();
     emit connectionChanged();
 }
 
@@ -68,6 +73,16 @@ void DeviceViewModel::onSample(const DeviceSample &sample)
     m_sinceSample.start();
     m_staleCheck.start();
     emit measurementsChanged();
+}
+
+void DeviceViewModel::clearSessionData()
+{
+    invalidate();
+    if (!m_hasBoardInfo)
+        return;
+    m_boardInfo = BoardInfo{};
+    m_hasBoardInfo = false;
+    emit boardInfoChanged();
 }
 
 void DeviceViewModel::invalidate()

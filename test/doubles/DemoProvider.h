@@ -21,6 +21,7 @@ public:
 
     // Deterministic sample number n (pure; public for tests).
     static DeviceSample sampleAt(int n);
+    static BoardInfo sampleBoardInfo(); // sent once after connecting
 
 private:
     void tick();

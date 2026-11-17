@@ -12,6 +12,20 @@ struct MeasurementForeign
     QML_VALUE_TYPE(measurement)
 };
 
+struct TextValueForeign
+{
+    Q_GADGET
+    QML_FOREIGN(TextValue)
+    QML_VALUE_TYPE(textValue)
+};
+
+struct BoardInfoForeign
+{
+    Q_GADGET
+    QML_FOREIGN(BoardInfo)
+    QML_VALUE_TYPE(boardInfo)
+};
+
 struct FlagForeign
 {
     Q_GADGET

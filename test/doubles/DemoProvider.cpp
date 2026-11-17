@@ -18,6 +18,7 @@ void DemoProvider::start(quint64 sessionId)
         if (m_sessionId != sessionId)
             return; // stopped before the connection "completed"
         emit stateChanged(sessionId, ConnectionState::Connected, {});
+        emit boardInfoReceived(sessionId, sampleBoardInfo());
         m_timer.start();
     });
 }
@@ -42,6 +43,22 @@ void DemoProvider::tick()
         return;
     }
     emit sampleReceived(m_sessionId, sampleAt(m_n++));
+}
+
+BoardInfo DemoProvider::sampleBoardInfo()
+{
+    // Values of the Gimbal info design.
+    const auto text = [](const char *value) { return TextValue{QString::fromLatin1(value), true}; };
+    BoardInfo info;
+    info.deviceId = text("0x1A42");
+    info.firmware = text("v2.4.1");
+    info.model = text("MCB-2");
+    info.mcuDeviceId = text("0x0451");
+    info.uid = text("3A00 2F14 5133 3532");
+    info.flashSizeKb = text("1024");
+    info.bootloaderVersion = text("1.3.0");
+    info.boardId = text("0x07");
+    return info;
 }
 
 DeviceSample DemoProvider::sampleAt(int n)
