@@ -21,7 +21,7 @@ void DeviceSession::connectDevice()
     m_activeId = m_nextId++;
     setState(ConnectionState::Connecting, {});
     emit sessionStarted(m_activeId);
-    m_provider->start(m_activeId);
+    m_provider->start(m_activeId, m_target);
 }
 
 void DeviceSession::disconnectDevice()

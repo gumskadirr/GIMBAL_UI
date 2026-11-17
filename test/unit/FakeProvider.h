@@ -8,14 +8,16 @@ class FakeProvider : public IDeviceProvider
     Q_OBJECT
 
 public:
-    void start(quint64 sessionId) override
+    void start(quint64 sessionId, const ConnectionTarget &target) override
     {
         lastSessionId = sessionId;
+        lastTarget = target;
         ++starts;
     }
     void stop() override { ++stops; }
 
     quint64 lastSessionId = 0;
+    ConnectionTarget lastTarget;
     int starts = 0;
     int stops = 0;
 };

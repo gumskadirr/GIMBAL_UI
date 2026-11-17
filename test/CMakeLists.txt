@@ -14,6 +14,8 @@ ids_add_test(tst_devicesession unit/FakeProvider.h)
 ids_add_test(tst_deviceviewmodel unit/FakeProvider.h)
 ids_add_test(tst_demoprovider)
 ids_add_test(tst_fonts)
+ids_add_test(tst_connectionstore)
+ids_add_test(tst_transportprovider)
 target_link_libraries(tst_demoprovider PRIVATE ids_gimbal_demo_provider)
 
 # Qt Quick Test: every test/qml/tst_*.qml runs against the real IDS_GIMBAL module.

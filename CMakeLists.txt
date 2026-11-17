@@ -5,7 +5,7 @@ project(IDS_GIMBAL VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 Test QuickTest LinguistTools)
+find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 SerialPort Network Test QuickTest LinguistTools)
 
 qt_standard_project_setup(REQUIRES 6.12)
 
@@ -30,6 +30,8 @@ qt_add_qml_module(ids_gimbal
         device/session/DeviceSession.h device/session/DeviceSession.cpp
         device/presentation/DeviceViewModel.h device/presentation/DeviceViewModel.cpp
         device/presentation/DeviceValueTypes.h
+        device/session/ConnectionStore.h device/session/ConnectionStore.cpp
+        device/transport/TransportProvider.h device/transport/TransportProvider.cpp
         shared/ui/Fonts.h shared/ui/Fonts.cpp
     QML_FILES
         app/Main.qml
@@ -90,7 +92,7 @@ target_include_directories(ids_gimbal
     PRIVATE shared/settings shared/localization shared/notifications device/presentation device/api
 )
 
-target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2 Qt6::SerialPort Qt6::Network)
 target_compile_definitions(ids_gimbal PRIVATE IDS_GIMBAL_VERSION="${PROJECT_VERSION}")
 
 # Inter and JetBrains Mono (SIL OFL 1.1, license texts next to the files), loaded by loadAppFonts().
@@ -107,7 +109,6 @@ qt_add_resources(ids_gimbal "fonts"
 # Real target: no device transport yet, so it stays disconnected and never shows sample data.
 qt_add_executable(appIDS_GIMBAL
     app/main.cpp
-    app/DisconnectedProvider.h
 )
 target_link_libraries(appIDS_GIMBAL PRIVATE ids_gimbal ids_gimbalplugin)
 

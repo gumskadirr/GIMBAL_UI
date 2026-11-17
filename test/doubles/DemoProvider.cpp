@@ -9,7 +9,7 @@ DemoProvider::DemoProvider(int intervalMs, int linkLossAfter, int lateResultDela
     connect(&m_timer, &QTimer::timeout, this, &DemoProvider::tick);
 }
 
-void DemoProvider::start(quint64 sessionId)
+void DemoProvider::start(quint64 sessionId, const ConnectionTarget &)
 {
     stop();
     m_sessionId = sessionId;

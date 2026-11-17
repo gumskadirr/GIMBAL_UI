@@ -72,9 +72,14 @@
 <context>
     <name>Detail</name>
     <message>
-        <location filename="../app/DisconnectedProvider.h" line="20"/>
-        <source>No device transport in this build</source>
-        <translation>Bu sürümde cihaz bağlantı katmanı yok</translation>
+        <location filename="../device/transport/TransportProvider.cpp" line="62"/>
+        <source>No serial port selected</source>
+        <translation>Seri port seçilmedi</translation>
+    </message>
+    <message>
+        <location filename="../device/transport/TransportProvider.cpp" line="80"/>
+        <source>Invalid UDP address</source>
+        <translation>Geçersiz UDP adresi</translation>
     </message>
 </context>
 <context>

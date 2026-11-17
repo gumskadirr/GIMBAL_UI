@@ -6,6 +6,9 @@
 class QGuiApplication;
 class IDeviceProvider;
 
+// Each service's key in ConnectionStore and in the page registry (Main.qml `services`).
+inline constexpr const char *kMainControlService = "mainControl";
+
 struct AppConfig
 {
     QString applicationName; // also the settings identity; real and demo targets differ

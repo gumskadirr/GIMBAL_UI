@@ -16,7 +16,7 @@ public:
     explicit DemoProvider(int intervalMs = 100, int linkLossAfter = 300, int lateResultDelayMs = 500,
                           QObject *parent = nullptr);
 
-    void start(quint64 sessionId) override;
+    void start(quint64 sessionId, const ConnectionTarget &target = {}) override; // target ignored
     void stop() override;
 
     // Deterministic sample number n (pure; public for tests).

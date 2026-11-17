@@ -21,7 +21,7 @@ private slots:
         DemoProvider p(5, 1000, 50);
         QSignalSpy states(&p, &IDeviceProvider::stateChanged);
         QSignalSpy samples(&p, &IDeviceProvider::sampleReceived);
-        p.start(1);
+        p.start(1, {});
         QCOMPARE(states.count(), 0); // never synchronously from start()
         QTRY_VERIFY(samples.count() >= 3);
         QCOMPARE(states.at(0).at(1).value<ConnectionState>(), ConnectionState::Connected);
@@ -39,7 +39,7 @@ private slots:
     {
         DemoProvider p(5, 1000, 50);
         QSignalSpy info(&p, &IDeviceProvider::boardInfoReceived);
-        p.start(1);
+        p.start(1, {});
         QCOMPARE(info.count(), 0); // never synchronously from start()
         QTRY_COMPARE(info.count(), 1);
         QCOMPARE(info.at(0).at(0).toULongLong(), 1u);
@@ -62,7 +62,7 @@ private slots:
     {
         DemoProvider p(1, 1000, 50);
         QSignalSpy samples(&p, &IDeviceProvider::sampleReceived);
-        p.start(1);
+        p.start(1, {});
         QTRY_VERIFY_WITH_TIMEOUT(samples.count() >= 50, 5000);
         QVERIFY(sampleAt(samples, 39).gimbalTempC.valid);
         QVERIFY(!sampleAt(samples, 40).gimbalTempC.valid);
@@ -74,7 +74,7 @@ private slots:
         DemoProvider p(1, 20, 50);
         QSignalSpy states(&p, &IDeviceProvider::stateChanged);
         QSignalSpy samples(&p, &IDeviceProvider::sampleReceived);
-        p.start(1);
+        p.start(1, {});
         QTRY_COMPARE_WITH_TIMEOUT(states.count(), 2, 5000);
         QCOMPARE(states.at(1).at(1).value<ConnectionState>(), ConnectionState::Error);
         QCOMPARE(states.at(1).at(2).toString(), QStringLiteral("Simulated link loss"));
@@ -94,7 +94,7 @@ private slots:
     void destroyWithPendingLateResult()
     {
         auto *p = new DemoProvider(5, 1000, 30);
-        p->start(1);
+        p->start(1, {});
         QTest::qWait(20);
         p->stop();
         delete p;

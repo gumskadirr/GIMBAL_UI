@@ -6,6 +6,7 @@
 #include <QQuickStyle>
 
 #include "device/presentation/DeviceViewModel.h"
+#include "device/session/ConnectionStore.h"
 #include "device/session/DeviceSession.h"
 #include "shared/localization/Localization.h"
 #include "shared/notifications/NotificationModel.h"
@@ -52,6 +53,7 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
     Localization localization;
     DeviceSession session(std::move(provider));
     DeviceViewModel deviceViewModel(&session);
+    ConnectionStore connections;
     QQmlApplicationEngine engine;
 
     // First languageChanged handler: QML bindings are refreshed before the C++ models.
@@ -65,6 +67,19 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &session, &DeviceSession::disconnectDevice);
 
     localization.setLanguage(settings.language());
+
+    QObject::connect(&connections, &ConnectionStore::writeFailed, &notifications, [&](const QString &service) {
+        notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error,
+                          QStringLiteral("connection/") + service);
+    });
+    // Startup (architecture §12, rule 2): connect when settings were saved; the demo needs none.
+    const QString service = QString::fromLatin1(kMainControlService);
+    if (const auto target = connections.load(service)) {
+        session.setTarget(*target);
+        session.connectDevice();
+    } else if (config.demoMode) {
+        session.connectDevice();
+    }
 
     for (QObject *o : std::initializer_list<QObject *>{&settings, &notifications, &localization, &deviceViewModel})
         QJSEngine::setObjectOwnership(o, QJSEngine::CppOwnership);

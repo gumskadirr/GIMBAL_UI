@@ -64,12 +64,12 @@ private slots:
     void appDetailFollowsLanguage()
     {
         NotificationModel m;
-        m.add("device.error", {}, NotificationModel::Error, "No device transport in this build");
+        m.add("device.error", {}, NotificationModel::Error, "No serial port selected");
         m.add("device.error", {}, NotificationModel::Error, "RAW-ERR 0x12");
         Localization l;
         QVERIFY(l.setLanguage("tr"));
         QCOMPARE(at(m, 1, NotificationModel::DetailRole).toString(),
-                 QStringLiteral("Bu sürümde cihaz bağlantı katmanı yok"));
+                 QStringLiteral("Seri port seçilmedi"));
         QCOMPARE(at(m, 0, NotificationModel::DetailRole).toString(), QStringLiteral("RAW-ERR 0x12"));
         l.setLanguage("en");
     }

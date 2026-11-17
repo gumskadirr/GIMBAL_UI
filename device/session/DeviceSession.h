@@ -15,6 +15,9 @@ public:
     explicit DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject *parent = nullptr);
     ~DeviceSession() override;
 
+    // Where the next connectDevice() connects; the provider validates it and reports Error if unusable.
+    void setTarget(const ConnectionTarget &target) { m_target = target; }
+    ConnectionTarget target() const { return m_target; }
     void connectDevice();    // closes an open session first
     void disconnectDevice();
 
@@ -42,4 +45,5 @@ private:
     quint64 m_activeId = 0;
     quint64 m_nextId = 1;
     quint64 m_staleDropped = 0;
+    ConnectionTarget m_target;
 };

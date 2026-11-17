@@ -50,6 +50,20 @@ private slots:
         QCOMPARE(accepted.count(), 1);
     }
 
+    void targetPassedToProvider()
+    {
+        Fixture f;
+        ConnectionTarget t;
+        t.transport = ConnectionTarget::Transport::Udp;
+        t.host = QStringLiteral("192.168.1.89");
+        t.port = 5000;
+        f.session.setTarget(t);
+        f.session.connectDevice();
+        QCOMPARE(f.fake->lastTarget.transport, ConnectionTarget::Transport::Udp);
+        QCOMPARE(f.fake->lastTarget.host, QStringLiteral("192.168.1.89"));
+        QCOMPARE(f.fake->lastTarget.port, quint16(5000));
+    }
+
     void connectedAndSampleAccepted()
     {
         Fixture f;

@@ -14,7 +14,7 @@ public:
     using QObject::QObject;
 
     // Must not emit synchronously from inside start(); report results from the event loop.
-    virtual void start(quint64 sessionId) = 0;
+    virtual void start(quint64 sessionId, const ConnectionTarget &target) = 0;
     virtual void stop() = 0; // idempotent
 
 signals:

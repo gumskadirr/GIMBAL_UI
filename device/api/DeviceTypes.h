@@ -86,6 +86,23 @@ public:
     TextValue boardId;
 };
 
+// Where a service connects (architecture §2, §12). Plain values only: the API stays free of QtSerialPort and
+// QtNetwork types.
+struct ConnectionTarget
+{
+    enum class Transport { Serial, Udp };
+    enum class Parity { None, Even, Odd };
+
+    Transport transport = Transport::Serial;
+    QString serialPort;  // e.g. "COM3", "/dev/ttyUSB0"
+    qint32 baudRate = 115200;
+    int dataBits = 8;    // 7 or 8
+    Parity parity = Parity::None;
+    int stopBits = 1;    // 1 or 2
+    QString host;        // UDP: address of the device
+    quint16 port = 0;    // UDP: port of the device
+};
+
 Q_DECLARE_METATYPE(ConnectionState)
 Q_DECLARE_METATYPE(DeviceSample)
 Q_DECLARE_METATYPE(BoardInfo)
