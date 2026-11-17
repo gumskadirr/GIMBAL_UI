@@ -134,6 +134,31 @@ TestCase {
         tryCompare(navItem.rail, "expanded", true)
     }
 
+    // Only the visible page is active; switching hands the activity over (architecture §11).
+    function test_onlyVisiblePageIsActive() {
+        const main = createMain(true)
+        const pagesWithActivity = main.pages.filter(page => {
+            const item = pageItem(main, page.id)
+            return item && "pageActive" in item
+        })
+        verify(pagesWithActivity.length >= 4) // the three frame pages and diagnostics
+        for (const shown of pagesWithActivity) {
+            main.currentPageId = shown.id
+            for (const page of pagesWithActivity)
+                compare(pageItem(main, page.id).pageActive, page.id === shown.id, shown.id + " shown, " + page.id)
+        }
+    }
+
+    // The breadcrumb names the service of the page; pages without a service show only their title.
+    function test_breadcrumbShowsService() {
+        const main = createMain(true)
+        const topBar = findChild(main.contentItem, "topBar")
+        main.currentPageId = "motorControl"
+        compare(topBar.crumbs, ["Main control service", "Motor control"])
+        main.currentPageId = "preferences"
+        compare(topBar.crumbs, ["Preferences"])
+    }
+
     function test_languageChangeKeepsPagesAndUpdatesTitles() {
         const main = createMain(true)
         main.currentPageId = "preferences"

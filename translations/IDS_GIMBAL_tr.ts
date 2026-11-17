@@ -4,67 +4,67 @@
 <context>
     <name>ControlPageFrame</name>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="23"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="26"/>
         <source>REF %1 · %2</source>
         <translation>REF %1 · %2</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="51"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="54"/>
         <source>Safe control</source>
         <translation>Güvenli kontrol</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="53"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="56"/>
         <source>Locked</source>
         <translation>Kilitli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="53"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="56"/>
         <source>Unlocked</source>
         <translation>Kilitli değil</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="59"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="62"/>
         <source>Gimbal / IMU temp.</source>
         <translation>Gimbal / IMU sıc.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="61"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="64"/>
         <source>IMU %1</source>
         <translation>IMU %1</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="65"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="68"/>
         <source>Supply voltage</source>
         <translation>Besleme gerilimi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="70"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="73"/>
         <source>Pan angle</source>
         <translation>Pan açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="84"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="87"/>
         <source>Tilt angle</source>
         <translation>Tilt açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="107"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="110"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="108"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="111"/>
         <source>3D model, follows live pan and tilt</source>
         <translation>Canlı pan ve tilt açısını izleyen 3B model</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="116"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="119"/>
         <source>3D gimbal model</source>
         <translation>3B gimbal modeli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="117"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="120"/>
         <source>Reserved area for the interactive 3D view</source>
         <translation>Etkileşimli 3B görünüm için ayrılmış alan</translation>
     </message>
@@ -363,93 +363,93 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/Main.qml" line="21"/>
+        <location filename="../app/Main.qml" line="24"/>
         <source>Board</source>
         <translation>Kart</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="21"/>
+        <location filename="../app/Main.qml" line="24"/>
         <source>Gimbal info</source>
         <translation>Gimbal bilgisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="23"/>
+        <location filename="../app/Main.qml" line="26"/>
         <source>Control</source>
         <translation>Kontrol</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="23"/>
+        <location filename="../app/Main.qml" line="26"/>
         <source>Motor control</source>
         <translation>Motor kontrolü</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="25"/>
+        <location filename="../app/Main.qml" line="28"/>
         <source>Hardware</source>
         <translation>Donanım</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="25"/>
+        <location filename="../app/Main.qml" line="28"/>
         <source>Heater</source>
         <translation>Isıtıcı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="27"/>
+        <location filename="../app/Main.qml" line="30"/>
         <source>Diagnostics</source>
         <translation>Tanılama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="27"/>
+        <location filename="../app/Main.qml" line="30"/>
         <source>Developer</source>
         <translation>Geliştirici</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="29"/>
+        <location filename="../app/Main.qml" line="32"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="29"/>
+        <location filename="../app/Main.qml" line="32"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="42"/>
+        <location filename="../app/Main.qml" line="45"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="97"/>
-        <location filename="../app/Main.qml" line="127"/>
+        <location filename="../app/Main.qml" line="19"/>
+        <location filename="../app/Main.qml" line="99"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="131"/>
+        <location filename="../app/Main.qml" line="135"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="171"/>
+        <location filename="../app/Main.qml" line="175"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="172"/>
+        <location filename="../app/Main.qml" line="176"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="173"/>
+        <location filename="../app/Main.qml" line="177"/>
         <source>Info</source>
         <translation>Bilgi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="189"/>
+        <location filename="../app/Main.qml" line="193"/>
         <source>No notifications</source>
         <translation>Bildirim yok</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="200"/>
+        <location filename="../app/Main.qml" line="204"/>
         <source>Notifications (%1)</source>
         <translation>Bildirimler (%1)</translation>
     </message>

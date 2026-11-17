@@ -15,15 +15,18 @@ ApplicationWindow {
     // Page registry (architecture §11): the only place a page is listed; menu and content are built from it.
     // Titles are bindings and follow language changes. The views use pages.length as their model, so a
     // language change does not recreate the pages.
+    // Services (architecture §12): each has its own connection; pages of both may be open side by side.
+    readonly property var services: ({ mainControl: qsTr("Main control service") })
     readonly property var pages: [
+        // service: key of `services`; pages without one (preferences, developer) belong to no connection.
         // designHeight: natural height of the page's (reference) layout, measured; tst_shell fails if the content
         // outgrows it. Used by the page host below to scale the page to fit.
-        { id: "gimbalInfo", group: qsTr("Board"), title: qsTr("Gimbal info"), icon: Icons.info,
-          component: gimbalInfoPage, designHeight: 768 },
-        { id: "motorControl", group: qsTr("Control"), title: qsTr("Motor control"), icon: Icons.motor,
-          component: motorControlPage, designHeight: 860 },
-        { id: "heater", group: qsTr("Hardware"), title: qsTr("Heater"), icon: Icons.heater,
-          component: heaterPage },
+        { id: "gimbalInfo", service: "mainControl", group: qsTr("Board"), title: qsTr("Gimbal info"),
+          icon: Icons.info, component: gimbalInfoPage, designHeight: 768 },
+        { id: "motorControl", service: "mainControl", group: qsTr("Control"), title: qsTr("Motor control"),
+          icon: Icons.motor, component: motorControlPage, designHeight: 860 },
+        { id: "heater", service: "mainControl", group: qsTr("Hardware"), title: qsTr("Heater"),
+          icon: Icons.heater, component: heaterPage },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
@@ -75,7 +78,6 @@ ApplicationWindow {
         id: diagnosticsPage
         DiagnosticsPage {
             viewModel: window.deviceViewModel
-            pageActive: window.activePageId === "diagnostics"
         }
     }
     Component {
@@ -124,7 +126,9 @@ ApplicationWindow {
         }
 
         topBar: TopBar {
-            crumbs: [qsTr("Main control service"), window.pages[window.currentIndex].title]
+            objectName: "topBar"
+            readonly property var page: window.pages[window.currentIndex]
+            crumbs: page.service ? [window.services[page.service], page.title] : [page.title]
             Badge {
                 visible: window.demoMode
                 kind: "warn"
@@ -234,7 +238,17 @@ ApplicationWindow {
                     readonly property real designHeight: window.pages[index].designHeight ?? 0
                     readonly property real fit: designHeight > 0 && height > 0 ? Math.min(1, height / designHeight) : 1
 
+                    // Only the visible page is active (architecture §11): pages with `pageActive` stop their
+                    // heavy work when hidden; data reception and connections are not affected.
+                    Binding {
+                        target: pageLoader.item
+                        property: "pageActive"
+                        value: window.activePageId === window.pages[pageSlot.index].id
+                        when: pageLoader.item !== null && "pageActive" in pageLoader.item
+                    }
+
                     Loader {
+                        id: pageLoader
                         objectName: "page-" + window.pages[pageSlot.index].id
                         width: pageSlot.width / pageSlot.fit
                         height: pageSlot.height / pageSlot.fit

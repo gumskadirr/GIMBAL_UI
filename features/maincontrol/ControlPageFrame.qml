@@ -11,6 +11,9 @@ import IDS_GIMBAL
 Item {
     id: page
     required property DeviceViewModel viewModel
+    // Set by Main.qml: true only while the page is visible. Rule for every page: timers, charts, video and other
+    // heavy redraws stop while it is false; data reception and connections continue (architecture §11).
+    property bool pageActive: false
     default property alias content: pageContent.data
 
     function degrees(m: measurement): string {
