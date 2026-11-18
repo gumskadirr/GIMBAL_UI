@@ -91,7 +91,7 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
     MainControlViewModel mainControl(main->session.get(), main->connection.get());
     Service *image = byKey.value(QString::fromLatin1(kIdsImageService));
     Q_ASSERT(image); // so does IDS Image
-    ImageViewModel imageViewModel(image->connection.get());
+    ImageViewModel imageViewModel(image->session.get(), image->connection.get());
     QObject::connect(mainControl.parameters(), &ParameterModel::profileFailed, &notifications,
                      [&](const QString &file, const QString &reason) {
                          notifications.add(QStringLiteral("parameters.fileFailed"), {file}, NotificationModel::Error,

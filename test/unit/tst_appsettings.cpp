@@ -48,6 +48,17 @@ private slots:
         QCOMPARE(s2.lastPage(), QStringLiteral("heater"));
     }
 
+    void rtspUrlPersists()
+    {
+        {
+            AppSettings s(path());
+            QVERIFY(s.rtspUrl().startsWith(QLatin1String("rtsp://")));
+            s.setRtspUrl(QStringLiteral("rtsp://10.0.0.5/cam"));
+        }
+        AppSettings s2(path());
+        QCOMPARE(s2.rtspUrl(), QStringLiteral("rtsp://10.0.0.5/cam"));
+    }
+
     void invalidStoredValuesFallBack()
     {
         {

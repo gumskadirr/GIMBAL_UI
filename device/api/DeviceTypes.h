@@ -16,6 +16,10 @@ struct Measurement
 public:
     double value = 0.0;
     bool valid = false; // false means "no reading", never "reading of 0"
+
+    // Needed by moc for gadget properties of this type (ImageSample).
+    friend bool operator==(const Measurement &a, const Measurement &b) { return a.value == b.value && a.valid == b.valid; }
+    friend bool operator!=(const Measurement &a, const Measurement &b) { return !(a == b); }
 };
 
 struct Flag
@@ -27,6 +31,9 @@ struct Flag
 public:
     bool value = false;
     bool valid = false;
+
+    friend bool operator==(const Flag &a, const Flag &b) { return a.value == b.value && a.valid == b.valid; }
+    friend bool operator!=(const Flag &a, const Flag &b) { return !(a == b); }
 };
 
 struct TextValue
@@ -102,6 +109,59 @@ public:
     TextValue flashSizeKb;
     TextValue bootloaderVersion;
     TextValue boardId;
+};
+
+// Streamed telemetry of the IDS Image service (stale shortly after it stops, like DeviceSample). Angles in
+// degrees, rates in deg/s. The stream settings are the values the device holds now: the page shows these, never
+// what the user last asked for. Option settings are indices into the lists of ViewControlPage.
+// shortcut: fields and option lists follow the design; recheck them when the protocol document arrives.
+struct ImageSample
+{
+    Q_GADGET
+    Q_PROPERTY(Measurement rollDeg MEMBER rollDeg)
+    Q_PROPERTY(Measurement tiltDeg MEMBER tiltDeg)
+    Q_PROPERTY(Measurement rollRateDps MEMBER rollRateDps)
+    Q_PROPERTY(Measurement tiltRateDps MEMBER tiltRateDps)
+    Q_PROPERTY(Measurement fps MEMBER fps)
+    Q_PROPERTY(Measurement zoom MEMBER zoom)
+    Q_PROPERTY(Measurement blend MEMBER blend)
+    Q_PROPERTY(Measurement brightness MEMBER brightness)
+    Q_PROPERTY(Measurement contrast MEMBER contrast)
+    Q_PROPERTY(Measurement streamMode MEMBER streamMode)
+    Q_PROPERTY(Measurement polarity MEMBER polarity)
+    Q_PROPERTY(Measurement ffcMode MEMBER ffcMode)
+    Q_PROPERTY(Flag overlay MEMBER overlay)
+    Q_PROPERTY(Flag skyUp MEMBER skyUp)
+    Q_PROPERTY(Flag attitudeEnabled MEMBER attitudeEnabled)
+    Q_PROPERTY(Measurement controlDevice MEMBER controlDevice)
+    Q_PROPERTY(Flag lrfPointer MEMBER lrfPointer)
+    Q_PROPERTY(Measurement lrfDistanceM MEMBER lrfDistanceM)
+    Q_PROPERTY(Flag followTarget MEMBER followTarget)
+    Q_PROPERTY(TextValue status MEMBER status)
+    Q_PROPERTY(TextValue mode MEMBER mode)
+
+public:
+    Measurement rollDeg;
+    Measurement tiltDeg;
+    Measurement rollRateDps;
+    Measurement tiltRateDps;
+    Measurement fps;
+    Measurement zoom;       // x1.0 ...
+    Measurement blend;
+    Measurement brightness;
+    Measurement contrast;
+    Measurement streamMode; // index
+    Measurement polarity;   // index
+    Measurement ffcMode;    // index
+    Flag overlay;
+    Flag skyUp;
+    Flag attitudeEnabled;
+    Measurement controlDevice; // 0 keyboard, 1 joystick
+    Flag lrfPointer;
+    Measurement lrfDistanceM;
+    Flag followTarget;
+    TextValue status; // raw device text ("OK"); the page colours it
+    TextValue mode;   // raw device text ("Locked")
 };
 
 // One built-in test item; name and description are raw device text.
@@ -236,6 +296,7 @@ inline std::optional<ConnectionTarget::Parity> parityFromName(const QString &nam
 Q_DECLARE_METATYPE(ConnectionState)
 Q_DECLARE_METATYPE(DeviceSample)
 Q_DECLARE_METATYPE(BoardInfo)
+Q_DECLARE_METATYPE(ImageSample)
 Q_DECLARE_METATYPE(BitReport)
 Q_DECLARE_METATYPE(CrosstalkResult)
 Q_DECLARE_METATYPE(ImuBias)

@@ -31,6 +31,8 @@ ApplicationWindow {
           icon: Icons.sliders, component: gimbalSettingsPage, designHeight: 720 },
         { id: "heater", service: "mainControl", group: qsTr("Hardware"), title: qsTr("Heater"),
           icon: Icons.heater, component: heaterPage },
+        { id: "viewControl", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("View & control"),
+          icon: Icons.eye, component: viewControlPage, designHeight: 914 },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
@@ -102,6 +104,13 @@ ApplicationWindow {
         id: heaterPage
         HeaterPage {
             viewModel: window.mainControl
+        }
+    }
+    Component {
+        id: viewControlPage
+        ViewControlPage {
+            viewModel: window.imageViewModel
+            settings: window.settings
         }
     }
     Component {
@@ -189,7 +198,7 @@ ApplicationWindow {
         topBar: TopBar {
             objectName: "topBar"
             readonly property var page: window.pages[window.currentIndex]
-            crumbs: page.service ? [window.services[page.service], page.title] : [page.title]
+            crumbs: page.service ? [page.crumb ?? window.services[page.service], page.title] : [page.title]
             Badge {
                 visible: window.demoMode
                 kind: "warn"

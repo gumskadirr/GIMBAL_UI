@@ -50,6 +50,19 @@ private slots:
         QCOMPARE(accepted.count(), 1);
     }
 
+    void imageSampleOfActiveSessionOnly()
+    {
+        Fixture f;
+        QSignalSpy accepted(&f.session, &DeviceSession::imageSampleAccepted);
+        f.session.connectDevice();
+        emit f.fake->imageSampleReceived(1, makeImageSample());
+        QCOMPARE(accepted.count(), 1);
+        f.session.connectDevice(); // session 2
+        emit f.fake->imageSampleReceived(1, makeImageSample()); // late result of session 1
+        QCOMPARE(accepted.count(), 1);
+        QCOMPARE(f.session.staleDropped(), 1u);
+    }
+
     void bitReportOfActiveSessionOnly()
     {
         Fixture f;

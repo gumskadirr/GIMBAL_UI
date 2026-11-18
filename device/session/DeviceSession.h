@@ -39,6 +39,7 @@ signals:
     void stateChanged();
     void sessionStarted(quint64 sessionId);
     void sampleAccepted(const DeviceSample &sample);
+    void imageSampleAccepted(const ImageSample &sample);
     void boardInfoAccepted(const BoardInfo &info);
     void bitReportAccepted(const BitReport &report);
     void crosstalkResultAccepted(const CrosstalkResult &result);

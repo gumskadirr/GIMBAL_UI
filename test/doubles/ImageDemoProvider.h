@@ -4,8 +4,9 @@
 
 #include "device/api/IDeviceProvider.h"
 
-// Sample provider of the IDS Image service (demo target). Skeleton: connects, accepts every command after
-// kCommandDelayMs and makes up traffic; T17-T20 add the IDS Image telemetry.
+// Sample provider of the IDS Image service (demo target): connects, makes up traffic and the telemetry of the
+// View & control design, and accepts every command after kCommandDelayMs. Stream settings and attitude commands
+// take effect at once, so the next telemetry shows them. T18-T20 add the other pages' data.
 class ImageDemoProvider : public IDeviceProvider
 {
     Q_OBJECT
@@ -24,6 +25,7 @@ public:
     static constexpr quint64 kRxPerTick = 4000;
 
 private:
+    ImageSample m_state; // what the "device" holds
     QTimer m_timer;
     quint64 m_sessionId = 0;
     quint64 m_tx = 0;

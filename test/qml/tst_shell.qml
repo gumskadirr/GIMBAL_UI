@@ -29,7 +29,9 @@ TestCase {
 
     function cleanup() {
         testHelper.disconnectDevice()
+        testHelper.disconnectImage()
         testHelper.restoreConnection()
+        testHelper.restoreImageConnection()
         testLocalization.setLanguage("en")
         testNotifications.clear()
         testSettings.theme = "dark"
@@ -57,6 +59,7 @@ TestCase {
         verify(testLocalization.setLanguage(data.lang))
         const main = createMain(true)
         testHelper.connectWithFullSample() // the fullest content: Gimbal info shows the BIT tiles
+        testHelper.connectImageWithSample()
         main.visibility = Window.Windowed
         main.width = data.w
         main.height = data.h
@@ -81,7 +84,7 @@ TestCase {
             verify(scroller.contentHeight <= scroller.height + 0.5,
                    page.id + " needs " + scroller.contentHeight + ", has " + scroller.height)
         }
-        verify(framePages >= 3)
+        verify(framePages >= 5) // includes View & control
         compare(findChild(main.contentItem, "page-preferences").scale, 1)
     }
 
@@ -106,7 +109,7 @@ TestCase {
 
     function test_pageList() {
         const main = createMain(true)
-        compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "preferences"])
+        compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "viewControl", "preferences"])
         compare(main.activePageId, "gimbalInfo")
     }
 
@@ -215,6 +218,20 @@ TestCase {
         popup.close()
     }
 
+    // Rule 1 for IDS Image: its connection settings open when its page becomes visible, not before.
+    function test_imageSettingsOpenWhenItsPageShows() {
+        testHelper.forgetImageConnection()
+        const main = createMain(false)
+        const popup = findChild(findChild(main.contentItem, "connectionButton"), "connectionPopup")
+        wait(50)
+        verify(!popup.opened) // Main control is configured
+        main.currentPageId = "viewControl"
+        tryCompare(popup, "opened", true)
+        compare(findChild(main.contentItem, "connectionButton").text, "Not configured")
+        main.currentPageId = "gimbalInfo" // back to a configured service: the popup of the other one closes
+        tryCompare(popup, "opened", false)
+    }
+
     // Only the visible page is active; switching hands the activity over (architecture §11).
     function test_onlyVisiblePageIsActive() {
         const main = createMain(true)
@@ -236,6 +253,8 @@ TestCase {
         const topBar = findChild(main.contentItem, "topBar")
         main.currentPageId = "motorControl"
         compare(topBar.crumbs, ["Main control service", "Motor control"])
+        main.currentPageId = "viewControl"
+        compare(topBar.crumbs, ["IDS Image", "View & control"])
         main.currentPageId = "preferences"
         compare(topBar.crumbs, ["Preferences"])
     }

@@ -7,6 +7,11 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
 {
     connect(m_provider.get(), &IDeviceProvider::stateChanged, this, &DeviceSession::onProviderState);
     connect(m_provider.get(), &IDeviceProvider::sampleReceived, this, &DeviceSession::onProviderSample);
+    connect(m_provider.get(), &IDeviceProvider::imageSampleReceived, this,
+            [this](quint64 sessionId, const ImageSample &sample) {
+                if (isActive(sessionId))
+                    emit imageSampleAccepted(sample);
+            });
     connect(m_provider.get(), &IDeviceProvider::boardInfoReceived, this, &DeviceSession::onProviderBoardInfo);
     connect(m_provider.get(), &IDeviceProvider::bitReportReceived, this,
             [this](quint64 sessionId, const BitReport &report) {

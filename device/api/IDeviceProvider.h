@@ -35,6 +35,8 @@ signals:
     void trafficCounted(quint64 sessionId, quint64 txBytes, quint64 rxBytes);
     void stateChanged(quint64 sessionId, ConnectionState state, const QString &detail);
     void sampleReceived(quint64 sessionId, const DeviceSample &sample); // streamed telemetry
+    // IDS Image telemetry; the Main control provider never emits it.
+    void imageSampleReceived(quint64 sessionId, const ImageSample &sample);
     void boardInfoReceived(quint64 sessionId, const BoardInfo &info);   // read-once data, any time in a session
     void bitReportReceived(quint64 sessionId, const BitReport &report); // after RunBit and on connect
     void crosstalkResultReceived(quint64 sessionId, const CrosstalkResult &result); // after StartCrosstalkCheck

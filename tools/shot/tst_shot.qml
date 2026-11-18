@@ -24,6 +24,8 @@ TestCase {
         main.currentPageId = page
         testHelper.setCommandsSupported(true) // buttons enabled, as with a device that has a protocol
         testHelper.connectWithFullSample()
+        testHelper.setImageCommandsSupported(true)
+        testHelper.connectImageWithSample() // values of the View & control design
         let item = findChild(main.contentItem, "firmware-name") // Gimbal info: the file of the design
         while (item && item.firmwareSource === undefined)
             item = item.parent
@@ -104,8 +106,11 @@ TestCase {
         testMainControl.script.stop()
         shot(1536, 786, "script-1536-light-tr.png", "light", "tr", "gimbalSettings", true)
         testMainControl.script.stop()
+        shot(1536, 786, "viewControl-1536-dark-en.png", "dark", "en", "viewControl")
+        shot(1536, 786, "viewControl-1536-light-tr.png", "light", "tr", "viewControl")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)
+        testHelper.setImageCommandsSupported(false)
     }
 }

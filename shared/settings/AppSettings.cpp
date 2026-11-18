@@ -6,6 +6,8 @@ const QStringList kLanguages{QStringLiteral("tr"), QStringLiteral("en")};
 const QString kThemeKey = QStringLiteral("ui/theme");
 const QString kLanguageKey = QStringLiteral("ui/language");
 const QString kLastPageKey = QStringLiteral("ui/lastPage");
+const QString kRtspUrlKey = QStringLiteral("image/rtspUrl");
+const QString kDefaultRtspUrl = QStringLiteral("rtsp://192.168.1.160:8554/operator/h264");
 
 QString validOr(const QString &value, const QStringList &allowed)
 {
@@ -36,6 +38,7 @@ void AppSettings::load()
     m_theme = validOr(settings->value(kThemeKey).toString(), kThemes);
     m_language = validOr(settings->value(kLanguageKey).toString(), kLanguages);
     m_lastPage = settings->value(kLastPageKey).toString();
+    m_rtspUrl = settings->value(kRtspUrlKey, kDefaultRtspUrl).toString();
 }
 
 void AppSettings::setTheme(const QString &theme)
@@ -63,6 +66,15 @@ void AppSettings::setLastPage(const QString &page)
     m_lastPage = page;
     emit lastPageChanged();
     write(kLastPageKey, page);
+}
+
+void AppSettings::setRtspUrl(const QString &url)
+{
+    if (url == m_rtspUrl)
+        return;
+    m_rtspUrl = url;
+    emit rtspUrlChanged();
+    write(kRtspUrlKey, url);
 }
 
 void AppSettings::write(const QString &key, const QString &value)

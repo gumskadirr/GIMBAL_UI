@@ -2,6 +2,7 @@
 #include <QTest>
 
 #include "DemoProvider.h"
+#include "ImageDemoProvider.h"
 #include "device/session/DeviceSession.h"
 
 namespace {
@@ -33,6 +34,26 @@ private slots:
                                      first.gimbalTempC, first.imuTempC, first.supplyVoltageV})
             QVERIFY(m.valid);
         QVERIFY(first.safeControlLocked.valid);
+    }
+
+    void imageDemoShowsDesignValuesAndAppliesSettings()
+    {
+        ImageDemoProvider p;
+        QSignalSpy samples(&p, &IDeviceProvider::imageSampleReceived);
+        p.start(1, {});
+        QTRY_VERIFY(samples.count() >= 1);
+        ImageSample s = samples.last().at(1).value<ImageSample>();
+        QCOMPARE(s.status.value, QStringLiteral("OK"));
+        QCOMPARE(s.mode.value, QStringLiteral("Locked"));
+        QCOMPARE(s.fps.value, 30.0);
+        QCOMPARE(s.zoom.value, 1.0);
+        QCOMPARE(s.brightness.value, 200.0);
+        QVERIFY(!s.lrfDistanceM.valid);
+
+        p.send(1, 1, {Command::ImageSetStreamSetting, {{"setting", "brightness"}, {"value", 90.0}}});
+        const int seen = samples.count();
+        QTRY_VERIFY(samples.count() > seen);
+        QCOMPARE(samples.last().at(1).value<ImageSample>().brightness.value, 90.0);
     }
 
     void sendsBoardInfoOnceAfterConnecting()

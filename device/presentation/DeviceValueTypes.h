@@ -27,6 +27,13 @@ struct BoardInfoForeign
     QML_VALUE_TYPE(boardInfo)
 };
 
+struct ImageSampleForeign
+{
+    Q_GADGET
+    QML_FOREIGN(ImageSample)
+    QML_VALUE_TYPE(imageSample)
+};
+
 struct BitItemForeign
 {
     Q_GADGET

@@ -88,6 +88,7 @@ qt_add_qml_module(ids_gimbal
         shared/ui/IdsSlider.qml
         shared/ui/ConnectionPopup.qml
         shared/ui/Kbd.qml
+        shared/ui/OverlayTag.qml
         shared/ui/IdsTabs.qml
         shared/ui/LineChart.qml
         shared/ui/ThemeSwitcher.qml
@@ -100,6 +101,8 @@ qt_add_qml_module(ids_gimbal
         features/maincontrol/GimbalSettingsPage.qml
         features/maincontrol/ScriptDialog.qml
         features/maincontrol/HeaterPage.qml
+        features/idsimage/ImagePageFrame.qml
+        features/idsimage/ViewControlPage.qml
     RESOURCES
         assets/icons/ids_logo.png
 )

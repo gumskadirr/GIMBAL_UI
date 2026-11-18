@@ -43,6 +43,22 @@ enum Kind {
     StepResponse, // direction: int (+1 or -1); the result arrives as stepMetricsReceived
     // Script playback: one row of the script. Several arrive per second, so the device must answer quickly.
     ScriptPoint, // type: QString (as SetReference), pan: double and/or tilt: double (the axes that move; %, deg/s, deg)
+    // IDS Image (View & control). Settings and choices are sent as soon as the user lets go of the control.
+    // One kind for every stream setting: while one is pending the others wait (ServiceConnection rule).
+    ImageSetStreamSetting, // setting: QString ("zoom"|"blend"|"brightness"|"contrast"|"streamMode"|"polarity"|
+                           // "ffcMode"|"overlay"|"skyUp"), value: double (zoom, blend, brightness, contrast),
+                           // int (option index) or bool (overlay, skyUp)
+    ImageTriggerNuc,       // non-uniformity correction (shutter)
+    ImageAttitudeEnable,   // enabled: bool
+    ImageSetControlDevice, // device: QString ("keyboard" | "joystick")
+    ImagePark,             // "P": move the gimbal to its park position (reading of the design, see docs/kararlar.md)
+    ImageSetPosition,      // roll: double, tilt: double (deg)
+    ImageResetPosition,
+    ImageLrfPointer,       // enabled: bool
+    ImageLrfMeasure,       // mode: QString ("single" | "continuous")
+    ImageBoxSize,          // delta: int (+1 larger, -1 smaller)
+    ImageTrack,
+    ImageFollowTarget,     // enabled: bool
 };
 Q_ENUM_NS(Kind)
 

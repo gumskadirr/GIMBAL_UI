@@ -132,6 +132,32 @@ public:
         m_imageSession->connectDevice();
         emit m_imageFake->stateChanged(m_imageSession->activeSessionId(), ConnectionState::Error, detail);
     }
+    // IDS Image page tests: the image fake records what is sent, like the Main control one.
+    Q_INVOKABLE void setImageCommandsSupported(bool supported) { m_imageFake->commands = supported; }
+    Q_INVOKABLE void connectImageWithSample()
+    {
+        connectImage();
+        sendImageSample();
+    }
+    Q_INVOKABLE void sendImageSample(double brightness = 200)
+    {
+        ImageSample s = makeImageSample();
+        s.brightness = {brightness, true};
+        emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
+    }
+    Q_INVOKABLE int imageSentCount() const { return int(m_imageFake->sent.size()); }
+    Q_INVOKABLE int lastImageCommandKind() const { return m_imageFake->sent.isEmpty() ? -1 : int(m_imageFake->sent.last().kind); }
+    Q_INVOKABLE QVariantMap lastImageCommandArgs() const
+    {
+        return m_imageFake->sent.isEmpty() ? QVariantMap{} : m_imageFake->sent.last().args;
+    }
+    Q_INVOKABLE void answerLastImageCommand(int status)
+    {
+        emit m_imageFake->commandFinished(m_imageFake->lastCommandSessionId, m_imageFake->lastRequestId,
+                                          {Command::Status(status), {}});
+    }
+    Q_INVOKABLE void forgetImageConnection() { m_imageSession->setTarget({}); }
+    Q_INVOKABLE void restoreImageConnection() { m_imageSession->setTarget(loopbackTarget()); }
     Q_INVOKABLE void disconnectImage() { m_imageSession->disconnectDevice(); }
     // Design comparison screenshots (tools/shot/tst_shot.qml, docs/gelistirme.md); not used by the tests.
     Q_INVOKABLE bool saveWindowImage(QQuickWindow *window, const QString &path)
@@ -172,7 +198,7 @@ public slots:
         m_imageSession = std::make_unique<DeviceSession>(std::move(imageFake));
         m_imageSession->setTarget(loopbackTarget());
         m_imageConnection = std::make_unique<ServiceConnection>(m_imageSession.get());
-        m_image = std::make_unique<ImageViewModel>(m_imageConnection.get());
+        m_image = std::make_unique<ImageViewModel>(m_imageSession.get(), m_imageConnection.get());
         // The application's own service wiring (AppRunner), not a copy of it.
         connectServices(*m_settings, *m_notifications, *m_localization);
         connectDeviceService(*m_notifications, *m_localization, *m_session, *m_connection,

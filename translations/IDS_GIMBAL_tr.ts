@@ -893,6 +893,49 @@
     </message>
 </context>
 <context>
+    <name>ImagePageFrame</name>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="60"/>
+        <source>Video source</source>
+        <translation>Video kaynağı</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="69"/>
+        <source>RTSP address</source>
+        <translation>RTSP adresi</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="77"/>
+        <source>Open</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="86"/>
+        <source>Video is not available in this version</source>
+        <translation>Video bu sürümde kullanılamıyor</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="92"/>
+        <source>ROLL %1  TILT %2</source>
+        <translation>ROLL %1  TILT %2</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="100"/>
+        <source>%1 FPS · x%2</source>
+        <translation>%1 FPS · x%2</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="121"/>
+        <source>STATUS</source>
+        <translation>DURUM</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ImagePageFrame.qml" line="135"/>
+        <source>MODE</source>
+        <translation>MOD</translation>
+    </message>
+</context>
+<context>
     <name>Main</name>
     <message>
         <location filename="../app/Main.qml" line="26"/>
@@ -932,27 +975,32 @@
     </message>
     <message>
         <location filename="../app/Main.qml" line="34"/>
+        <source>View &amp; control</source>
+        <translation>Görüntü ve kontrol</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="36"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="34"/>
+        <location filename="../app/Main.qml" line="36"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="52"/>
+        <location filename="../app/Main.qml" line="54"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="201"/>
+        <location filename="../app/Main.qml" line="210"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="149"/>
+        <location filename="../app/Main.qml" line="158"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -962,7 +1010,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="196"/>
+        <location filename="../app/Main.qml" line="205"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
@@ -1935,6 +1983,248 @@
         <location filename="../shared/ui/ThemeSwitcher.qml" line="15"/>
         <source>Dark theme</source>
         <translation>Koyu tema</translation>
+    </message>
+</context>
+<context>
+    <name>ViewControlPage</name>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="144"/>
+        <source>Select...</source>
+        <translation>Seçin...</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="165"/>
+        <source>Stream</source>
+        <translation>Akış</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="167"/>
+        <source>Zoom</source>
+        <translation>Yakınlaştırma</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="168"/>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="178"/>
+        <source>Blend</source>
+        <translation>Karışım</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="169"/>
+        <source>Brightness</source>
+        <translation>Parlaklık</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="170"/>
+        <source>Contrast</source>
+        <translation>Kontrast</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="175"/>
+        <source>Stream mode</source>
+        <translation>Akış modu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="178"/>
+        <source>Visible</source>
+        <translation>Görünür</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="178"/>
+        <source>Thermal</source>
+        <translation>Termal</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="181"/>
+        <source>Polarity mode</source>
+        <translation>Polarite modu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="184"/>
+        <source>White hot</source>
+        <translation>Beyaz sıcak</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="184"/>
+        <source>Black hot</source>
+        <translation>Siyah sıcak</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="187"/>
+        <source>FFC mode</source>
+        <translation>FFC modu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="190"/>
+        <source>FFC manual</source>
+        <translation>FFC elle</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="190"/>
+        <source>FFC auto</source>
+        <translation>FFC otomatik</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="198"/>
+        <source>Trigger shutter (NUC)</source>
+        <translation>Deklanşörü tetikle (NUC)</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="205"/>
+        <source>Stream overlay info</source>
+        <translation>Akış üstü bilgi</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="212"/>
+        <source>Sky up</source>
+        <translation>Gökyüzü yukarı</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="223"/>
+        <source>Attitude</source>
+        <translation>Duruş</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="231"/>
+        <source>Park position</source>
+        <translation>Park konumu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="239"/>
+        <source>Disable</source>
+        <translation>Kapat</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="239"/>
+        <source>Enable</source>
+        <translation>Etkinleştir</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="249"/>
+        <source>Control device</source>
+        <translation>Kontrol aygıtı</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="253"/>
+        <source>Keyboard</source>
+        <translation>Klavye</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="253"/>
+        <source>Joystick</source>
+        <translation>Joystick</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="262"/>
+        <source>Motor status</source>
+        <translation>Motor durumu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="266"/>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="281"/>
+        <source>Roll, deg</source>
+        <translation>Roll, der</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="267"/>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="293"/>
+        <source>Tilt, deg</source>
+        <translation>Tilt, der</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="268"/>
+        <source>Roll, deg/s</source>
+        <translation>Roll, der/sn</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="269"/>
+        <source>Tilt, deg/s</source>
+        <translation>Tilt, der/sn</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="271"/>
+        <source>Position control</source>
+        <translation>Konum kontrolü</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="283"/>
+        <source>Roll, deg (%1 to %2)</source>
+        <translation>Roll, der (%1 ile %2 arası)</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="295"/>
+        <source>Tilt, deg (%1 to %2)</source>
+        <translation>Tilt, der (%1 ile %2 arası)</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="305"/>
+        <source>Reset position</source>
+        <translation>Konumu sıfırla</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="312"/>
+        <source>Set</source>
+        <translation>Ayarla</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="321"/>
+        <source>Target control</source>
+        <translation>Hedef kontrolü</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="325"/>
+        <source>LRF pointer</source>
+        <translation>LRF işaretçisi</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="332"/>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="342"/>
+        <source>Distance, m</source>
+        <translation>Mesafe, m</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="350"/>
+        <source>Single</source>
+        <translation>Tekli</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="350"/>
+        <source>Continuous</source>
+        <translation>Sürekli</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="352"/>
+        <source>Measurement mode</source>
+        <translation>Ölçüm modu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="359"/>
+        <source>Start</source>
+        <translation>Başlat</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="369"/>
+        <source>Box size</source>
+        <translation>Kutu boyutu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="378"/>
+        <source>Smaller box</source>
+        <translation>Daha küçük kutu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="387"/>
+        <source>Larger box</source>
+        <translation>Daha büyük kutu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="394"/>
+        <source>Track</source>
+        <translation>İzle</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="399"/>
+        <source>Follow tracked target</source>
+        <translation>İzlenen hedefi takip et</translation>
     </message>
 </context>
 </TS>

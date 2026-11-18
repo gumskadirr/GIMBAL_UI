@@ -96,3 +96,30 @@ inline DeviceSample makeFullSample()
     s.tiltTorqueA = {-0.5, true};
     return s;
 }
+
+// The values of the View & control design: status OK, mode Locked, 30 FPS, x1.0, brightness 200; the LRF
+// reading and polarity are not available.
+inline ImageSample makeImageSample()
+{
+    ImageSample s;
+    s.rollDeg = {0.0, true};
+    s.tiltDeg = {0.0, true};
+    s.rollRateDps = {0.0, true};
+    s.tiltRateDps = {0.0, true};
+    s.fps = {30.0, true};
+    s.zoom = {1.0, true};
+    s.blend = {0.0, true};
+    s.brightness = {200.0, true};
+    s.contrast = {0.0, true};
+    s.streamMode = {2.0, true};
+    s.ffcMode = {0.0, true};
+    s.overlay = {true, true};
+    s.skyUp = {true, true};
+    s.attitudeEnabled = {false, true};
+    s.controlDevice = {0.0, true};
+    s.lrfPointer = {false, true};
+    s.followTarget = {false, true};
+    s.status = {QStringLiteral("OK"), true};
+    s.mode = {QStringLiteral("Locked"), true};
+    return s;
+}
