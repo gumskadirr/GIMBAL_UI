@@ -110,7 +110,7 @@ qt_add_resources(ids_gimbal "fonts"
         assets/fonts/JetBrainsMono-SemiBold.ttf assets/fonts/JetBrainsMono-Bold.ttf
 )
 
-# Real target: no device transport yet, so it stays disconnected and never shows sample data.
+# Real target: opens serial (UART) or UDP through TransportProvider; it never shows sample data.
 qt_add_executable(appIDS_GIMBAL
     app/main.cpp
 )
