@@ -126,6 +126,21 @@ private slots:
         QCOMPARE(f.fake->sent.size(), 5);
     }
 
+    void remainingFollowsTheRowsNotTheClock()
+    {
+        Fixture f(10, 20);
+        f.fake->answer = Command::Accepted;
+        QCOMPARE(f.runner.remainingMs(), 200);
+        QVERIFY(f.runner.start());
+        QVERIFY(QTest::qWaitFor([&] { return f.runner.row() >= 4; }, 2000));
+        QVERIFY(f.runner.running());
+        const int row = f.runner.row();
+        QCOMPARE(f.runner.remainingMs(), qint64(10 - row) * 20);
+        QVERIFY(f.runner.remainingMs() > 0);
+        f.runner.stop();
+        QVERIFY(f.runner.remainingMs() > 0); // stopped: still the unsent rows
+    }
+
     void cannotStartWithoutCommandsOrFile()
     {
         Fixture f;

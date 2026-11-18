@@ -57,7 +57,7 @@ public:
     int percent() const { return rowCount() > 0 ? int(qint64(m_row) * 100 / rowCount()) : 0; }
     qint64 durationMs() const { return qint64(rowCount()) * m_sampleMs; }
     qint64 elapsedMs() const { return running() ? m_clock.elapsed() : m_elapsedMs; }
-    qint64 remainingMs() const { return qMax<qint64>(0, durationMs() - elapsedMs()); }
+    qint64 remainingMs() const { return qint64(rowCount() - m_row) * m_sampleMs; } // rows still to send, not wall clock
     Measurement commandPan() const { return m_commandPan; }
     Measurement commandTilt() const { return m_commandTilt; }
     void setPanEnabled(bool on) { set(m_panEnabled, on); }
