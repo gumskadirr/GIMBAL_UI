@@ -68,8 +68,16 @@ void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceComman
             m_parameters = defaultParameters();
             [[fallthrough]];
         case Command::ReadParameters:
-            emit parametersReceived(sessionId, m_parameters);
+        {
+            const QString prefix = command.args.value(QStringLiteral("prefix")).toString();
+            QVariantMap values;
+            for (auto it = m_parameters.cbegin(); it != m_parameters.cend(); ++it) {
+                if (it.key().startsWith(prefix))
+                    values.insert(it.key(), it.value());
+            }
+            emit parametersReceived(sessionId, values);
             break;
+        }
         case Command::RunBit:
             emit bitReportReceived(sessionId, sampleBitReport(QTime::currentTime().toString(QStringLiteral("HH:mm:ss")) + QStringLiteral(" manual run")));
             break;
@@ -98,6 +106,13 @@ QVariantMap DemoProvider::defaultParameters()
     QVariantMap values;
     for (const ParameterSpec &spec : ParameterKeys::all()) {
         const bool tilt = spec.key.startsWith(QLatin1String("tilt."));
+        if (spec.key.startsWith(QLatin1String("heater."))) { // values of the Heater design
+            const QString zone = spec.key.mid(7, 2);
+            values.insert(spec.key, spec.type == ParameterType::Bool ? QVariant(true)
+                          : QVariant(zone == QLatin1String("g1") || zone == QLatin1String("g2") ? 35.0
+                                   : zone == QLatin1String("g3") ? 20.0 : zone == QLatin1String("tv") ? 60.0 : 45.0));
+            continue;
+        }
         switch (spec.type) {
         case ParameterType::Number:
             values.insert(spec.key, spec.key.endsWith(QLatin1String("Deg"))

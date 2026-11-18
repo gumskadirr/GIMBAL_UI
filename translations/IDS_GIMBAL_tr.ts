@@ -166,33 +166,33 @@
         <translation>Geçersiz UDP adresi</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ParameterModel.cpp" line="127"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="136"/>
         <source>No parameter values to save</source>
         <translation>Kaydedilecek parametre değeri yok</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ParameterModel.cpp" line="147"/>
-        <location filename="../device/presentation/ParameterModel.cpp" line="150"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="156"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="159"/>
         <source>Not a parameter profile</source>
         <translation>Parametre profili değil</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ParameterModel.cpp" line="152"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="161"/>
         <source>Unsupported profile version</source>
         <translation>Desteklenmeyen profil sürümü</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ParameterModel.cpp" line="160"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="169"/>
         <source>Unknown parameter in the file</source>
         <translation>Dosyada bilinmeyen parametre var</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ParameterModel.cpp" line="163"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="172"/>
         <source>Value out of range or of the wrong type in the file</source>
         <translation>Dosyada aralık dışı ya da yanlış türde değer var</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ParameterModel.cpp" line="167"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="176"/>
         <source>No parameter values in the file</source>
         <translation>Dosyada parametre değeri yok</translation>
     </message>
@@ -723,57 +723,57 @@
 <context>
     <name>HeaterPage</name>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="22"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="45"/>
         <source>Heater</source>
         <translation>Isıtıcı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="23"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="46"/>
         <source>Keep optics and electronics above their minimum temperature</source>
         <translation>Optik ve elektroniği en düşük sıcaklıklarının üzerinde tutar</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="26"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="54"/>
         <source>Read</source>
         <translation>Oku</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="27"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="62"/>
         <source>Set heater settings</source>
         <translation>Isıtıcı ayarlarını uygula</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="33"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="71"/>
         <source>Heater zones</source>
         <translation>Isıtıcı bölgeleri</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="34"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="72"/>
         <source>Duty cycle of each zone</source>
         <translation>Her bölgenin görev çevrimi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="35"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="75"/>
         <source>Enable heaters</source>
         <translation>Isıtıcıları etkinleştir</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="78"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="147"/>
         <source>%1 duty cycle</source>
         <translation>%1 görev çevrimi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="85"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="156"/>
         <source>Duty cycle, %</source>
         <translation>Görev çevrimi, %</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="96"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="169"/>
         <source>%1 duty cycle value</source>
         <translation>%1 görev çevrimi değeri</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/HeaterPage.qml" line="104"/>
+        <location filename="../features/maincontrol/HeaterPage.qml" line="177"/>
         <source>Changes apply when you press Set heater settings. Total heater power is limited by the board.</source>
         <translation>Değişiklikler Isıtıcı ayarlarını uygula&apos;ya basınca geçerli olur. Toplam ısıtıcı gücü kart tarafından sınırlanır.</translation>
     </message>

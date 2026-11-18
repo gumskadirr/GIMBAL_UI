@@ -106,6 +106,32 @@ private slots:
         QVERIFY(!Fixture().model.write());   // nothing to write
     }
 
+    void prefixedWriteSendsOnlyThoseEdits()
+    {
+        Fixture f;
+        f.model.set(QStringLiteral("pan.torqueKp"), 2.5);
+        f.model.set(QStringLiteral("heater.g1DutyPct"), 40);
+        QVERIFY(f.model.write(QStringLiteral("heater.")));
+        QCOMPARE(f.fake->sent.last().args.value(QStringLiteral("values")).toMap(),
+                 (QVariantMap{{QStringLiteral("heater.g1DutyPct"), 40.0}}));
+        f.answer();
+        QCOMPARE(f.model.unsavedCount(), 1); // the motor edit still waits
+        QVERIFY(!f.model.write(QStringLiteral("heater."))); // no heater edit left
+        QVERIFY(f.model.write()); // no prefix: everything left
+        QCOMPARE(f.fake->sent.last().args.value(QStringLiteral("values")).toMap().size(), 1);
+    }
+
+    void prefixedReadSendsPrefix()
+    {
+        Fixture f;
+        QVERIFY(f.model.read(QStringLiteral("heater.")));
+        QCOMPARE(f.fake->sent.last().kind, Command::ReadParameters);
+        QCOMPARE(f.fake->sent.last().args.value(QStringLiteral("prefix")).toString(), QStringLiteral("heater."));
+        f.answer();
+        QVERIFY(f.model.read());
+        QVERIFY(f.fake->sent.last().args.isEmpty());
+    }
+
     void sessionEndKeepsEditsDropsDeviceValues()
     {
         Fixture f;

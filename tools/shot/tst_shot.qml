@@ -39,6 +39,9 @@ TestCase {
             testMainControl.parameters.set("pan.speedKi", 3.6)
             testMainControl.parameters.set("pan.slipRing", true)
         }
+        if (page === "heater") // values of the design
+            testHelper.sendParameters({"heater.enabled": true, "heater.g1DutyPct": 35, "heater.g2DutyPct": 35,
+                "heater.g3DutyPct": 20, "heater.tvDutyPct": 60, "heater.irDutyPct": 45})
         wait(50) // telemetry turns stale after 1 s
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
@@ -50,6 +53,8 @@ TestCase {
         shot(1536, 786, "gimbalInfo-1536-light-tr.png", "light", "tr", "gimbalInfo")
         shot(1536, 786, "motorControl-1536-dark-en.png", "dark", "en", "motorControl")
         shot(1536, 786, "motorControl-1536-light-tr.png", "light", "tr", "motorControl")
+        shot(1536, 786, "heater-1536-dark-en.png", "dark", "en", "heater")
+        shot(1536, 786, "heater-1536-light-tr.png", "light", "tr", "heater")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)

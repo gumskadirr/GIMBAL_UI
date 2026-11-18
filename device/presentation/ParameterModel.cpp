@@ -80,13 +80,22 @@ void ParameterModel::revertAll()
     emit changed();
 }
 
-bool ParameterModel::read() { return m_connection->send(Command::ReadParameters); }
-
-bool ParameterModel::write()
+bool ParameterModel::read(const QString &prefix)
 {
-    if (m_edits.isEmpty())
+    return m_connection->send(Command::ReadParameters,
+                              prefix.isEmpty() ? QVariantMap{} : QVariantMap{{QStringLiteral("prefix"), prefix}});
+}
+
+bool ParameterModel::write(const QString &prefix)
+{
+    QVariantMap values;
+    for (auto it = m_edits.cbegin(); it != m_edits.cend(); ++it) {
+        if (it.key().startsWith(prefix))
+            values.insert(it.key(), it.value());
+    }
+    if (values.isEmpty())
         return false;
-    return m_connection->send(Command::WriteParameters, {{QStringLiteral("values"), m_edits}});
+    return m_connection->send(Command::WriteParameters, {{QStringLiteral("values"), values}});
 }
 
 bool ParameterModel::saveToFlash() { return m_connection->send(Command::SaveParametersToFlash); }

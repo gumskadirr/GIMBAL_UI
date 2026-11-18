@@ -41,8 +41,10 @@ public:
     Q_INVOKABLE void revertAll();
 
     // Device commands; false when nothing was sent (no commands, already pending, nothing to write).
-    Q_INVOKABLE bool read();
-    Q_INVOKABLE bool write();
+    // An optional key prefix (e.g. "heater.") limits a read to those keys and a write to those edits; the
+    // other edits stay unsaved.
+    Q_INVOKABLE bool read(const QString &prefix = {});
+    Q_INVOKABLE bool write(const QString &prefix = {});
     Q_INVOKABLE bool saveToFlash();
     Q_INVOKABLE bool restoreDefaults();
 
