@@ -1,4 +1,5 @@
 #include "ImageDemoProvider.h"
+#include <limits>
 
 ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
 {
@@ -23,6 +24,15 @@ ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
     m_state.controlDevice = {0.0, true}; // Keyboard
     m_state.status = {QStringLiteral("OK"), true};
     m_state.mode = {QStringLiteral("Locked"), true};
+    // Values of the Alignment design.
+    const double inf = std::numeric_limits<double>::infinity();
+    m_state.camera = m_state.focusMode = {0.0, true}; // CMOS sensor, Auto
+    m_state.focusDistanceM = m_state.fovGain = {inf, true};
+    m_state.offsetX = {9.0, true};
+    m_state.offsetY = {11.0, true};
+    m_state.imageScale = {1.0, true};
+    m_state.stabilization = {false, true};
+    m_state.gainMode = m_state.irisMode = m_state.shutterMode = {1.0, true}; // Auto
 }
 
 void ImageDemoProvider::start(quint64 sessionId, const ConnectionTarget &)
@@ -61,6 +71,14 @@ void ImageDemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceC
         else if (name == QLatin1String("ffcMode")) m_state.ffcMode = m;
         else if (name == QLatin1String("overlay")) m_state.overlay = {v.toBool(), true};
         else if (name == QLatin1String("skyUp")) m_state.skyUp = {v.toBool(), true};
+        else if (name == QLatin1String("camera")) m_state.camera = m;
+        else if (name == QLatin1String("focusMode")) m_state.focusMode = m;
+        else if (name == QLatin1String("imageScale")) m_state.imageScale = m;
+        else if (name == QLatin1String("fovGain")) m_state.fovGain = m;
+        else if (name == QLatin1String("stabilization")) m_state.stabilization = {v.toBool(), true};
+        else if (name == QLatin1String("gainMode")) m_state.gainMode = m;
+        else if (name == QLatin1String("irisMode")) m_state.irisMode = m;
+        else if (name == QLatin1String("shutterMode")) m_state.shutterMode = m;
         break;
     }
     case Command::ImageAttitudeEnable: m_state.attitudeEnabled = {a.value(QStringLiteral("enabled")).toBool(), true}; break;
@@ -75,6 +93,12 @@ void ImageDemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceC
     case Command::ImageResetPosition: m_state.rollDeg = m_state.tiltDeg = {0.0, true}; break;
     case Command::ImageLrfPointer: m_state.lrfPointer = {a.value(QStringLiteral("enabled")).toBool(), true}; break;
     case Command::ImageLrfMeasure: m_state.lrfDistanceM = {1250.5, true}; break;
+    case Command::ImageSetFocus: m_state.focusDistanceM = {a.value(QStringLiteral("distance")).toDouble(), true}; break;
+    case Command::ImageWriteOffset:
+        m_state.offsetX = {a.value(QStringLiteral("x")).toDouble(), true};
+        m_state.offsetY = {a.value(QStringLiteral("y")).toDouble(), true};
+        m_state.imageScale = {a.value(QStringLiteral("scale")).toDouble(), true};
+        break;
     case Command::ImageFollowTarget: m_state.followTarget = {a.value(QStringLiteral("enabled")).toBool(), true}; break;
     default: break;
     }

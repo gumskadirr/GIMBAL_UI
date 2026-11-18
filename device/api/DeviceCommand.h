@@ -59,6 +59,12 @@ enum Kind {
     ImageBoxSize,          // delta: int (+1 larger, -1 smaller)
     ImageTrack,
     ImageFollowTarget,     // enabled: bool
+    // IDS Image (Alignment). Camera, focus mode, zoom, image scale, FOV gain, stabilization and the Manual/Auto
+    // choices go as ImageSetStreamSetting: "camera"|"focusMode"|"imageScale"|"fovGain" (double, +inf = infinity)|
+    // "stabilization" (bool)|"gainMode"|"irisMode"|"shutterMode" (0 Manual, 1 Auto; indices as in ImageSample).
+    ImageSetFocus,         // distance: double (m; +inf = INF button)
+    ImageWriteOffset,      // x: int, y: int (pixels), scale: double
+    ImageCameraStep,       // param: QString ("gain"|"iris"|"shutter"), delta: int (+1, -1)
 };
 Q_ENUM_NS(Kind)
 

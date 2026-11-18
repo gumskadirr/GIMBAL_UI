@@ -139,6 +139,17 @@ struct ImageSample
     Q_PROPERTY(Flag followTarget MEMBER followTarget)
     Q_PROPERTY(TextValue status MEMBER status)
     Q_PROPERTY(TextValue mode MEMBER mode)
+    Q_PROPERTY(Measurement camera MEMBER camera)
+    Q_PROPERTY(Measurement focusMode MEMBER focusMode)
+    Q_PROPERTY(Measurement focusDistanceM MEMBER focusDistanceM)
+    Q_PROPERTY(Measurement offsetX MEMBER offsetX)
+    Q_PROPERTY(Measurement offsetY MEMBER offsetY)
+    Q_PROPERTY(Measurement imageScale MEMBER imageScale)
+    Q_PROPERTY(Measurement fovGain MEMBER fovGain)
+    Q_PROPERTY(Flag stabilization MEMBER stabilization)
+    Q_PROPERTY(Measurement gainMode MEMBER gainMode)
+    Q_PROPERTY(Measurement irisMode MEMBER irisMode)
+    Q_PROPERTY(Measurement shutterMode MEMBER shutterMode)
 
 public:
     Measurement rollDeg;
@@ -162,6 +173,18 @@ public:
     Flag followTarget;
     TextValue status; // raw device text ("OK"); the page colours it
     TextValue mode;   // raw device text ("Locked")
+    // Alignment page.
+    Measurement camera;         // index: 0 CMOS sensor, 1 Thermal sensor
+    Measurement focusMode;      // index: 0 Auto, 1 Manual
+    Measurement focusDistanceM; // infinity = +inf
+    Measurement offsetX;        // pixels
+    Measurement offsetY;
+    Measurement imageScale;     // x1 ...
+    Measurement fovGain;        // distance in m the offset is calibrated for; +inf = infinity
+    Flag stabilization;         // Sony camera stabilization
+    Measurement gainMode;       // index: 0 Manual, 1 Auto
+    Measurement irisMode;
+    Measurement shutterMode;
 };
 
 // One built-in test item; name and description are raw device text.

@@ -2,6 +2,164 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="tr" sourcelanguage="en">
 <context>
+    <name>AlignmentPage</name>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="40"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="45"/>
+        <source>Infinity</source>
+        <translation>Sonsuz</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="115"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="160"/>
+        <source>Decrease %1</source>
+        <translation>%1 azalt</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="135"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="169"/>
+        <source>Increase %1</source>
+        <translation>%1 artır</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="174"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="239"/>
+        <source>Manual</source>
+        <translation>Manuel</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="174"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="239"/>
+        <source>Auto</source>
+        <translation>Otomatik</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="183"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="195"/>
+        <source>Camera</source>
+        <translation>Kamera</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="191"/>
+        <source>CMOS sensor</source>
+        <translation>CMOS sensörü</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="191"/>
+        <source>Thermal sensor</source>
+        <translation>Termal sensör</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="193"/>
+        <source>Select...</source>
+        <translation>Seçin...</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="205"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="216"/>
+        <source>Zoom</source>
+        <translation>Yakınlaştırma</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="235"/>
+        <source>Focus mode</source>
+        <translation>Odak modu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="246"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="253"/>
+        <source>Focus distance, m</source>
+        <translation>Odak mesafesi, m</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="261"/>
+        <source>INF</source>
+        <translation>SONSUZ</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="262"/>
+        <source>Focus at infinity</source>
+        <translation>Sonsuza odakla</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="276"/>
+        <source>Set</source>
+        <translation>Ayarla</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="286"/>
+        <source>Stream overlay info</source>
+        <translation>Yayın bilgi katmanı</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="292"/>
+        <source>Sky up</source>
+        <translation>Gökyüzü yukarı</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="302"/>
+        <source>Camera offset</source>
+        <translation>Kamera ofseti</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="309"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="320"/>
+        <source>Image scale</source>
+        <translation>Görüntü ölçeği</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="340"/>
+        <source>Offset X</source>
+        <translation>Ofset X</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="341"/>
+        <source>Offset Y</source>
+        <translation>Ofset Y</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="345"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="352"/>
+        <source>FOV gain</source>
+        <translation>FOV kazancı</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="362"/>
+        <source>Select</source>
+        <translation>Seç</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="373"/>
+        <source>Write offset</source>
+        <translation>Ofseti yaz</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="381"/>
+        <source>CMOS camera</source>
+        <translation>CMOS kamera</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="385"/>
+        <source>Sony camera stabilization</source>
+        <translation>Sony kamera stabilizasyonu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="389"/>
+        <source>Gain</source>
+        <translation>Kazanç</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="390"/>
+        <source>Iris</source>
+        <translation>Diyafram</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="391"/>
+        <source>Shutter</source>
+        <translation>Perde hızı</translation>
+    </message>
+</context>
+<context>
     <name>ConnectionPopup</name>
     <message>
         <location filename="../shared/ui/ConnectionPopup.qml" line="40"/>
@@ -980,27 +1138,32 @@
     </message>
     <message>
         <location filename="../app/Main.qml" line="36"/>
+        <source>Alignment</source>
+        <translation>Hizalama</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="38"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="36"/>
+        <location filename="../app/Main.qml" line="38"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="54"/>
+        <location filename="../app/Main.qml" line="56"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="210"/>
+        <location filename="../app/Main.qml" line="219"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="158"/>
+        <location filename="../app/Main.qml" line="167"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1010,7 +1173,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="205"/>
+        <location filename="../app/Main.qml" line="214"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include "device/api/IDeviceProvider.h"
 
 // Records calls; tests emit results directly with `emit provider->stateChanged(...)`.
@@ -121,5 +122,14 @@ inline ImageSample makeImageSample()
     s.followTarget = {false, true};
     s.status = {QStringLiteral("OK"), true};
     s.mode = {QStringLiteral("Locked"), true};
+    s.camera = {0.0, true};
+    s.focusMode = {0.0, true};
+    s.focusDistanceM = {std::numeric_limits<double>::infinity(), true};
+    s.offsetX = {9.0, true};
+    s.offsetY = {11.0, true};
+    s.imageScale = {1.0, true};
+    s.fovGain = {std::numeric_limits<double>::infinity(), true};
+    s.stabilization = {false, true};
+    s.gainMode = s.irisMode = s.shutterMode = {1.0, true};
     return s;
 }

@@ -108,6 +108,8 @@ TestCase {
         testMainControl.script.stop()
         shot(1536, 786, "viewControl-1536-dark-en.png", "dark", "en", "viewControl")
         shot(1536, 786, "viewControl-1536-light-tr.png", "light", "tr", "viewControl")
+        shot(1536, 786, "alignment-1536-dark-en.png", "dark", "en", "alignment")
+        shot(1536, 786, "alignment-1536-light-tr.png", "light", "tr", "alignment")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)

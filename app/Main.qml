@@ -33,6 +33,8 @@ ApplicationWindow {
           icon: Icons.heater, component: heaterPage },
         { id: "viewControl", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("View & control"),
           icon: Icons.eye, component: viewControlPage, designHeight: 914 },
+        { id: "alignment", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("Alignment"),
+          icon: Icons.target, component: alignmentPage, designHeight: 819 },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
@@ -109,6 +111,13 @@ ApplicationWindow {
     Component {
         id: viewControlPage
         ViewControlPage {
+            viewModel: window.imageViewModel
+            settings: window.settings
+        }
+    }
+    Component {
+        id: alignmentPage
+        AlignmentPage {
             viewModel: window.imageViewModel
             settings: window.settings
         }
