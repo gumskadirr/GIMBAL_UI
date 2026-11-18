@@ -41,6 +41,8 @@ enum Kind {
     StartCrosstalkCheck,
     StartImuBiasCalibration,
     StepResponse, // direction: int (+1 or -1); the result arrives as stepMetricsReceived
+    // Script playback: one row of the script. Several arrive per second, so the device must answer quickly.
+    ScriptPoint, // type: QString (as SetReference), pan: double and/or tilt: double (the axes that move; %, deg/s, deg)
 };
 Q_ENUM_NS(Kind)
 

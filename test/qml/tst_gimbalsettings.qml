@@ -27,9 +27,58 @@ TestCase {
         testHelper.connectWithFullSample()
         const controls = TestUtils.interactiveControls(page)
         verify(controls.length >= 20)
-        for (const control of controls)
+        for (const control of controls) {
+            if (control.objectName === "command-scriptDetails") // opens the script window: loading a file needs no device
+                continue
             verify(!control.enabled, control.objectName || control.text || String(control))
+        }
         verify(findChild(page, "command-safeStop"))
+    }
+
+    // The script window loads a file without a device, plays it with one and keeps playing when the page goes.
+    function test_scriptWindow() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        const runner = testMainControl.script
+        const details = findChild(page, "command-scriptDetails")
+        verify(details.enabled)
+        verify(!findChild(page, "command-startScript").enabled)
+        verify(!findChild(page, "command-safeStop").enabled)
+        compare(findChild(page, "value-scriptState").text, "No script loaded")
+        details.clicked()
+        const dialog = findChild(page, "scriptDialog")
+        tryVerify(() => dialog.opened)
+        verify(runner.file.load(testHelper.makeText("play.csv", "time_ms,pan_deg,tilt_deg
+0,1.5,-2
+20,2.5,-3
+40,3.5,-4
+")))
+        compare(findChild(dialog, "value-scriptRows").text, "3")
+        compare(findChild(dialog, "value-scriptDuration").text, "0.06")
+        compare(findChild(page, "value-scriptFile").text, "play.csv")
+        compare(findChild(page, "value-scriptState").text, "Ready")
+        verify(!findChild(dialog, "command-startScriptDialog").enabled) // no command support
+        verify(!runner.file.load(testHelper.makeText("bad.csv", "pan,tilt
+1,x
+"))) // rejected, the script stays
+        compare(runner.rowCount, 3)
+
+        testHelper.setCommandsSupported(true)
+        testHelper.connectWithFullSample()
+        const start = findChild(dialog, "command-startScriptDialog")
+        tryVerify(() => start.enabled)
+        findChild(dialog, "input-scriptSampleMs").text = "5"
+        findChild(dialog, "input-scriptSampleMs").editingFinished()
+        compare(runner.sampleMs, 5)
+        start.clicked()
+        verify(runner.running)
+        for (let i = 0; i < 100 && runner.running; ++i) { // the fake answers when told; the player waits for it
+            wait(5)
+            testHelper.answerLastCommand(Command.Accepted)
+        }
+        compare(runner.state, ScriptRunner.Done)
+        compare(findChild(page, "value-scriptCommand").text, "Pan 3.500 · Tilt -4.000")
+        testHelper.setCommandsSupported(false)
+        dialog.close()
     }
 
     // The stream row keeps Safe stop inside the card while recording, in the longest language.

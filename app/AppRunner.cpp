@@ -98,6 +98,12 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
                          notifications.add(QStringLiteral("recording.failed"), {file}, NotificationModel::Error,
                                            reason);
                      });
+    QObject::connect(mainControl.script()->file(), &ScriptFile::failed, &notifications,
+                     [&](const QString &file, const QString &reason) {
+                         notifications.add(QStringLiteral("script.fileFailed"), {file}, NotificationModel::Error, reason);
+                     });
+    QObject::connect(mainControl.script(), &ScriptRunner::connectionLost, &notifications,
+                     [&] { notifications.add(QStringLiteral("script.connectionLost"), {}, NotificationModel::Warning); });
     QQmlApplicationEngine engine;
 
     // First languageChanged handler: QML bindings are refreshed before the C++ models.

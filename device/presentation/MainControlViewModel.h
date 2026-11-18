@@ -7,6 +7,7 @@
 
 #include "device/api/DeviceTypes.h"
 #include "features/telemetry/CsvRecorder.h"
+#include "features/telemetry/ScriptRunner.h"
 #include "device/presentation/ParameterModel.h"
 #include "device/presentation/SeriesBuffer.h"
 #include "device/presentation/ServiceConnection.h"
@@ -24,6 +25,7 @@ class MainControlViewModel : public QObject
     Q_PROPERTY(ServiceConnection *connection READ connection CONSTANT)
     Q_PROPERTY(ParameterModel *parameters READ parameters CONSTANT)
     Q_PROPERTY(CsvRecorder *recorder READ recorder CONSTANT)
+    Q_PROPERTY(ScriptRunner *script READ script CONSTANT) // plays on when the page is left
     Q_PROPERTY(SeriesBuffer *scope READ scope CONSTANT) // scope history; filled while the page is hidden too
     // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
     Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
@@ -58,6 +60,7 @@ public:
     ParameterModel *parameters() { return &m_parameters; }
     CsvRecorder *recorder() { return &m_recorder; }
     SeriesBuffer *scope() { return &m_scope; }
+    ScriptRunner *script() { return &m_script; }
     Measurement pan() const { return m_sample.panDeg; }
     Measurement panRef() const { return m_sample.panRefDeg; }
     Measurement tilt() const { return m_sample.tiltDeg; }
@@ -100,6 +103,7 @@ private:
     ParameterModel m_parameters;
     CsvRecorder m_recorder;
     SeriesBuffer m_scope;
+    ScriptRunner m_script;
     DeviceSample m_sample; // default-constructed = all invalid
     QElapsedTimer m_sinceSample;
     QTimer m_staleCheck;

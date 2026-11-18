@@ -69,7 +69,8 @@ void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceComman
         const quint64 request = std::exchange(m_firmwareRequest, 0);
         QTimer::singleShot(0, this, [this, request] { emit commandFinished(m_firmwareSession, request, {Command::Cancelled, {}}); });
     }
-    QTimer::singleShot(kCommandDelayMs, this, [this, sessionId, requestId, command] {
+    // Script points come at the sample rate of the script: answered at once.
+    QTimer::singleShot(command.kind == Command::ScriptPoint ? 0 : kCommandDelayMs, this, [this, sessionId, requestId, command] {
         switch (command.kind) {
         case Command::WriteParameters:
             m_parameters.insert(command.args.value(QStringLiteral("values")).toMap());

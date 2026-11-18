@@ -38,6 +38,8 @@ qt_add_qml_module(ids_gimbal
         shared/ui/Fonts.h shared/ui/Fonts.cpp
         shared/ui/FileInfo.h
         features/telemetry/CsvRecorder.h features/telemetry/CsvRecorder.cpp
+        features/telemetry/ScriptFile.h features/telemetry/ScriptFile.cpp
+        features/telemetry/ScriptRunner.h features/telemetry/ScriptRunner.cpp
     QML_FILES
         app/Main.qml
         app/PreferencesPage.qml
@@ -91,6 +93,7 @@ qt_add_qml_module(ids_gimbal
         features/maincontrol/GimbalInfoPage.qml
         features/maincontrol/MotorControlPage.qml
         features/maincontrol/GimbalSettingsPage.qml
+        features/maincontrol/ScriptDialog.qml
         features/maincontrol/HeaterPage.qml
     RESOURCES
         assets/icons/ids_logo.png

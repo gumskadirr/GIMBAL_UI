@@ -5,7 +5,7 @@ import QtQuick.Dialogs
 import IDS_GIMBAL
 
 // Gimbal settings page of the final design (3D card | settings, 1:2). Stream, CSV recording, calibrations, filter gains,
-// board mode, Safe stop and the Scope are connected; Script (T13) is not yet.
+// board mode, Safe stop, the Scope and the Script row (player and window: ScriptDialog) are connected.
 // Without command support (real target) values show "—" and every input and command is disabled through
 // viewModel.connection.commandsAvailable. The stream rate badge shows what the device reports (1 vs 2 kHz is
 // open, §17). Calibration results are read on request and shown until the session ends.
@@ -16,6 +16,7 @@ ControlPageFrame {
     readonly property ParameterModel parameters: viewModel.parameters
     readonly property bool streaming: viewModel.streaming.valid && viewModel.streaming.value
     readonly property CsvRecorder recorder: viewModel.recorder
+    readonly property ScriptRunner script: viewModel.script
     property bool readDone: false
     property int tab: 0  // Scope, FFT, Bode sweep
     property int view: 0 // Speed loop, Position loop, Torque loop
@@ -41,6 +42,8 @@ ControlPageFrame {
     }
     Shortcut { sequence: "+"; enabled: page.pageActive; onActivated: page.step(1) }
     Shortcut { sequence: "-"; enabled: page.pageActive; onActivated: page.step(-1) }
+
+    ScriptDialog { id: scriptDialog; objectName: "scriptDialog"; viewModel: page.viewModel }
 
     FileDialog {
         id: csvDialog
@@ -171,10 +174,12 @@ ControlPageFrame {
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: 8
-        enabled: page.viewModel.connection.commandsAvailable // every input and command at once (Adım 10)
+        // Every input and command is disabled without command support (Adım 10), card by card: the Script
+        // row stays usable to load and preview a file (Start has its own condition).
 
         // Stream
         CardBackground {
+            enabled: page.connection.commandsAvailable
             Layout.fillWidth: true
             implicitHeight: streamRow.implicitHeight + 24
             RowLayout {
@@ -253,25 +258,53 @@ ControlPageFrame {
                 anchors.margins: 12
                 spacing: 12
                 BarTitle { text: qsTr("Script") }
-                StatusLabel { objectName: "value-scriptState"; status: "idle"; text: qsTr("No script loaded") }
+                StatusLabel { objectName: "value-scriptState"; status: scriptDialog.stateTone; text: scriptDialog.stateText }
                 Icon { implicitWidth: 15; implicitHeight: 15; path: Icons.file; color: Theme.muted }
-                ValueText { objectName: "value-scriptFile"; text: "—" }
+                ValueText { objectName: "value-scriptFile"; text: scriptDialog.fileName }
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 8
-                    LabelText { text: qsTr("Row %1 / %2").arg("—").arg("—") }
-                    IdsProgressBar { Layout.fillWidth: true; value: 0 }
-                    ValueText { text: "—" }
+                    LabelText {
+                        text: qsTr("Row %1 / %2").arg(page.script.file.loaded ? NumberFormat.fixed(page.script.row, 0) : "—")
+                                                 .arg(page.script.file.loaded ? NumberFormat.fixed(page.script.rowCount, 0) : "—")
+                    }
+                    IdsProgressBar { Layout.fillWidth: true; value: page.script.percent / 100 }
+                    ValueText { text: page.script.file.loaded ? NumberFormat.fixed(page.script.percent, 0) + "%" : "—" }
                 }
-                LabelText { text: qsTr("Pan %1 · Tilt %2").arg("—").arg("—") }
-                IdsButton { objectName: "command-startScript"; variant: "primary"; iconPath: Icons.play; text: qsTr("Start") }
-                IdsButton { objectName: "command-stopScript"; iconPath: Icons.pause; text: qsTr("Stop") }
-                IdsButton { objectName: "command-scriptDetails"; variant: "quiet"; iconPath: Icons.expand; text: qsTr("Details") }
+                LabelText {
+                    objectName: "value-scriptCommand"
+                    text: qsTr("Pan %1 · Tilt %2")
+                        .arg(page.script.commandPan.valid ? NumberFormat.fixed(page.script.commandPan.value, 3) : "—")
+                        .arg(page.script.commandTilt.valid ? NumberFormat.fixed(page.script.commandTilt.value, 3) : "—")
+                }
+                IdsButton {
+                    objectName: "command-startScript"
+                    variant: "primary"
+                    iconPath: Icons.play
+                    enabled: page.script.canStart
+                    text: qsTr("Start")
+                    onClicked: page.script.start()
+                }
+                IdsButton {
+                    objectName: "command-stopScript"
+                    iconPath: Icons.pause
+                    enabled: page.script.running
+                    text: qsTr("Stop")
+                    onClicked: page.script.stop()
+                }
+                IdsButton {
+                    objectName: "command-scriptDetails"
+                    variant: "quiet"
+                    iconPath: Icons.expand
+                    text: qsTr("Details")
+                    onClicked: scriptDialog.open()
+                }
             }
         }
 
         // Calibrations and gains
         GridLayout {
+            enabled: page.connection.commandsAvailable
             Layout.fillWidth: true
             Layout.fillHeight: false // the cards' fillHeight only evens out the row
             columns: 4
@@ -379,6 +412,7 @@ ControlPageFrame {
 
         // Scope
         Card {
+            enabled: page.connection.commandsAvailable
             Layout.fillWidth: true
             Layout.fillHeight: true
             compact: true

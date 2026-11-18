@@ -98,6 +98,13 @@ public:
             file.resize(bytes);
         return QUrl::fromLocalFile(file.fileName());
     }
+    Q_INVOKABLE QUrl makeText(const QString &name, const QString &text)
+    {
+        QFile file(m_dir.filePath(name));
+        if (file.open(QIODevice::WriteOnly))
+            file.write(text.toUtf8());
+        return QUrl::fromLocalFile(file.fileName());
+    }
     Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
     // Design comparison screenshots (tools/shot/tst_shot.qml, docs/gelistirme.md); not used by the tests.
     Q_INVOKABLE bool saveWindowImage(QQuickWindow *window, const QString &path)

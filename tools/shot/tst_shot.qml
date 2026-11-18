@@ -12,7 +12,7 @@ TestCase {
     name: "Shot"
     when: windowShown
 
-    function shot(w, h, file, theme, lang, page) {
+    function shot(w, h, file, theme, lang, page, dialog) {
         testSettings.theme = theme
         testLocalization.setLanguage(lang)
         const c = Qt.createComponent("IDS_GIMBAL", "Main")
@@ -53,7 +53,23 @@ TestCase {
                 wait(80)
             }
         }
-        wait(50) // telemetry turns stale after 1 s
+        if (page === "gimbalSettings" && dialog !== undefined) { // 742 of 1200 rows played, as in the design
+            let csv = "time_ms,pan_deg,tilt_deg
+"
+            for (let i = 0; i < 1200; ++i)
+                csv += i * 10 + "," + (31.42 + i * 0.001).toFixed(3) + "," + (-4.81 - i * 0.001).toFixed(3) + "
+"
+            const script = testMainControl.script
+            script.file.load(testHelper.makeText("scan_pattern_01.csv", csv))
+            script.start()
+            for (let i = 0; i < 2000 && script.row < 742; ++i) {
+                wait(5)
+                testHelper.answerLastCommand(Command.Accepted)
+            }
+            if (dialog)
+                findChild(main.contentItem, "command-scriptDetails").clicked()
+        }
+        wait(dialog ? 300 : 50) // telemetry turns stale after 1 s; the window fades in
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
     }
@@ -68,6 +84,12 @@ TestCase {
         shot(1536, 786, "heater-1536-light-tr.png", "light", "tr", "heater")
         shot(1536, 786, "gimbalSettings-1536-dark-en.png", "dark", "en", "gimbalSettings")
         shot(1536, 786, "gimbalSettings-1536-light-tr.png", "light", "tr", "gimbalSettings")
+        shot(1536, 786, "script-1536-dark-en.png", "dark", "en", "gimbalSettings", true)
+        testMainControl.script.stop()
+        shot(1536, 786, "scriptRow-1536-light-tr.png", "light", "tr", "gimbalSettings", false)
+        testMainControl.script.stop()
+        shot(1536, 786, "script-1536-light-tr.png", "light", "tr", "gimbalSettings", true)
+        testMainControl.script.stop()
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)
