@@ -38,6 +38,7 @@ signals:
     void sessionStarted(quint64 sessionId);
     void sampleAccepted(const DeviceSample &sample);
     void boardInfoAccepted(const BoardInfo &info);
+    void parametersAccepted(const QVariantMap &values);
     void commandFinished(quint64 requestId, const DeviceCommand &command, const CommandResult &result);
     void pendingChanged();
 

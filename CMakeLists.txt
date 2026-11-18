@@ -26,10 +26,11 @@ qt_add_qml_module(ids_gimbal
         shared/settings/AppSettings.h shared/settings/AppSettings.cpp
         shared/localization/Localization.h shared/localization/Localization.cpp
         shared/notifications/NotificationModel.h shared/notifications/NotificationModel.cpp
-        device/api/DeviceTypes.h device/api/DeviceCommand.h device/api/IDeviceProvider.h
+        device/api/DeviceTypes.h device/api/DeviceCommand.h device/api/IDeviceProvider.h device/api/ParameterKeys.h
         device/session/DeviceSession.h device/session/DeviceSession.cpp
         device/presentation/ServiceConnection.h device/presentation/ServiceConnection.cpp
         device/presentation/MainControlViewModel.h device/presentation/MainControlViewModel.cpp
+        device/presentation/ParameterModel.h device/presentation/ParameterModel.cpp
         device/presentation/DeviceValueTypes.h
         device/session/ConnectionStore.h device/session/ConnectionStore.cpp
         device/transport/TransportProvider.h device/transport/TransportProvider.cpp

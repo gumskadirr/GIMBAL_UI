@@ -88,6 +88,11 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
     Service *main = byKey.value(QString::fromLatin1(kMainControlService));
     Q_ASSERT(main); // every target provides the main control service
     MainControlViewModel mainControl(main->session.get(), main->connection.get());
+    QObject::connect(mainControl.parameters(), &ParameterModel::profileFailed, &notifications,
+                     [&](const QString &file, const QString &reason) {
+                         notifications.add(QStringLiteral("parameters.fileFailed"), {file}, NotificationModel::Error,
+                                           reason);
+                     });
     QQmlApplicationEngine engine;
 
     // First languageChanged handler: QML bindings are refreshed before the C++ models.

@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "device/api/ParameterKeys.h"
+
 DemoProvider::DemoProvider(int intervalMs, int linkLossAfter, int lateResultDelayMs, QObject *parent)
     : IDeviceProvider(parent), m_linkLossAfter(linkLossAfter), m_lateResultDelayMs(lateResultDelayMs)
 {
@@ -35,11 +37,44 @@ void DemoProvider::stop()
     QTimer::singleShot(m_lateResultDelayMs, this, [this, old, late] { emit sampleReceived(old, late); });
 }
 
-void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceCommand &)
+void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceCommand &command)
 {
-    QTimer::singleShot(kCommandDelayMs, this, [this, sessionId, requestId] {
+    QTimer::singleShot(kCommandDelayMs, this, [this, sessionId, requestId, command] {
+        switch (command.kind) {
+        case Command::WriteParameters:
+            m_parameters.insert(command.args.value(QStringLiteral("values")).toMap());
+            break;
+        case Command::RestoreDefaultParameters:
+            m_parameters = defaultParameters();
+            [[fallthrough]];
+        case Command::ReadParameters:
+            emit parametersReceived(sessionId, m_parameters);
+            break;
+        default:
+            break;
+        }
         emit commandFinished(sessionId, requestId, {Command::Accepted, {}});
     });
+}
+
+QVariantMap DemoProvider::defaultParameters()
+{
+    // Plausible values in every key's range; not taken from a real board.
+    QVariantMap values;
+    for (const ParameterSpec &spec : ParameterKeys::all()) {
+        const bool tilt = spec.key.startsWith(QLatin1String("tilt."));
+        switch (spec.type) {
+        case ParameterType::Number:
+            values.insert(spec.key, spec.key.endsWith(QLatin1String("Deg"))
+                                        ? (spec.key.contains(QLatin1String("forward")) ? 170.0 : spec.key.contains(QLatin1String("backward")) ? -170.0 : 0.0)
+                                        : (tilt ? 0.8 : 1.2));
+            break;
+        case ParameterType::Integer: values.insert(spec.key, 0); break;
+        case ParameterType::Bool: values.insert(spec.key, spec.key.endsWith(QLatin1String("slipRing")) && !tilt); break;
+        case ParameterType::Text: values.insert(spec.key, tilt ? QStringLiteral("TM-2207") : QStringLiteral("PM-3110")); break;
+        }
+    }
+    return values;
 }
 
 void DemoProvider::tick()

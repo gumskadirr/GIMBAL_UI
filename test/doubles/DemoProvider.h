@@ -7,7 +7,8 @@
 // Deterministic sample data for the demo target and tests. Not a gimbal simulator and does not
 // exercise any protocol parser. Scenarios: steady data, periodic invalid temperature (samples
 // 40-49 of every 100), link loss after `linkLossAfter` samples, and a delayed result carrying
-// the old session id after stop(). Commands: every command is accepted after `commandDelayMs` (mock).
+// the old session id after stop(). Commands: every command is accepted after kCommandDelayMs (mock);
+// parameters behave like a device: read returns them, write changes them, defaults restores them.
 class DemoProvider : public IDeviceProvider
 {
     Q_OBJECT
@@ -26,6 +27,7 @@ public:
     // Deterministic sample number n (pure; public for tests).
     static DeviceSample sampleAt(int n);
     static BoardInfo sampleBoardInfo(); // sent once after connecting
+    static QVariantMap defaultParameters();
 
 private:
     void tick();
@@ -35,4 +37,5 @@ private:
     int m_n = 0;
     int m_linkLossAfter;
     int m_lateResultDelayMs;
+    QVariantMap m_parameters = defaultParameters();
 };

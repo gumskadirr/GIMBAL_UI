@@ -165,6 +165,37 @@
         <source>Invalid UDP address</source>
         <translation>Geçersiz UDP adresi</translation>
     </message>
+    <message>
+        <location filename="../device/presentation/ParameterModel.cpp" line="127"/>
+        <source>No parameter values to save</source>
+        <translation>Kaydedilecek parametre değeri yok</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ParameterModel.cpp" line="147"/>
+        <location filename="../device/presentation/ParameterModel.cpp" line="150"/>
+        <source>Not a parameter profile</source>
+        <translation>Parametre profili değil</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ParameterModel.cpp" line="152"/>
+        <source>Unsupported profile version</source>
+        <translation>Desteklenmeyen profil sürümü</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ParameterModel.cpp" line="160"/>
+        <source>Unknown parameter in the file</source>
+        <translation>Dosyada bilinmeyen parametre var</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ParameterModel.cpp" line="163"/>
+        <source>Value out of range or of the wrong type in the file</source>
+        <translation>Dosyada aralık dışı ya da yanlış türde değer var</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ParameterModel.cpp" line="167"/>
+        <source>No parameter values in the file</source>
+        <translation>Dosyada parametre değeri yok</translation>
+    </message>
 </context>
 <context>
     <name>GimbalInfoPage</name>
@@ -1045,6 +1076,11 @@
     </message>
     <message>
         <location filename="../shared/notifications/NotificationModel.cpp" line="18"/>
+        <source>Parameter file could not be used: %1</source>
+        <translation>Parametre dosyası kullanılamadı: %1</translation>
+    </message>
+    <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="20"/>
         <source>Fonts could not be loaded: %1</source>
         <translation>Yazı tipleri yüklenemedi: %1</translation>
     </message>

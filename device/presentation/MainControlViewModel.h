@@ -6,6 +6,7 @@
 #include <QtQml/qqmlregistration.h>
 
 #include "device/api/DeviceTypes.h"
+#include "device/presentation/ParameterModel.h"
 #include "device/presentation/ServiceConnection.h"
 
 class DeviceSession;
@@ -19,6 +20,7 @@ class MainControlViewModel : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("Owned by the application")
     Q_PROPERTY(ServiceConnection *connection READ connection CONSTANT)
+    Q_PROPERTY(ParameterModel *parameters READ parameters CONSTANT)
     // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
     Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement panRef READ panRef NOTIFY measurementsChanged)
@@ -37,6 +39,7 @@ public:
     MainControlViewModel(DeviceSession *session, ServiceConnection *connection, QObject *parent = nullptr);
 
     ServiceConnection *connection() const { return m_connection; }
+    ParameterModel *parameters() { return &m_parameters; }
     Measurement pan() const { return m_sample.panDeg; }
     Measurement panRef() const { return m_sample.panRefDeg; }
     Measurement tilt() const { return m_sample.tiltDeg; }
@@ -61,6 +64,7 @@ private:
 
     DeviceSession *m_session;
     ServiceConnection *m_connection;
+    ParameterModel m_parameters;
     DeviceSample m_sample; // default-constructed = all invalid
     QElapsedTimer m_sinceSample;
     QTimer m_staleCheck;

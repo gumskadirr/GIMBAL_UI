@@ -8,6 +8,11 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
     connect(m_provider.get(), &IDeviceProvider::stateChanged, this, &DeviceSession::onProviderState);
     connect(m_provider.get(), &IDeviceProvider::sampleReceived, this, &DeviceSession::onProviderSample);
     connect(m_provider.get(), &IDeviceProvider::boardInfoReceived, this, &DeviceSession::onProviderBoardInfo);
+    connect(m_provider.get(), &IDeviceProvider::parametersReceived, this,
+            [this](quint64 sessionId, const QVariantMap &values) {
+                if (isActive(sessionId))
+                    emit parametersAccepted(values);
+            });
     connect(m_provider.get(), &IDeviceProvider::commandFinished, this, &DeviceSession::onProviderCommandFinished);
 }
 

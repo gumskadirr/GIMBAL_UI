@@ -15,6 +15,12 @@ enum Kind {
     ExitBootloader,
     StartBootBridge, // board: QString (sub-board name)
     RunBit,
+    // Parameters (architecture §13, device/api/ParameterKeys.h). The device answers reads and defaults
+    // with parametersReceived; an accepted write means the device now holds the written values.
+    ReadParameters,
+    WriteParameters, // values: QVariantMap (key -> value, only the changed keys)
+    SaveParametersToFlash,
+    RestoreDefaultParameters,
 };
 Q_ENUM_NS(Kind)
 

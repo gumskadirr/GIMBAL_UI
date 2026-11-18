@@ -15,7 +15,7 @@ bool anyValid(const DeviceSample &s)
 } // namespace
 
 MainControlViewModel::MainControlViewModel(DeviceSession *session, ServiceConnection *connection, QObject *parent)
-    : QObject(parent), m_session(session), m_connection(connection)
+    : QObject(parent), m_session(session), m_connection(connection), m_parameters(session, connection)
 {
     connect(m_session, &DeviceSession::stateChanged, this, [this] {
         if (m_session->state() != ConnectionState::Connected)
