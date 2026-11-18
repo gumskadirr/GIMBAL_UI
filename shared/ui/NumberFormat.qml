@@ -14,4 +14,13 @@ QtObject {
         const text = rounded.toFixed(decimals)
         return language === "tr" ? text.replace(".", ",") : text
     }
+
+    // Reads what fixed() shows: only the language's own decimal separator is accepted. NaN when it is not a number.
+    function parse(text: string): real {
+        const t = text.trim()
+        const wrongSeparator = language === "tr" ? "." : ","
+        if (t.includes(wrongSeparator))
+            return NaN
+        return /^[+-]?(\d+[.,]?\d*|[.,]\d+)$/.test(t) ? Number(t.replace(",", ".")) : NaN
+    }
 }

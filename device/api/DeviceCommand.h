@@ -24,6 +24,14 @@ enum Kind {
     // Firmware update (progress through IDeviceProvider::commandProgress; answered when it ends).
     UpdateFirmware, // file: QString (local path of the firmware file)
     CancelFirmwareUpdate,
+    // Motor control
+    SetControlMode, // mode: int (index of the control mode list: Torque, Speed, Position)
+    SelectMotor,    // motor: QString ("pan" | "tilt"), the motor the control commands drive
+    ToggleLatch,    // the safe-control latch
+    StartControl,
+    StopControl,
+    SetReference,   // type: QString ("torque" | "speed" | "position"), value: double (%, deg/s, deg)
+    ResetReference, // type: QString (as SetReference)
 };
 Q_ENUM_NS(Kind)
 

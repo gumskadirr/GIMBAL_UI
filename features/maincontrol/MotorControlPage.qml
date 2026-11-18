@@ -1,15 +1,91 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Dialogs
 import IDS_GIMBAL
 
 // Motor control page of the final design (three equal columns: 3D card | Motor configuration | Control).
-// Display only: parameters and commands need the device protocol (architecture §7, §13), so every input
-// and command is disabled through viewModel.connection.commandsAvailable and fields stay empty.
-// Not taken from the design: the "N UNSAVED CHANGES" badge (nothing can be edited), the command range and
-// the torque unit (device limits), and the option lists (they come from the device).
+// Fields show viewModel.parameters (pan. / tilt. keys), edits wait there as "unsaved" until Write. Without
+// command support (real target) every input and command is disabled through
+// viewModel.connection.commandsAvailable and fields stay empty.
+// Not taken from the design: the profile buttons. The option lists and the command ranges are fixed lists
+// until the protocol document arrives (docs/kararlar.md, T8).
 ControlPageFrame {
     id: page
+
+    readonly property ServiceConnection connection: viewModel.connection
+    readonly property ParameterModel parameters: viewModel.parameters
+    property string motor: "pan" // motor whose parameters the Configure card shows (page state, not sent)
+    property bool readDone: false
+    readonly property var referenceTypes: ["torque", "speed", "position"]
+    readonly property var referenceRanges: [[-100, 100], [-360, 360], [-180, 180]]
+    readonly property var referenceLabels: [qsTr("Torque, %"), qsTr("Speed, deg/s"), qsTr("Position, deg")]
+    property var referenceValues: [0, 0, 0]
+    readonly property real keyboardStep: 1 // one arrow key press changes the reference by this much
+
+    function range(type: int): string {
+        return qsTr("Range %1 to %2.").arg(NumberFormat.fixed(referenceRanges[type][0], 3)).arg(NumberFormat.fixed(referenceRanges[type][1], 3))
+    }
+    // True when the reference was sent.
+    function sendReference(value: real): bool {
+        const type = commandType.currentIndex
+        if (isNaN(value) || value < referenceRanges[type][0] || value > referenceRanges[type][1]) {
+            referenceField.error = true
+            return false
+        }
+        referenceField.error = false
+        const values = referenceValues.slice()
+        values[type] = value
+        referenceValues = values
+        referenceField.text = NumberFormat.fixed(value, 3)
+        return connection.send(Command.SetReference, {type: referenceTypes[type], value: value})
+    }
+    // Arrow key of Keyboard control: direction +1 / -1.
+    function nudge(direction: int) {
+        if (!keyboardControl.checked || !pageActive)
+            return
+        const current = NumberFormat.parse(referenceField.text)
+        sendReference((isNaN(current) ? referenceValues[commandType.currentIndex] : current) + direction * keyboardStep)
+    }
+    // The parameters are read once per connection, when the page is visible.
+    function readOnce() {
+        if (pageActive && connection.commandsAvailable && !readDone)
+            readDone = parameters.read()
+    }
+    onPageActiveChanged: readOnce()
+    Connections {
+        target: page.connection
+        function onChanged() {
+            if (!page.connection.commandsAvailable)
+                page.readDone = false
+            page.readOnce()
+        }
+    }
+    Component.onCompleted: readOnce()
+
+    FileDialog {
+        id: saveDialog
+        title: qsTr("Save parameter profile")
+        fileMode: FileDialog.SaveFile
+        defaultSuffix: "json"
+        nameFilters: [qsTr("Parameter profile (*.json)")]
+        onAccepted: page.parameters.saveProfile(selectedFile)
+    }
+    FileDialog {
+        id: loadDialog
+        title: qsTr("Load parameter profile")
+        nameFilters: [qsTr("Parameter profile (*.json)"), qsTr("All files (*)")]
+        onAccepted: page.parameters.loadProfile(selectedFile)
+    }
+    component Arrow: Shortcut {
+        property int direction
+        enabled: page.pageActive && keyboardControl.checked && page.connection.commandsAvailable
+        onActivated: page.nudge(direction)
+    }
+    Arrow { sequence: "Left"; direction: -1 }
+    Arrow { sequence: "Down"; direction: -1 }
+    Arrow { sequence: "Right"; direction: 1 }
+    Arrow { sequence: "Up"; direction: 1 }
 
     component GainHeader: Text {
         font.family: Theme.fontSans
@@ -25,10 +101,43 @@ ControlPageFrame {
         color: Theme.text2
     }
     component ValueField: IdsTextField {
+        id: field
+        // Parameter name without the motor prefix, e.g. "torqueKp".
+        property string name
+        property int decimals: 4
+        property bool numeric: true
+        readonly property string key: page.motor + "." + name
+        readonly property var stored: page.parameters.values[key]
+        property string shown // what show() put in the field; differs while the user is typing
+
+        function show() {
+            shown = stored === undefined ? "" : numeric ? NumberFormat.fixed(stored, decimals) : stored
+            text = shown
+            error = false
+        }
+        // Enter or focus loss: a value the model refuses (not a number, out of range) is never sent.
+        function commit() {
+            if (text === shown)
+                return
+            const value = numeric ? NumberFormat.parse(text) : text
+            if ((numeric && isNaN(value)) || !page.parameters.set(key, value))
+                error = true
+            else
+                show()
+        }
+
         Layout.fillWidth: true
         implicitWidth: 60
         compact: true // 34 px: keeps the dense parameter grids close to the design height
         placeholderText: "—"
+        onStoredChanged: if (text === shown) show()
+        onKeyChanged: show()
+        onEditingFinished: commit()
+        Component.onCompleted: show()
+        Connections {
+            target: NumberFormat
+            function onLanguageChanged() { field.show() }
+        }
     }
 
     RowLayout {
@@ -44,9 +153,20 @@ ControlPageFrame {
             Layout.preferredWidth: 1
             spacing: 8
 
-            SectionHeading {
-                title: qsTr("Motor configuration")
-                subtitle: qsTr("Gains, limits and wiring of the selected motor")
+            RowLayout {
+                Layout.fillWidth: true
+                SectionHeading {
+                    title: qsTr("Motor configuration")
+                    subtitle: qsTr("Gains, limits and wiring of the selected motor")
+                }
+                Item { Layout.fillWidth: true }
+                Badge {
+                    objectName: "unsavedBadge"
+                    Layout.alignment: Qt.AlignTop
+                    visible: page.parameters.unsavedCount > 0
+                    kind: "warn"
+                    text: qsTr("%1 unsaved changes").arg(page.parameters.unsavedCount)
+                }
             }
             Flow {
                 Layout.fillWidth: true
@@ -59,11 +179,45 @@ ControlPageFrame {
                     font.pixelSize: Theme.fsBody
                     color: Theme.text2
                 }
-                SegmentedControl { width: 160; model: [qsTr("Pan"), qsTr("Tilt")] }
-                IdsButton { objectName: "command-read"; text: qsTr("Read") }
-                IdsButton { objectName: "command-write"; text: qsTr("Write") }
-                IdsButton { objectName: "command-saveToFlash"; variant: "primary"; text: qsTr("Save to flash") }
-                IdsButton { objectName: "command-defaults"; variant: "quiet"; text: qsTr("Defaults") }
+                SegmentedControl {
+                    objectName: "motorSelect"
+                    width: 160
+                    model: [qsTr("Pan"), qsTr("Tilt")]
+                    onActivated: index => page.motor = index === 0 ? "pan" : "tilt"
+                }
+                CommandButton {
+                    objectName: "command-read"
+                    connection: page.connection
+                    kind: Command.ReadParameters
+                    perform: () => page.parameters.read()
+                    text: qsTr("Read")
+                }
+                CommandButton {
+                    objectName: "command-write"
+                    connection: page.connection
+                    kind: Command.WriteParameters
+                    ready: page.parameters.unsavedCount > 0
+                    perform: () => page.parameters.write()
+                    text: qsTr("Write")
+                }
+                CommandButton {
+                    objectName: "command-saveToFlash"
+                    connection: page.connection
+                    kind: Command.SaveParametersToFlash
+                    perform: () => page.parameters.saveToFlash()
+                    variant: "primary"
+                    text: qsTr("Save to flash")
+                }
+                CommandButton {
+                    objectName: "command-defaults"
+                    connection: page.connection
+                    kind: Command.RestoreDefaultParameters
+                    perform: () => page.parameters.restoreDefaults()
+                    variant: "quiet"
+                    text: qsTr("Defaults")
+                }
+                IdsButton { objectName: "command-saveProfile"; variant: "quiet"; text: qsTr("Save profile…"); onClicked: saveDialog.open() }
+                IdsButton { objectName: "command-loadProfile"; variant: "quiet"; text: qsTr("Load profile…"); onClicked: loadDialog.open() }
             }
             Text {
                 Layout.fillWidth: true
@@ -89,27 +243,27 @@ ControlPageFrame {
                     GainHeader { text: "KI" }
                     GainHeader { text: "KD" }
                     LoopLabel { text: qsTr("Torque") }
-                    ValueField { objectName: "input-torqueKp"; Accessible.name: qsTr("Torque Kp") }
-                    ValueField { Accessible.name: qsTr("Torque Ki") }
-                    ValueField { Accessible.name: qsTr("Torque Kd") }
+                    ValueField { objectName: "input-torqueKp"; name: "torqueKp"; Accessible.name: qsTr("Torque Kp") }
+                    ValueField { objectName: "input-torqueKi"; name: "torqueKi"; Accessible.name: qsTr("Torque Ki") }
+                    ValueField { objectName: "input-torqueKd"; name: "torqueKd"; Accessible.name: qsTr("Torque Kd") }
                     LoopLabel { text: qsTr("Speed") }
-                    ValueField { Accessible.name: qsTr("Speed Kp") }
-                    ValueField { Accessible.name: qsTr("Speed Ki") }
-                    ValueField { Accessible.name: qsTr("Speed Kd") }
+                    ValueField { objectName: "input-speedKp"; name: "speedKp"; Accessible.name: qsTr("Speed Kp") }
+                    ValueField { objectName: "input-speedKi"; name: "speedKi"; Accessible.name: qsTr("Speed Ki") }
+                    ValueField { objectName: "input-speedKd"; name: "speedKd"; Accessible.name: qsTr("Speed Kd") }
                     LoopLabel { text: qsTr("Position") }
-                    ValueField { Accessible.name: qsTr("Position Kp") }
-                    ValueField { Accessible.name: qsTr("Position Ki") }
-                    ValueField { Accessible.name: qsTr("Position Kd") }
+                    ValueField { objectName: "input-positionKp"; name: "positionKp"; Accessible.name: qsTr("Position Kp") }
+                    ValueField { objectName: "input-positionKi"; name: "positionKi"; Accessible.name: qsTr("Position Ki") }
+                    ValueField { objectName: "input-positionKd"; name: "positionKd"; Accessible.name: qsTr("Position Kd") }
                     LoopLabel { text: qsTr("Tracker") }
-                    ValueField { Accessible.name: qsTr("Tracker Kp") }
-                    ValueField { Accessible.name: qsTr("Tracker Ki") }
-                    ValueField { Accessible.name: qsTr("Tracker Kd") }
+                    ValueField { objectName: "input-trackerKp"; name: "trackerKp"; Accessible.name: qsTr("Tracker Kp") }
+                    ValueField { objectName: "input-trackerKi"; name: "trackerKi"; Accessible.name: qsTr("Tracker Ki") }
+                    ValueField { objectName: "input-trackerKd"; name: "trackerKd"; Accessible.name: qsTr("Tracker Kd") }
                 }
                 FormField {
                     Layout.fillWidth: true
                     Layout.maximumWidth: 320
                     label: qsTr("Model serial number")
-                    IdsTextField { compact: true; placeholderText: "—" }
+                    ValueField { objectName: "input-modelSerial"; name: "modelSerial"; numeric: false }
                 }
             }
 
@@ -124,18 +278,40 @@ ControlPageFrame {
                     columns: 2
                     columnSpacing: 12
                     rowSpacing: 8
-                    FormField { Layout.fillWidth: true; label: qsTr("Position offset, deg"); ValueField {} }
-                    FormField { Layout.fillWidth: true; label: qsTr("Electrical offset, deg"); ValueField {} }
-                    FormField { Layout.fillWidth: true; label: qsTr("Forward border, deg"); ValueField {} }
-                    FormField { Layout.fillWidth: true; label: qsTr("Backward border, deg"); ValueField {} }
+                    FormField { Layout.fillWidth: true; label: qsTr("Position offset, deg"); ValueField { objectName: "input-positionOffsetDeg"; name: "positionOffsetDeg"; decimals: 3 } }
+                    FormField { Layout.fillWidth: true; label: qsTr("Electrical offset, deg"); ValueField { objectName: "input-electricalOffsetDeg"; name: "electricalOffsetDeg"; decimals: 3 } }
+                    FormField { Layout.fillWidth: true; label: qsTr("Forward border, deg"); ValueField { objectName: "input-forwardBorderDeg"; name: "forwardBorderDeg"; decimals: 3 } }
+                    FormField { Layout.fillWidth: true; label: qsTr("Backward border, deg"); ValueField { objectName: "input-backwardBorderDeg"; name: "backwardBorderDeg"; decimals: 3 } }
                     FormField {
                         Layout.fillWidth: true
                         label: qsTr("Encoder rotation")
-                        SegmentedControl { model: [qsTr("Forward"), qsTr("Reverse")] }
+                        SegmentedControl {
+                            objectName: "input-encoderReverse"
+                            model: [qsTr("Forward"), qsTr("Reverse")]
+                            onActivated: index => page.parameters.set(page.motor + ".encoderReverse", index === 1)
+                            Binding on currentIndex { value: page.parameters.values[page.motor + ".encoderReverse"] ? 1 : 0 }
+                        }
                     }
-                    FormField { Layout.fillWidth: true; label: qsTr("Phase rotation"); IdsComboBox {} }
+                    FormField {
+                        Layout.fillWidth: true
+                        label: qsTr("Phase rotation")
+                        IdsComboBox {
+                            objectName: "input-phaseRotation"
+                            textRole: "text"
+                            valueRole: "value"
+                            model: ["A-B-C", "A-C-B", "B-A-C", "B-C-A", "C-A-B", "C-B-A"].map((text, value) => ({text, value}))
+                            selectedValue: page.parameters.values[page.motor + ".phaseRotation"] ?? -1
+                            onActivated: page.parameters.set(page.motor + ".phaseRotation", currentValue)
+                        }
+                    }
                 }
-                ToggleRow { Layout.fillWidth: true; text: qsTr("Slip ring") }
+                ToggleRow {
+                    objectName: "input-slipRing"
+                    Layout.fillWidth: true
+                    text: qsTr("Slip ring")
+                    onToggled: page.parameters.set(page.motor + ".slipRing", switchItem.checked)
+                    Binding on checked { value: !!page.parameters.values[page.motor + ".slipRing"] }
+                }
             }
         }
 
@@ -160,8 +336,25 @@ ControlPageFrame {
                     Layout.fillWidth: true
                     columns: 2
                     columnSpacing: 12
-                    FormField { Layout.fillWidth: true; label: qsTr("Control mode"); IdsComboBox {} }
-                    FormField { Layout.fillWidth: true; label: qsTr("Current motor"); IdsComboBox {} }
+                    FormField {
+                        Layout.fillWidth: true
+                        label: qsTr("Control mode")
+                        IdsComboBox {
+                            objectName: "input-controlMode"
+                            currentIndex: 2 // the device does not report it yet
+                            model: [qsTr("Torque"), qsTr("Speed"), qsTr("Position")]
+                            onActivated: index => page.connection.send(Command.SetControlMode, {mode: index})
+                        }
+                    }
+                    FormField {
+                        Layout.fillWidth: true
+                        label: qsTr("Current motor")
+                        IdsComboBox {
+                            objectName: "input-currentMotor"
+                            model: [qsTr("Pan"), qsTr("Tilt")]
+                            onActivated: index => page.connection.send(Command.SelectMotor, {motor: index === 0 ? "pan" : "tilt"})
+                        }
+                    }
                 }
                 Zone {
                     Layout.fillWidth: true
@@ -177,24 +370,28 @@ ControlPageFrame {
                                 : qsTr("Unlocked")
                         }
                         Item { Layout.fillWidth: true }
-                        IdsButton { objectName: "command-toggleLatch"; text: qsTr("Toggle latch") }
+                        CommandButton { objectName: "command-toggleLatch"; connection: page.connection; kind: Command.ToggleLatch; text: qsTr("Toggle latch") }
                     }
                 }
-                ToggleRow { Layout.fillWidth: true; text: qsTr("Keyboard control") }
+                ToggleRow { id: keyboardControl; objectName: "input-keyboardControl"; Layout.fillWidth: true; text: qsTr("Keyboard control") }
                 GridLayout {
                     Layout.fillWidth: true
                     columns: 2
                     columnSpacing: 8
-                    IdsButton {
+                    CommandButton {
                         objectName: "command-startControl"
+                        connection: page.connection
+                        kind: Command.StartControl
                         Layout.fillWidth: true
                         Layout.preferredHeight: Theme.touchMin
                         variant: "primary"
                         iconPath: Icons.play
                         text: qsTr("Start control")
                     }
-                    IdsButton {
+                    CommandButton {
                         objectName: "command-stopControl"
+                        connection: page.connection
+                        kind: Command.StopControl
                         Layout.fillWidth: true
                         Layout.preferredHeight: Theme.touchMin
                         iconPath: Icons.stop
@@ -210,22 +407,46 @@ ControlPageFrame {
                 subtitle: qsTr("Send a reference to the active motor")
                 SegmentedControl {
                     id: commandType
+                    objectName: "referenceType"
                     Layout.fillWidth: true
                     currentIndex: 2
                     model: [qsTr("Torque"), qsTr("Speed"), qsTr("Position")]
                 }
                 FormField {
                     Layout.fillWidth: true
-                    label: [qsTr("Torque"), qsTr("Speed, deg/s"), qsTr("Position, deg")][commandType.currentIndex]
+                    label: page.referenceLabels[commandType.currentIndex]
                     RowLayout {
                         spacing: 8
-                        ValueField {}
-                        IdsButton { objectName: "command-set"; text: qsTr("Set") }
-                        IdsButton { objectName: "command-reset"; variant: "quiet"; text: qsTr("Reset") }
+                        IdsTextField {
+                            id: referenceField
+                            objectName: "input-reference"
+                            Layout.fillWidth: true
+                            implicitWidth: 60
+                            compact: true
+                            Accessible.name: page.referenceLabels[commandType.currentIndex]
+                            text: NumberFormat.fixed(page.referenceValues[commandType.currentIndex], 3)
+                            onTextEdited: error = false
+                            onAccepted: page.sendReference(NumberFormat.parse(text))
+                        }
+                        CommandButton {
+                            objectName: "command-set"
+                            connection: page.connection
+                            kind: Command.SetReference
+                            perform: () => page.sendReference(NumberFormat.parse(referenceField.text))
+                            text: qsTr("Set")
+                        }
+                        CommandButton {
+                            objectName: "command-reset"
+                            connection: page.connection
+                            kind: Command.ResetReference
+                            args: ({type: page.referenceTypes[commandType.currentIndex]})
+                            variant: "quiet"
+                            text: qsTr("Reset")
+                        }
                     }
                 }
                 Text {
-                    text: qsTr("Enter sends the value.")
+                    text: qsTr("%1 Enter sends the value.").arg(page.range(commandType.currentIndex))
                     font.family: Theme.fontSans
                     font.pixelSize: Theme.fsSmall
                     color: Theme.label

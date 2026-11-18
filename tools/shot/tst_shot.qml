@@ -29,6 +29,16 @@ TestCase {
             item = item.parent
         if (item)
             item.firmwareSource = testHelper.makeFile("mcb_firmware_v2.5.0.bin", 1258291)
+        if (page === "motorControl") { // values of the design, three of them edited
+            testHelper.sendParameters({"pan.torqueKp": 0.85, "pan.torqueKi": 12, "pan.torqueKd": 0, "pan.speedKp": 0.42,
+                "pan.speedKi": 3.5, "pan.speedKd": 0.001, "pan.positionKp": 6, "pan.positionKi": 0.2, "pan.positionKd": 0.05,
+                "pan.trackerKp": 2.5, "pan.trackerKi": 0.08, "pan.trackerKd": 0.02, "pan.modelSerial": "MCB2-24-00142",
+                "pan.positionOffsetDeg": 0, "pan.electricalOffsetDeg": 12.4, "pan.forwardBorderDeg": 170,
+                "pan.backwardBorderDeg": -170, "pan.encoderReverse": false, "pan.phaseRotation": 0, "pan.slipRing": false})
+            testMainControl.parameters.set("pan.torqueKp", 0.9)
+            testMainControl.parameters.set("pan.speedKi", 3.6)
+            testMainControl.parameters.set("pan.slipRing", true)
+        }
         wait(50) // telemetry turns stale after 1 s
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
@@ -38,6 +48,8 @@ TestCase {
         // 1536x786: the target screen (1080p at 125 %) minus the taskbar.
         shot(1536, 786, "gimbalInfo-1536-dark-en.png", "dark", "en", "gimbalInfo")
         shot(1536, 786, "gimbalInfo-1536-light-tr.png", "light", "tr", "gimbalInfo")
+        shot(1536, 786, "motorControl-1536-dark-en.png", "dark", "en", "motorControl")
+        shot(1536, 786, "motorControl-1536-light-tr.png", "light", "tr", "motorControl")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)

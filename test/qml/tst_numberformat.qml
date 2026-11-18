@@ -26,4 +26,16 @@ TestCase {
     function test_noNegativeZero() {
         compare(NumberFormat.fixed(-0.0001, 3), "0.000")
     }
+
+    // Only the language's own decimal separator is read back.
+    function test_parse() {
+        compare(NumberFormat.parse(" -12.5 "), -12.5)
+        verify(isNaN(NumberFormat.parse("12,5")))
+        verify(isNaN(NumberFormat.parse("abc")))
+        verify(isNaN(NumberFormat.parse("")))
+        NumberFormat.language = "tr"
+        compare(NumberFormat.parse("12,5"), 12.5)
+        compare(NumberFormat.parse("7"), 7)
+        verify(isNaN(NumberFormat.parse("12.5")))
+    }
 }

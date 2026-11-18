@@ -58,6 +58,11 @@ public:
     {
         emit m_fake->commandProgress(m_fake->lastCommandSessionId, m_fake->lastRequestId, percent, stage);
     }
+    // The device reports parameters (answer to a read).
+    Q_INVOKABLE void sendParameters(const QVariantMap &values)
+    {
+        emit m_fake->parametersReceived(m_session->activeSessionId(), values);
+    }
     // A file of `bytes` bytes in the test directory (firmware file box).
     Q_INVOKABLE QUrl makeFile(const QString &name, qint64 bytes)
     {
