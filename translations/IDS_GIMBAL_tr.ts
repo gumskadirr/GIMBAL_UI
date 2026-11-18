@@ -946,13 +946,18 @@
         <translation>IDS Gimbal</translation>
     </message>
     <message>
+        <location filename="../app/Main.qml" line="161"/>
+        <source>Realtime graph and logger</source>
+        <translation>Gerçek zamanlı grafik ve kayıt</translation>
+    </message>
+    <message>
         <location filename="../app/Main.qml" line="19"/>
-        <location filename="../app/Main.qml" line="112"/>
+        <location filename="../app/Main.qml" line="120"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="148"/>
+        <location filename="../app/Main.qml" line="156"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
@@ -1548,6 +1553,60 @@
     </message>
 </context>
 <context>
+    <name>RealtimeWindow</name>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="21"/>
+        <source>Speed</source>
+        <translation>Hız</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="26"/>
+        <source>Position</source>
+        <translation>Konum</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="31"/>
+        <source>Torque</source>
+        <translation>Tork</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="38"/>
+        <source>Realtime graph and logger</source>
+        <translation>Gerçek zamanlı grafik ve kayıt</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="53"/>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="112"/>
+        <source>Record CSV</source>
+        <translation>Kayıt</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="56"/>
+        <source>CSV file (*.csv)</source>
+        <translation>CSV dosyası (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="72"/>
+        <source>Scope view</source>
+        <translation>Scope görünümü</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="101"/>
+        <source>No stream data</source>
+        <translation>Akış verisi yok</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="119"/>
+        <source>Save CSV</source>
+        <translation>CSV kaydet</translation>
+    </message>
+    <message>
+        <location filename="../features/telemetry/RealtimeWindow.qml" line="125"/>
+        <source>%1 rows</source>
+        <translation>%1 satır</translation>
+    </message>
+</context>
+<context>
     <name>ScriptDialog</name>
     <message>
         <location filename="../features/maincontrol/ScriptDialog.qml" line="22"/>
@@ -1848,6 +1907,24 @@
         <location filename="../device/presentation/ServiceConnection.cpp" line="127"/>
         <source>Not configured</source>
         <translation>Ayarlanmadı</translation>
+    </message>
+</context>
+<context>
+    <name>ThemeSwitcher</name>
+    <message>
+        <location filename="../shared/ui/ThemeSwitcher.qml" line="13"/>
+        <source>Light theme</source>
+        <translation>Açık tema</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ThemeSwitcher.qml" line="14"/>
+        <source>Blue theme</source>
+        <translation>Mavi tema</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ThemeSwitcher.qml" line="15"/>
+        <source>Dark theme</source>
+        <translation>Koyu tema</translation>
     </message>
 </context>
 </TS>

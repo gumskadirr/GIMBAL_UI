@@ -219,6 +219,64 @@ TestCase {
         compare(topBar.crumbs, ["Preferences"])
     }
 
+    // The theme switcher writes AppSettings only; Theme.mode follows through Main.qml's binding. Persistence of
+    // AppSettings across instances: tst_appsettings (persistsAcrossInstances).
+    function test_themeSwitcherWritesSettings() {
+        const main = createMain(false)
+        const switcher = findChild(main.contentItem, "themeSwitcher")
+        for (const [i, mode] of [[0, "light"], [1, "blue"], [2, "dark"]]) {
+            mouseClick(switcher.children[0].children[i])
+            compare(testSettings.theme, mode)
+            compare(Theme.mode, mode)
+        }
+        testSettings.theme = "light" // changed elsewhere (Preferences): the switcher follows
+        compare(switcher.currentIndex, 0)
+    }
+
+    // The Realtime window draws only while it is visible.
+    function test_realtimeWindowDrawsOnlyWhileOpen() {
+        const main = createMain(false)
+        const win = findChild(main, "realtimeWindow")
+        const chart = win.chart
+        verify(!win.visible)
+        verify(!chart.active)
+        mouseClick(findChild(main.contentItem, "realtimeButton"))
+        tryCompare(win, "visible", true)
+        verify(chart.active)
+        testHelper.connectWithFullSample()
+        tryVerify(() => chart.version > 0)
+        win.close()
+        tryCompare(win, "visible", false)
+        verify(!chart.active)
+        const version = chart.version
+        wait(150)
+        compare(chart.version, version)
+        win.show()
+        tryCompare(chart, "active", true)
+        win.close()
+    }
+
+    // Everything on the top bar stays inside it, also in Turkish with the sample-data badge.
+    function test_topBarFitsInTurkish_data() {
+        return [{ tag: "1280", w: 1280 }, { tag: "1024", w: 1024 }]
+    }
+    function test_topBarFitsInTurkish(data) {
+        verify(testLocalization.setLanguage("tr"))
+        const main = createMain(true)
+        main.visibility = Window.Windowed
+        main.width = data.w
+        main.height = 700
+        main.currentPageId = "gimbalSettings" // longest breadcrumb
+        const topBar = findChild(main.contentItem, "topBar")
+        const crumbs = topBar.children[0].children[0]
+        const status = findChild(topBar, "connectionStatus")
+        waitForRendering(topBar)
+        const crumbsRight = crumbs.mapToItem(topBar, crumbs.width, 0).x
+        const buttonLeft = findChild(topBar, "realtimeButton").mapToItem(topBar, 0, 0).x
+        verify(crumbsRight <= buttonLeft, "crumbs " + crumbsRight + " button " + buttonLeft)
+        verify(status.mapToItem(topBar, status.width, 0).x <= topBar.width, "status")
+    }
+
     function test_languageChangeKeepsPagesAndUpdatesTitles() {
         const main = createMain(true)
         main.currentPageId = "preferences"

@@ -101,6 +101,14 @@ ApplicationWindow {
         }
     }
 
+    RealtimeWindow {
+        id: realtimeWindow
+        objectName: "realtimeWindow"
+        transientParent: window // closes with the main window
+        viewModel: window.mainControl
+        notifications: window.notifications
+    }
+
     AppShell {
         anchors.fill: parent
 
@@ -147,14 +155,24 @@ ApplicationWindow {
                 kind: "warn"
                 text: qsTr("Sample data")
             }
+            IdsButton {
+                objectName: "realtimeButton"
+                iconPath: Icons.chart
+                text: qsTr("Realtime graph and logger")
+                onClicked: realtimeWindow.show()
+            }
+            ThemeSwitcher {
+                objectName: "themeSwitcher"
+                settings: window.settings
+            }
             StatusLabel {
                 objectName: "connectionStatus"
                 framed: true
-                status: window.mainControl.connection.hasError ? "crit"
-                      : window.mainControl.connection.connected ? "ok"
-                      : window.mainControl.connection.busy ? "warn"
+                status: window.activeConnection.hasError ? "crit"
+                      : window.activeConnection.connected ? "ok"
+                      : window.activeConnection.busy ? "warn"
                       : "idle"
-                text: window.mainControl.connection.statusText
+                text: window.activeConnection.statusText
             }
         }
 

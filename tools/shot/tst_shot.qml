@@ -12,7 +12,7 @@ TestCase {
     name: "Shot"
     when: windowShown
 
-    function shot(w, h, file, theme, lang, page, dialog) {
+    function shot(w, h, file, theme, lang, page, dialog, realtime) {
         testSettings.theme = theme
         testLocalization.setLanguage(lang)
         const c = Qt.createComponent("IDS_GIMBAL", "Main")
@@ -73,12 +73,25 @@ TestCase {
         wait(dialog ? 300 : 50) // telemetry turns stale after 1 s; the window fades in
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
+        if (realtime) { // the Realtime graph and logger window, with scope history and a notification
+            testHelper.addNotification("device.error", "link lost")
+            const win = findChild(main, "realtimeWindow")
+            win.show()
+            for (let i = 0; i < 25; ++i) {
+                testHelper.sendScopeSample(i)
+                wait(80)
+            }
+            waitForRendering(win.contentItem)
+            verify(testHelper.saveWindowImage(win, "build/shots/" + file.replace(".png", "-realtime.png")))
+            win.close()
+            testNotifications.clear()
+        }
     }
 
     function test_shots() {
         // 1536x786: the target screen (1080p at 125 %) minus the taskbar.
-        shot(1536, 786, "gimbalInfo-1536-dark-en.png", "dark", "en", "gimbalInfo")
-        shot(1536, 786, "gimbalInfo-1536-light-tr.png", "light", "tr", "gimbalInfo")
+        shot(1536, 786, "gimbalInfo-1536-dark-en.png", "dark", "en", "gimbalInfo", undefined, true)
+        shot(1536, 786, "gimbalInfo-1536-light-tr.png", "light", "tr", "gimbalInfo", undefined, true)
         shot(1536, 786, "motorControl-1536-dark-en.png", "dark", "en", "motorControl")
         shot(1536, 786, "motorControl-1536-light-tr.png", "light", "tr", "motorControl")
         shot(1536, 786, "heater-1536-dark-en.png", "dark", "en", "heater")

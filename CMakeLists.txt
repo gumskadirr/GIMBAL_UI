@@ -89,6 +89,8 @@ qt_add_qml_module(ids_gimbal
         shared/ui/Kbd.qml
         shared/ui/IdsTabs.qml
         shared/ui/LineChart.qml
+        shared/ui/ThemeSwitcher.qml
+        features/telemetry/RealtimeWindow.qml
         shared/notifications/NotificationArea.qml
         features/maincontrol/ControlPageFrame.qml
         features/maincontrol/SectionHeading.qml
