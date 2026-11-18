@@ -1,4 +1,7 @@
+#include <QDir>
+#include <QFileInfo>
 #include <QQmlContext>
+#include <QQuickWindow>
 #include <QQmlEngine>
 #include <QQuickStyle>
 #include <QTemporaryDir>
@@ -39,6 +42,12 @@ public:
         emit m_fake->boardInfoReceived(id, makeBoardInfo());
     }
     Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
+    // Design comparison screenshots (tools/shot/tst_shot.qml, docs/gelistirme.md); not used by the tests.
+    Q_INVOKABLE bool saveWindowImage(QQuickWindow *window, const QString &path)
+    {
+        QDir().mkpath(QFileInfo(path).absolutePath());
+        return window && window->grabWindow().save(path);
+    }
     // Tests start with saved settings (so Main does not open the connection settings by itself); this
     // brings back the "never configured" state for the test of rule 1.
     Q_INVOKABLE void forgetConnection() { m_session->setTarget({}); }
