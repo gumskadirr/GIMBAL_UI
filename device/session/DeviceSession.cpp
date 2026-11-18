@@ -8,6 +8,17 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
     connect(m_provider.get(), &IDeviceProvider::stateChanged, this, &DeviceSession::onProviderState);
     connect(m_provider.get(), &IDeviceProvider::sampleReceived, this, &DeviceSession::onProviderSample);
     connect(m_provider.get(), &IDeviceProvider::boardInfoReceived, this, &DeviceSession::onProviderBoardInfo);
+    connect(m_provider.get(), &IDeviceProvider::bitReportReceived, this,
+            [this](quint64 sessionId, const BitReport &report) {
+                if (isActive(sessionId))
+                    emit bitReportAccepted(report);
+            });
+    connect(m_provider.get(), &IDeviceProvider::commandProgress, this,
+            [this](quint64 sessionId, quint64 requestId, int percent, const QString &stage) {
+                const auto it = m_pending.constFind(requestId);
+                if (isActive(sessionId) && it != m_pending.cend())
+                    emit commandProgressed(requestId, it.value(), percent, stage);
+            });
     connect(m_provider.get(), &IDeviceProvider::parametersReceived, this,
             [this](quint64 sessionId, const QVariantMap &values) {
                 if (isActive(sessionId))

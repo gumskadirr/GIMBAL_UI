@@ -50,6 +50,40 @@ private slots:
         QCOMPARE(accepted.count(), 1);
     }
 
+    void bitReportOfActiveSessionOnly()
+    {
+        Fixture f;
+        QSignalSpy accepted(&f.session, &DeviceSession::bitReportAccepted);
+        f.session.connectDevice();
+        emit f.fake->bitReportReceived(1, makeBitReport());
+        QCOMPARE(accepted.count(), 1);
+        QCOMPARE(accepted.at(0).at(0).value<BitReport>().items.size(), 8);
+
+        f.session.connectDevice(); // session 2
+        emit f.fake->bitReportReceived(1, makeBitReport()); // late report of session 1
+        QCOMPARE(accepted.count(), 1);
+    }
+
+    void progressOfPendingCommandOfActiveSessionOnly()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        QSignalSpy progressed(&f.session, &DeviceSession::commandProgressed);
+        f.session.connectDevice();
+        emit f.fake->stateChanged(1, ConnectionState::Connected, {});
+        const quint64 request = f.session.send({Command::UpdateFirmware, {}});
+        emit f.fake->commandProgress(1, request, 40, QStringLiteral("Writing"));
+        QCOMPARE(progressed.count(), 1);
+        QCOMPARE(progressed.at(0).at(0).toULongLong(), request);
+        QCOMPARE(progressed.at(0).at(1).value<DeviceCommand>().kind, Command::UpdateFirmware);
+        QCOMPARE(progressed.at(0).at(2).toInt(), 40);
+        emit f.fake->commandProgress(1, request + 1, 50, {}); // not a pending request
+        QCOMPARE(progressed.count(), 1);
+        f.session.connectDevice(); // session 2: the old request is cancelled, its late progress is dropped
+        emit f.fake->commandProgress(1, request, 60, {});
+        QCOMPARE(progressed.count(), 1);
+    }
+
     void targetPassedToProvider()
     {
         Fixture f;

@@ -1,6 +1,8 @@
 #include "DemoProvider.h"
 
+#include <QTime>
 #include <cmath>
+#include <utility>
 
 #include "device/api/ParameterKeys.h"
 
@@ -9,6 +11,8 @@ DemoProvider::DemoProvider(int intervalMs, int linkLossAfter, int lateResultDela
 {
     m_timer.setInterval(intervalMs);
     connect(&m_timer, &QTimer::timeout, this, &DemoProvider::tick);
+    m_firmwareTimer.setInterval(kFirmwareStepMs);
+    connect(&m_firmwareTimer, &QTimer::timeout, this, &DemoProvider::firmwareStep);
 }
 
 void DemoProvider::start(quint64 sessionId, const ConnectionTarget &)
@@ -21,6 +25,7 @@ void DemoProvider::start(quint64 sessionId, const ConnectionTarget &)
             return; // stopped before the connection "completed"
         emit stateChanged(sessionId, ConnectionState::Connected, {});
         emit boardInfoReceived(sessionId, sampleBoardInfo());
+        emit bitReportReceived(sessionId, sampleBitReport(QStringLiteral("14:20:05 at power-on")));
         m_timer.start();
     });
 }
@@ -30,6 +35,8 @@ void DemoProvider::stop()
     if (m_sessionId == 0)
         return;
     m_timer.stop();
+    m_firmwareTimer.stop();
+    m_firmwareRequest = 0;
     const quint64 old = m_sessionId;
     const DeviceSample late = sampleAt(m_n);
     m_sessionId = 0;
@@ -39,6 +46,19 @@ void DemoProvider::stop()
 
 void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceCommand &command)
 {
+    if (command.kind == Command::UpdateFirmware) { // no fixed delay: progress starts at once, the answer ends it
+        m_firmwareSession = sessionId;
+        m_firmwareRequest = requestId;
+        m_firmwarePercent = 0;
+        m_firmwareTimer.start();
+        QTimer::singleShot(0, this, [this, sessionId, requestId] { emit commandProgress(sessionId, requestId, 0, QStringLiteral("Erasing")); });
+        return;
+    }
+    if (command.kind == Command::CancelFirmwareUpdate && m_firmwareRequest != 0) {
+        m_firmwareTimer.stop();
+        const quint64 request = std::exchange(m_firmwareRequest, 0);
+        QTimer::singleShot(0, this, [this, request] { emit commandFinished(m_firmwareSession, request, {Command::Cancelled, {}}); });
+    }
     QTimer::singleShot(kCommandDelayMs, this, [this, sessionId, requestId, command] {
         switch (command.kind) {
         case Command::WriteParameters:
@@ -50,11 +70,26 @@ void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceComman
         case Command::ReadParameters:
             emit parametersReceived(sessionId, m_parameters);
             break;
+        case Command::RunBit:
+            emit bitReportReceived(sessionId, sampleBitReport(QTime::currentTime().toString(QStringLiteral("HH:mm:ss")) + QStringLiteral(" manual run")));
+            break;
         default:
             break;
         }
         emit commandFinished(sessionId, requestId, {Command::Accepted, {}});
     });
+}
+
+void DemoProvider::firmwareStep()
+{
+    m_firmwarePercent += 1;
+    const QString stage = m_firmwarePercent < 15 ? QStringLiteral("Erasing")
+                        : m_firmwarePercent < 90 ? QStringLiteral("Writing") : QStringLiteral("Verifying");
+    emit commandProgress(m_firmwareSession, m_firmwareRequest, m_firmwarePercent, stage);
+    if (m_firmwarePercent >= 100) {
+        m_firmwareTimer.stop();
+        emit commandFinished(m_firmwareSession, std::exchange(m_firmwareRequest, 0), {Command::Accepted, {}});
+    }
 }
 
 QVariantMap DemoProvider::defaultParameters()
@@ -94,6 +129,7 @@ BoardInfo DemoProvider::sampleBoardInfo()
     BoardInfo info;
     info.deviceId = text("0x1A42");
     info.firmware = text("v2.4.1");
+    info.firmwareBuilt = text("2026-10-28");
     info.model = text("MCB-2");
     info.mcuDeviceId = text("0x0451");
     info.uid = text("3A00 2F14 5133 3532");
@@ -101,6 +137,27 @@ BoardInfo DemoProvider::sampleBoardInfo()
     info.bootloaderVersion = text("1.3.0");
     info.boardId = text("0x07");
     return info;
+}
+
+BitReport DemoProvider::sampleBitReport(const QString &lastRun)
+{
+    struct Row { const char *name; BitItem::Status status; const char *description; };
+    static const Row rows[] = {
+        {"Power supply", BitItem::Pass, "24.1 V, within limits"},
+        {"IMU", BitItem::Pass, "Gyro bias within limits"},
+        {"Pan motor", BitItem::Warning, "Position limit reached"},
+        {"Tilt motor", BitItem::Pass, "Driver and current OK"},
+        {"Encoders", BitItem::Pass, "Pan and tilt signals OK"},
+        {"Heater", BitItem::Pass, "All zones respond"},
+        {"LRF", BitItem::Pass, "Optical crosstalk 0.4%"},
+        {"Flash memory", BitItem::Pass, "Checksum OK"},
+    };
+    BitReport report;
+    for (const Row &r : rows)
+        report.items.append({QString::fromLatin1(r.name), r.status, QString::fromLatin1(r.description)});
+    report.lastRun = lastRun;
+    report.valid = true;
+    return report;
 }
 
 DeviceSample DemoProvider::sampleAt(int n)
@@ -117,5 +174,7 @@ DeviceSample DemoProvider::sampleAt(int n)
     s.imuTempC = {38.6 + 0.01 * n, tempValid};
     s.supplyVoltageV = {24.1 + 0.05 * std::sin(phase), true};
     s.safeControlLocked = {(n / 100) % 2 == 0, true};
+    s.onTimeS = {11520.0 + n / 10, true}; // 3 h 12 min at the start (design), 10 samples per second
+    s.inBootloader = {false, true};
     return s;
 }

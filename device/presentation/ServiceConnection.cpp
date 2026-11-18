@@ -11,8 +11,21 @@ ServiceConnection::ServiceConnection(DeviceSession *session, QObject *parent)
 {
     connect(m_session, &DeviceSession::stateChanged, this, &ServiceConnection::changed);
     connect(m_session, &DeviceSession::pendingChanged, this, &ServiceConnection::pendingChanged);
+    connect(m_session, &DeviceSession::commandProgressed, this,
+            [this](quint64, const DeviceCommand &command, int percent, const QString &stage) {
+                m_progressKind = command.kind;
+                m_progressPercent = qBound(0, percent, 100);
+                m_progressStage = stage;
+                emit progressChanged();
+            });
     connect(m_session, &DeviceSession::commandFinished, this,
             [this](quint64, const DeviceCommand &command, const CommandResult &result) {
+                if (command.kind == m_progressKind) {
+                    m_progressKind = -1;
+                    m_progressPercent = 0;
+                    m_progressStage.clear();
+                    emit progressChanged();
+                }
                 emit commandFinished(command.kind, result.status, result.detail);
             });
 }

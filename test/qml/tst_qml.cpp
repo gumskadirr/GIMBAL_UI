@@ -1,5 +1,7 @@
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
+#include <QUrl>
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QQmlEngine>
@@ -40,6 +42,29 @@ public:
         emit m_fake->stateChanged(id, ConnectionState::Connected, {});
         emit m_fake->sampleReceived(id, makeFullSample());
         emit m_fake->boardInfoReceived(id, makeBoardInfo());
+        emit m_fake->bitReportReceived(id, makeBitReport());
+    }
+    // Command tests: the fake provider supports commands (set before connecting), records what is sent and
+    // answers or reports progress on request.
+    Q_INVOKABLE void setCommandsSupported(bool supported) { m_fake->commands = supported; }
+    Q_INVOKABLE int sentCount() const { return int(m_fake->sent.size()); }
+    Q_INVOKABLE int lastCommandKind() const { return m_fake->sent.isEmpty() ? -1 : int(m_fake->sent.last().kind); }
+    Q_INVOKABLE QVariantMap lastCommandArgs() const { return m_fake->sent.isEmpty() ? QVariantMap{} : m_fake->sent.last().args; }
+    Q_INVOKABLE void answerLastCommand(int status)
+    {
+        emit m_fake->commandFinished(m_fake->lastCommandSessionId, m_fake->lastRequestId, {Command::Status(status), {}});
+    }
+    Q_INVOKABLE void reportProgress(int percent, const QString &stage)
+    {
+        emit m_fake->commandProgress(m_fake->lastCommandSessionId, m_fake->lastRequestId, percent, stage);
+    }
+    // A file of `bytes` bytes in the test directory (firmware file box).
+    Q_INVOKABLE QUrl makeFile(const QString &name, qint64 bytes)
+    {
+        QFile file(m_dir.filePath(name));
+        if (file.open(QIODevice::WriteOnly))
+            file.resize(bytes);
+        return QUrl::fromLocalFile(file.fileName());
     }
     Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
     // Design comparison screenshots (tools/shot/tst_shot.qml, docs/gelistirme.md); not used by the tests.
@@ -64,6 +89,7 @@ public:
 public slots:
     void applicationAvailable()
     {
+        QCoreApplication::setApplicationVersion(QStringLiteral("2.1.3")); // AppRunner sets the real one
         QQuickStyle::setStyle(QStringLiteral("Basic"));
         loadAppFonts();
         m_settings = std::make_unique<AppSettings>(m_dir.filePath(QStringLiteral("settings.ini")));

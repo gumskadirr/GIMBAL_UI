@@ -25,6 +25,38 @@ class tst_ServiceConnection : public QObject
     };
 
 private slots:
+    void progressFollowsTheRunningCommand()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.connect();
+        QCOMPARE(f.vm.progressKind(), -1);
+        QVERIFY(f.vm.send(Command::UpdateFirmware));
+        QSignalSpy changed(&f.vm, &ServiceConnection::progressChanged);
+        emit f.fake->commandProgress(1, f.fake->lastRequestId, 40, QStringLiteral("Writing"));
+        QCOMPARE(f.vm.progressKind(), int(Command::UpdateFirmware));
+        QCOMPARE(f.vm.progressPercent(), 40);
+        QCOMPARE(f.vm.progressStage(), QStringLiteral("Writing"));
+        QCOMPARE(changed.count(), 1);
+        emit f.fake->commandFinished(1, f.fake->lastRequestId, {Command::Accepted, {}});
+        QCOMPARE(f.vm.progressKind(), -1);
+        QCOMPARE(f.vm.progressPercent(), 0);
+        QVERIFY(f.vm.progressStage().isEmpty());
+        QCOMPARE(changed.count(), 2);
+    }
+
+    void progressResetsWhenTheSessionEnds()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.connect();
+        QVERIFY(f.vm.send(Command::UpdateFirmware));
+        emit f.fake->commandProgress(1, f.fake->lastRequestId, 70, {});
+        f.vm.disconnectDevice(); // pending commands finish as Cancelled
+        QCOMPARE(f.vm.progressKind(), -1);
+        QCOMPARE(f.vm.progressPercent(), 0);
+    }
+
     void startsDisconnected()
     {
         Fixture f;

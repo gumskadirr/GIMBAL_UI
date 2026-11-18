@@ -25,6 +25,11 @@ class ServiceConnection : public QObject
     Q_PROPERTY(bool configured READ configured NOTIFY changed)
     // Command kinds (Command.Kind) waiting for an answer; their buttons look busy and cannot be pressed again.
     Q_PROPERTY(QList<int> pendingCommands READ pendingCommands NOTIFY pendingChanged)
+    // Progress of the running long command (e.g. UpdateFirmware); the status bar shows it on every page.
+    // progressKind is its Command.Kind, -1 when none; all three reset when it finishes or is cancelled.
+    Q_PROPERTY(int progressKind READ progressKind NOTIFY progressChanged)
+    Q_PROPERTY(int progressPercent READ progressPercent NOTIFY progressChanged)
+    Q_PROPERTY(QString progressStage READ progressStage NOTIFY progressChanged)
 
 public:
     explicit ServiceConnection(DeviceSession *session, QObject *parent = nullptr);
@@ -39,6 +44,9 @@ public:
     QString summary() const;
     bool configured() const;
     QList<int> pendingCommands() const;
+    int progressKind() const { return m_progressKind; }
+    int progressPercent() const { return m_progressPercent; }
+    QString progressStage() const { return m_progressStage; }
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
@@ -58,9 +66,13 @@ signals:
     void changed();
     void applied(); // the session target changed from the UI; the owner saves it
     void pendingChanged();
+    void progressChanged();
     // kind: Command.Kind, status: Command.Status. Failures also become notifications (AppRunner).
     void commandFinished(int kind, int status, const QString &detail);
 
 private:
     DeviceSession *m_session;
+    int m_progressKind = -1;
+    int m_progressPercent = 0;
+    QString m_progressStage; // raw provider text
 };

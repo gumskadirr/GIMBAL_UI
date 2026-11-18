@@ -59,6 +59,8 @@ struct DeviceSample
     Measurement imuTempC;
     Measurement supplyVoltageV;
     Flag safeControlLocked;
+    Measurement onTimeS; // seconds since power on
+    Flag inBootloader;   // false: the application is running
 };
 
 // Read once per session (on connect or on request), not streamed: valid until the session ends and never
@@ -69,6 +71,7 @@ struct BoardInfo
     Q_GADGET
     Q_PROPERTY(TextValue deviceId MEMBER deviceId)
     Q_PROPERTY(TextValue firmware MEMBER firmware)
+    Q_PROPERTY(TextValue firmwareBuilt MEMBER firmwareBuilt)
     Q_PROPERTY(TextValue model MEMBER model)
     Q_PROPERTY(TextValue mcuDeviceId MEMBER mcuDeviceId)
     Q_PROPERTY(TextValue uid MEMBER uid)
@@ -79,12 +82,50 @@ struct BoardInfo
 public:
     TextValue deviceId;
     TextValue firmware;
+    TextValue firmwareBuilt; // build date as the device reports it
     TextValue model;
     TextValue mcuDeviceId;
     TextValue uid;
     TextValue flashSizeKb;
     TextValue bootloaderVersion;
     TextValue boardId;
+};
+
+// One built-in test item; name and description are raw device text.
+struct BitItem
+{
+    Q_GADGET
+    Q_PROPERTY(QString name MEMBER name)
+    Q_PROPERTY(int status MEMBER status)
+    Q_PROPERTY(QString description MEMBER description)
+
+public:
+    enum Status { Pass, Warning, Fail };
+    Q_ENUM(Status)
+
+    QString name;
+    int status = Pass; // Status
+    QString description;
+
+    friend bool operator==(const BitItem &a, const BitItem &b)
+    {
+        return a.name == b.name && a.status == b.status && a.description == b.description;
+    }
+    friend bool operator!=(const BitItem &a, const BitItem &b) { return !(a == b); }
+};
+
+// Built-in test result, read on request (RunBit) and after connecting; valid until the session ends.
+struct BitReport
+{
+    Q_GADGET
+    Q_PROPERTY(QList<BitItem> items MEMBER items)
+    Q_PROPERTY(QString lastRun MEMBER lastRun)
+    Q_PROPERTY(bool valid MEMBER valid)
+
+public:
+    QList<BitItem> items;
+    QString lastRun;    // e.g. "14:20:05 at power-on", raw device text
+    bool valid = false; // false: no report in this session
 };
 
 // Where a service connects (architecture §2, §12). Plain values only: the API stays free of QtSerialPort and
@@ -132,3 +173,4 @@ inline std::optional<ConnectionTarget::Parity> parityFromName(const QString &nam
 Q_DECLARE_METATYPE(ConnectionState)
 Q_DECLARE_METATYPE(DeviceSample)
 Q_DECLARE_METATYPE(BoardInfo)
+Q_DECLARE_METATYPE(BitReport)

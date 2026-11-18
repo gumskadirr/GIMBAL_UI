@@ -38,6 +38,9 @@ signals:
     void sessionStarted(quint64 sessionId);
     void sampleAccepted(const DeviceSample &sample);
     void boardInfoAccepted(const BoardInfo &info);
+    void bitReportAccepted(const BitReport &report);
+    // A pending command made progress (progress of a finished or stale request is dropped).
+    void commandProgressed(quint64 requestId, const DeviceCommand &command, int percent, const QString &stage);
     void parametersAccepted(const QVariantMap &values);
     void commandFinished(quint64 requestId, const DeviceCommand &command, const CommandResult &result);
     void pendingChanged();

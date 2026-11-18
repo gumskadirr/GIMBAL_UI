@@ -10,6 +10,7 @@ T.Button {
 
     property string variant: "secondary"
     property string iconPath: ""
+    property bool busy: false // a turning arrow replaces the icon (CommandButton while its command is pending)
     property string trailingIconPath: ""
     property bool compact: false
     property string shortcutHint: "" // e.g. "Esc": shown as a key cap inside the button
@@ -60,10 +61,18 @@ T.Button {
             anchors.centerIn: parent
             spacing: control.spacing
             Icon {
+                id: leadingIcon
                 width: 15; height: 15
                 anchors.verticalCenter: parent.verticalCenter
-                path: control.iconPath
+                path: control.busy ? Icons.resetView : control.iconPath
                 color: control._fg
+                RotationAnimator on rotation {
+                    running: control.busy
+                    from: 0; to: 360
+                    duration: 900
+                    loops: Animation.Infinite
+                    onRunningChanged: if (!running) leadingIcon.rotation = 0
+                }
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter

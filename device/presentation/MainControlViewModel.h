@@ -30,8 +30,11 @@ class MainControlViewModel : public QObject
     Q_PROPERTY(Measurement imuTemp READ imuTemp NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement supplyVoltage READ supplyVoltage NOTIFY measurementsChanged)
     Q_PROPERTY(Flag safeControl READ safeControl NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement onTime READ onTime NOTIFY measurementsChanged) // seconds since power on
+    Q_PROPERTY(Flag inBootloader READ inBootloader NOTIFY measurementsChanged)
     // Read once per session; not affected by the telemetry stale timeout.
     Q_PROPERTY(BoardInfo boardInfo READ boardInfo NOTIFY boardInfoChanged)
+    Q_PROPERTY(BitReport bitReport READ bitReport NOTIFY bitReportChanged) // valid is false without a report
 
 public:
     static constexpr int kStaleAfterMs = 1000;
@@ -48,7 +51,10 @@ public:
     Measurement imuTemp() const { return m_sample.imuTempC; }
     Measurement supplyVoltage() const { return m_sample.supplyVoltageV; }
     Flag safeControl() const { return m_sample.safeControlLocked; }
+    Measurement onTime() const { return m_sample.onTimeS; }
+    Flag inBootloader() const { return m_sample.inBootloader; }
     BoardInfo boardInfo() const { return m_boardInfo; }
+    BitReport bitReport() const { return m_bitReport; }
 
     // -1 when there is no current (non-stale) sample.
     Q_INVOKABLE qint64 msSinceLastSample() const { return m_sinceSample.isValid() ? m_sinceSample.elapsed() : -1; }
@@ -56,6 +62,7 @@ public:
 signals:
     void measurementsChanged();
     void boardInfoChanged();
+    void bitReportChanged();
 
 private:
     void invalidate();       // telemetry only (also on stale timeout)
@@ -70,4 +77,5 @@ private:
     QTimer m_staleCheck;
     BoardInfo m_boardInfo; // default-constructed = all invalid
     bool m_hasBoardInfo = false;
+    BitReport m_bitReport; // valid = false until a report arrives
 };

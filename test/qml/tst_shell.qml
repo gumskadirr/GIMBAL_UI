@@ -54,6 +54,7 @@ TestCase {
     function test_referencePageScalesToFit(data) {
         verify(testLocalization.setLanguage(data.lang))
         const main = createMain(true)
+        testHelper.connectWithFullSample() // the fullest content: Gimbal info shows the BIT tiles
         main.visibility = Window.Windowed
         main.width = data.w
         main.height = data.h

@@ -34,6 +34,10 @@ signals:
     void stateChanged(quint64 sessionId, ConnectionState state, const QString &detail);
     void sampleReceived(quint64 sessionId, const DeviceSample &sample); // streamed telemetry
     void boardInfoReceived(quint64 sessionId, const BoardInfo &info);   // read-once data, any time in a session
+    void bitReportReceived(quint64 sessionId, const BitReport &report); // after RunBit and on connect
+    // Progress of a long command (e.g. UpdateFirmware): percent 0-100 and a raw stage text; the final
+    // answer still comes with commandFinished.
+    void commandProgress(quint64 sessionId, quint64 requestId, int percent, const QString &stage);
     // Parameter values (all or some keys of device/api/ParameterKeys.h), e.g. after ReadParameters.
     void parametersReceived(quint64 sessionId, const QVariantMap &values);
     void commandFinished(quint64 sessionId, quint64 requestId, const CommandResult &result);

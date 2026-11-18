@@ -26,7 +26,13 @@ TestCase {
 
     function cleanup() {
         testHelper.disconnectDevice()
+        testHelper.setCommandsSupported(false)
         NumberFormat.language = "en"
+    }
+
+    function connectWithCommands() {
+        testHelper.setCommandsSupported(true)
+        testHelper.connectWithFullSample()
     }
 
     // The command contract (device/api/DeviceCommand.h) is reachable from QML.
@@ -74,7 +80,7 @@ TestCase {
             verify(!control.enabled, control.objectName || control.text || String(control))
     }
 
-    // Read-once board data is shown and cleared with the session; "On time" is telemetry and stays "—".
+    // Read-once board data is shown and cleared with the session.
     function test_boardInfoShownForTheSession() {
         const page = createTemporaryObject(pageComponent, testCase)
         compare(findChild(page, "kpi-deviceId").value, "—")
@@ -101,5 +107,71 @@ TestCase {
         compare(cell(page, "pan").secondary, "")
         compare(cell(page, "pan").note, "")
         compare(cell(page, "safeControl").valueStatus, "")
+    }
+
+    // On time is telemetry; firmware build and the BIT report arrive with the session and leave with it.
+    function test_onTimeAndBitReport() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        compare(findChild(page, "kpi-onTime").value, "—")
+        compare(findChild(page, "bit-Pan motor"), null)
+        testHelper.connectWithFullSample()
+        compare(findChild(page, "kpi-onTime").value, "3 h 12 min")
+        compare(findChild(page, "kpi-onTime").caption, "11520 s since power on")
+        compare(findChild(page, "kpi-firmware").caption, "Built 2026-10-28")
+        compare(findChild(page, "bootloader-state").text, "Application running")
+        verify(findChild(page, "bit-Pan motor"))
+        compare(page.bitPassed, 7)
+        compare(page.bitWarnings, 1)
+        testHelper.disconnectDevice()
+        compare(findChild(page, "kpi-onTime").value, "—")
+        compare(findChild(page, "bootloader-state").text, "State unknown")
+        compare(findChild(page, "bit-Pan motor"), null)
+    }
+
+    // A command button sends its kind, looks busy while pending and is free again after the answer.
+    function test_runBitSendsAndShowsBusy() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        connectWithCommands()
+        const button = findChild(page, "command-runBit")
+        verify(button.enabled)
+        verify(!button.busy)
+        const before = testHelper.sentCount()
+        button.clicked()
+        compare(testHelper.sentCount(), before + 1)
+        compare(testHelper.lastCommandKind(), Command.RunBit)
+        verify(button.busy)
+        verify(!button.enabled)
+        button.clicked() // pending: nothing more is sent
+        compare(testHelper.sentCount(), before + 1)
+        testHelper.answerLastCommand(Command.Accepted)
+        verify(!button.busy)
+        verify(button.enabled)
+    }
+
+    // Firmware update: needs a file, shows the file box and the progress, ends with the answer.
+    function test_firmwareUpdateProgress() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        connectWithCommands()
+        const update = findChild(page, "command-updateFirmware")
+        const cancel = findChild(page, "command-cancelFirmware")
+        verify(!update.enabled) // no file yet
+        verify(!cancel.enabled)
+        const url = testHelper.makeFile("mcb_firmware_v2.5.0.bin", 1258291)
+        findChild(page, "firmwareFile").source = url
+        compare(findChild(page, "firmware-name").text, "mcb_firmware_v2.5.0.bin")
+        verify(findChild(page, "firmware-detail").text.startsWith("1.2 MB · "))
+        verify(update.enabled)
+        update.clicked()
+        compare(testHelper.lastCommandKind(), Command.UpdateFirmware)
+        verify(String(testHelper.lastCommandArgs().file).endsWith("mcb_firmware_v2.5.0.bin"))
+        testHelper.reportProgress(40, "Writing")
+        compare(testMainControl.connection.progressKind, Command.UpdateFirmware)
+        compare(findChild(page, "firmware-progress").value, 40)
+        compare(findChild(page, "firmware-status").text, "Writing")
+        verify(cancel.enabled)
+        testHelper.answerLastCommand(Command.Accepted)
+        compare(testMainControl.connection.progressKind, -1)
+        compare(findChild(page, "firmware-status").text, "Update complete")
+        compare(findChild(page, "firmware-progress").value, 100)
     }
 }

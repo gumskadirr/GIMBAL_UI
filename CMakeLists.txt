@@ -5,7 +5,7 @@ project(IDS_GIMBAL VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 SerialPort Network Test QuickTest LinguistTools)
+find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 QuickDialogs2 SerialPort Network Test QuickTest LinguistTools)
 
 qt_standard_project_setup(REQUIRES 6.12)
 
@@ -35,6 +35,7 @@ qt_add_qml_module(ids_gimbal
         device/session/ConnectionStore.h device/session/ConnectionStore.cpp
         device/transport/TransportProvider.h device/transport/TransportProvider.cpp
         shared/ui/Fonts.h shared/ui/Fonts.cpp
+        shared/ui/FileInfo.h
     QML_FILES
         app/Main.qml
         app/PreferencesPage.qml
@@ -44,6 +45,7 @@ qt_add_qml_module(ids_gimbal
         shared/ui/Icon.qml
         shared/ui/FocusRing.qml
         shared/ui/IdsButton.qml
+        shared/ui/CommandButton.qml
         shared/ui/IdsComboBox.qml
         shared/ui/AppShell.qml
         shared/ui/BrandStripe.qml
@@ -94,10 +96,10 @@ qt_add_qml_module(ids_gimbal
 target_include_directories(ids_gimbal
     PUBLIC ${PROJECT_SOURCE_DIR}
     # The generated QML type registration includes headers by file name.
-    PRIVATE shared/settings shared/localization shared/notifications device/presentation device/api
+    PRIVATE shared/ui shared/settings shared/localization shared/notifications device/presentation device/api
 )
 
-target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2 Qt6::SerialPort Qt6::Network)
+target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::SerialPort Qt6::Network)
 target_compile_definitions(ids_gimbal PRIVATE IDS_GIMBAL_VERSION="${PROJECT_VERSION}")
 
 # Inter and JetBrains Mono (SIL OFL 1.1, license texts next to the files), loaded by loadAppFonts().

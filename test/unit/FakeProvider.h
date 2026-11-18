@@ -47,6 +47,7 @@ inline BoardInfo makeBoardInfo()
     BoardInfo info;
     info.deviceId = {QStringLiteral("0x1A42"), true};
     info.firmware = {QStringLiteral("v2.4.1"), true};
+    info.firmwareBuilt = {QStringLiteral("2026-10-28"), true};
     info.model = {QStringLiteral("MCB-2"), true};
     info.mcuDeviceId = {QStringLiteral("0x0451"), true};
     info.uid = {QStringLiteral("3A00 2F14 5133 3532"), true};
@@ -54,6 +55,18 @@ inline BoardInfo makeBoardInfo()
     info.bootloaderVersion = {QStringLiteral("1.3.0"), true};
     info.boardId = {QStringLiteral("0x07"), true};
     return info;
+}
+
+// The report of the Gimbal info design (7 pass, 1 warning).
+inline BitReport makeBitReport()
+{
+    BitReport report;
+    for (const char *name : {"Power supply", "IMU", "Pan motor", "Tilt motor", "Encoders", "Heater", "LRF", "Flash memory"})
+        report.items.append({QString::fromLatin1(name), BitItem::Pass, QStringLiteral("OK")});
+    report.items[2].status = BitItem::Warning;
+    report.lastRun = QStringLiteral("14:20:05 at power-on");
+    report.valid = true;
+    return report;
 }
 
 // Every field valid (the "full" sample the Gimbal info page shows).
@@ -68,5 +81,7 @@ inline DeviceSample makeFullSample()
     s.imuTempC = {38.6, true};
     s.supplyVoltageV = {24.1, true};
     s.safeControlLocked = {true, true};
+    s.onTimeS = {11520.0, true};
+    s.inBootloader = {false, true};
     return s;
 }

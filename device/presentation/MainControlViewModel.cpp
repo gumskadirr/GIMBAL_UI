@@ -10,7 +10,7 @@ bool anyValid(const DeviceSample &s)
         if (m.valid)
             return true;
     }
-    return s.safeControlLocked.valid;
+    return s.safeControlLocked.valid || s.onTimeS.valid || s.inBootloader.valid;
 }
 } // namespace
 
@@ -27,6 +27,11 @@ MainControlViewModel::MainControlViewModel(DeviceSession *session, ServiceConnec
         m_boardInfo = info;
         m_hasBoardInfo = true;
         emit boardInfoChanged();
+    });
+
+    connect(m_session, &DeviceSession::bitReportAccepted, this, [this](const BitReport &report) {
+        m_bitReport = report;
+        emit bitReportChanged();
     });
 
     m_staleCheck.setInterval(kStaleAfterMs / 4);
@@ -47,6 +52,10 @@ void MainControlViewModel::onSample(const DeviceSample &sample)
 void MainControlViewModel::clearSessionData()
 {
     invalidate();
+    if (m_bitReport.valid) {
+        m_bitReport = BitReport{};
+        emit bitReportChanged();
+    }
     if (!m_hasBoardInfo)
         return;
     m_boardInfo = BoardInfo{};

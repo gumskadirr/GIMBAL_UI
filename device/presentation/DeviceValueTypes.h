@@ -27,6 +27,20 @@ struct BoardInfoForeign
     QML_VALUE_TYPE(boardInfo)
 };
 
+struct BitItemForeign
+{
+    Q_GADGET
+    QML_FOREIGN(BitItem)
+    QML_VALUE_TYPE(bitItem)
+};
+
+struct BitReportForeign
+{
+    Q_GADGET
+    QML_FOREIGN(BitReport)
+    QML_VALUE_TYPE(bitReport)
+};
+
 // QML: Command.AskBootloader, Command.Accepted ... (ServiceConnection.send / commandFinished).
 namespace CommandForeign {
 Q_NAMESPACE

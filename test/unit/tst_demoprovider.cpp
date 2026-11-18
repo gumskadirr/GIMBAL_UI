@@ -81,6 +81,37 @@ private slots:
         QCOMPARE(samples.count(), 20);
     }
 
+    void sendsBitReportOnConnectAndAfterRunBit()
+    {
+        DemoProvider p(5, 1000, 50);
+        QSignalSpy reports(&p, &IDeviceProvider::bitReportReceived);
+        p.start(1, {});
+        QTRY_COMPARE(reports.count(), 1);
+        const BitReport first = reports.at(0).at(1).value<BitReport>();
+        QCOMPARE(first.items.size(), 8);
+        QCOMPARE(first.items.at(2).status, int(BitItem::Warning));
+        p.send(1, 1, {Command::RunBit, {}});
+        QTRY_COMPARE(reports.count(), 2);
+    }
+
+    void firmwareUpdateReportsProgressAndCanBeCancelled()
+    {
+        DemoProvider p(5, 1000, 50);
+        QSignalSpy progress(&p, &IDeviceProvider::commandProgress);
+        QSignalSpy finished(&p, &IDeviceProvider::commandFinished);
+        p.start(1, {});
+        p.send(1, 7, {Command::UpdateFirmware, {{QStringLiteral("file"), QStringLiteral("a.bin")}}});
+        QTRY_VERIFY(progress.count() >= 3);
+        QCOMPARE(progress.at(0).at(1).toULongLong(), 7u);
+        QVERIFY(progress.last().at(2).toInt() > progress.at(0).at(2).toInt());
+        p.send(1, 8, {Command::CancelFirmwareUpdate, {}});
+        QTRY_COMPARE(finished.count(), 2);
+        QCOMPARE(finished.at(0).at(1).toULongLong(), 7u); // the update ends as Cancelled
+        QCOMPARE(finished.at(0).at(2).value<CommandResult>().status, Command::Cancelled);
+        QCOMPARE(finished.at(1).at(1).toULongLong(), 8u); // the cancel itself is accepted
+        QCOMPARE(finished.at(1).at(2).value<CommandResult>().status, Command::Accepted);
+    }
+
     void lateResultDroppedBySession()
     {
         DeviceSession session(std::make_unique<DemoProvider>(5, 1000, 30));

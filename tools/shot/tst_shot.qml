@@ -22,17 +22,24 @@ TestCase {
         main.width = w
         main.height = h
         main.currentPageId = page
+        testHelper.setCommandsSupported(true) // buttons enabled, as with a device that has a protocol
         testHelper.connectWithFullSample()
-        wait(400)
+        let item = findChild(main.contentItem, "firmware-name") // Gimbal info: the file of the design
+        while (item && item.firmwareSource === undefined)
+            item = item.parent
+        if (item)
+            item.firmwareSource = testHelper.makeFile("mcb_firmware_v2.5.0.bin", 1258291)
+        wait(50) // telemetry turns stale after 1 s
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
     }
 
     function test_shots() {
         // 1536x786: the target screen (1080p at 125 %) minus the taskbar.
-        shot(1536, 786, "gimbalSettings-1536-dark-en.png", "dark", "en", "gimbalSettings")
-        shot(1536, 786, "gimbalSettings-1536-light-tr.png", "light", "tr", "gimbalSettings")
+        shot(1536, 786, "gimbalInfo-1536-dark-en.png", "dark", "en", "gimbalInfo")
+        shot(1536, 786, "gimbalInfo-1536-light-tr.png", "light", "tr", "gimbalInfo")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
+        testHelper.setCommandsSupported(false)
     }
 }

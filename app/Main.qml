@@ -22,7 +22,7 @@ ApplicationWindow {
         // designHeight: natural height of the page's (reference) layout, measured; tst_shell fails if the content
         // outgrows it. Used by the page host below to scale the page to fit.
         { id: "gimbalInfo", service: "mainControl", group: qsTr("Board"), title: qsTr("Gimbal info"),
-          icon: Icons.info, component: gimbalInfoPage, designHeight: 768 },
+          icon: Icons.info, component: gimbalInfoPage, designHeight: 890 },
         { id: "motorControl", service: "mainControl", group: qsTr("Control"), title: qsTr("Motor control"),
           icon: Icons.motor, component: motorControlPage, designHeight: 860 },
         { id: "gimbalSettings", service: "mainControl", group: qsTr("Control"), title: qsTr("Gimbal settings"),

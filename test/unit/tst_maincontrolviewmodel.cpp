@@ -112,6 +112,31 @@ private slots:
         QVERIFY(!f.vm.boardInfo().deviceId.valid);
     }
 
+    void bitReportClearedWhenSessionEnds()
+    {
+        Fixture f;
+        f.connect();
+        QVERIFY(!f.vm.bitReport().valid);
+        emit f.fake->bitReportReceived(1, makeBitReport());
+        QVERIFY(f.vm.bitReport().valid);
+        QCOMPARE(f.vm.bitReport().items.size(), 8);
+        f.connection.disconnectDevice();
+        QVERIFY(!f.vm.bitReport().valid);
+        QVERIFY(f.vm.bitReport().items.isEmpty());
+    }
+
+    void onTimeAndBootloaderAreTelemetry()
+    {
+        Fixture f;
+        f.connect();
+        emit f.fake->sampleReceived(1, makeFullSample());
+        QCOMPARE(f.vm.onTime().value, 11520.0);
+        QVERIFY(f.vm.inBootloader().valid && !f.vm.inBootloader().value);
+        f.connection.disconnectDevice();
+        QVERIFY(!f.vm.onTime().valid);
+        QVERIFY(!f.vm.inBootloader().valid);
+    }
+
     void becomesStale()
     {
         Fixture f;

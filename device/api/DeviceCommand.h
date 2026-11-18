@@ -21,6 +21,9 @@ enum Kind {
     WriteParameters, // values: QVariantMap (key -> value, only the changed keys)
     SaveParametersToFlash,
     RestoreDefaultParameters,
+    // Firmware update (progress through IDeviceProvider::commandProgress; answered when it ends).
+    UpdateFirmware, // file: QString (local path of the firmware file)
+    CancelFirmwareUpdate,
 };
 Q_ENUM_NS(Kind)
 
