@@ -32,6 +32,14 @@ enum Kind {
     StopControl,
     SetReference,   // type: QString ("torque" | "speed" | "position"), value: double (%, deg/s, deg)
     ResetReference, // type: QString (as SetReference)
+    // Gimbal settings. The calibrations are long: progress through IDeviceProvider::commandProgress, the answer
+    // comes when they end; their results arrive as crosstalkResultReceived / imuBiasReceived.
+    StartStream,
+    StopStream,
+    SafeStop, // no confirmation: it must always be one press away
+    StartElectricalAngleCalibration,
+    StartCrosstalkCheck,
+    StartImuBiasCalibration,
 };
 Q_ENUM_NS(Kind)
 

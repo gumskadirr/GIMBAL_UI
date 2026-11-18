@@ -3,12 +3,41 @@ import QtQuick
 import QtQuick.Layouts
 import IDS_GIMBAL
 
-// Gimbal settings page of the final design (3D card | settings, 1:2), without the charts (later step).
-// Display only: stream, script, calibrations and gains need the device protocol (architecture §7), so values show
-// "—" and every input and command is disabled through viewModel.connection.commandsAvailable.
-// Not taken from the design: the "1 kHz" stream badge (rate comes from the device; 1 vs 2 kHz is open, §17).
+// Gimbal settings page of the final design (3D card | settings, 1:2). Stream, calibrations, filter gains,
+// board mode and Safe stop are connected; CSV (T11), charts (T12) and Script (T13) are not yet.
+// Without command support (real target) values show "—" and every input and command is disabled through
+// viewModel.connection.commandsAvailable. The stream rate badge shows what the device reports (1 vs 2 kHz is
+// open, §17). Calibration results are read on request and shown until the session ends.
 ControlPageFrame {
     id: page
+
+    readonly property ServiceConnection connection: viewModel.connection
+    readonly property ParameterModel parameters: viewModel.parameters
+    readonly property bool streaming: viewModel.streaming.valid && viewModel.streaming.value
+    property bool readDone: false
+
+    // The filter gains are read once per connection, when the page is visible.
+    function readOnce() {
+        if (pageActive && connection.commandsAvailable && !readDone)
+            readDone = parameters.read("gimbal.")
+    }
+    onPageActiveChanged: readOnce()
+    Connections {
+        target: page.connection
+        function onChanged() {
+            if (!page.connection.commandsAvailable)
+                page.readDone = false
+            page.readOnce()
+        }
+    }
+    Component.onCompleted: readOnce()
+
+    // Esc is Safe stop, but only while this page is visible and the button could send it.
+    Shortcut {
+        sequence: "Esc"
+        enabled: page.pageActive && safeStop.enabled
+        onActivated: safeStop.clicked()
+    }
 
     component BarTitle: Text {
         font.family: Theme.fontSans
@@ -32,6 +61,47 @@ ControlPageFrame {
         compact: true
         placeholderText: "—"
     }
+    // Filter gain: Enter or focus loss sets the value and writes the "gimbal." parameters; a value the model
+    // refuses (not a number, outside the range) is never sent.
+    component GainField: ValueField {
+        id: gain
+        required property string key
+        readonly property var stored: page.parameters.values[key]
+        property string shown // what show() put in the field; differs while the user is typing
+
+        function show() {
+            shown = stored === undefined ? "" : NumberFormat.fixed(stored, 4)
+            text = shown
+            error = false
+        }
+        function commit() {
+            if (text === shown)
+                return
+            const value = NumberFormat.parse(text)
+            if (isNaN(value) || !page.parameters.set(key, value)) {
+                error = true
+                return
+            }
+            show()
+            page.parameters.write("gimbal.")
+        }
+        onStoredChanged: if (text === shown) show()
+        onEditingFinished: commit()
+        Component.onCompleted: show()
+        Connections {
+            target: NumberFormat
+            function onLanguageChanged() { gain.show() }
+        }
+    }
+    component CalibrationProgress: IdsProgressBar {
+        required property int kind
+        Layout.fillWidth: true
+        visible: page.connection.progressKind === kind
+        from: 0
+        to: 100
+        value: page.connection.progressPercent
+        Accessible.name: qsTr("Calibration progress")
+    }
 
     ColumnLayout {
         Layout.fillWidth: true
@@ -49,15 +119,40 @@ ControlPageFrame {
                 anchors.margins: 12
                 spacing: 8
                 BarTitle { text: qsTr("Stream") }
-                IdsButton { objectName: "command-startStream"; iconPath: Icons.play; text: qsTr("Start stream") }
-                IdsButton { objectName: "command-stopStream"; variant: "quiet"; text: qsTr("Stop stream") }
+                Badge {
+                    objectName: "value-streamRate"
+                    visible: page.viewModel.streamRate.valid
+                    kind: page.streaming ? "ok" : "neutral"
+                    text: !page.streaming ? qsTr("Stopped")
+                        : page.viewModel.streamRate.value % 1000 === 0 ? NumberFormat.fixed(page.viewModel.streamRate.value / 1000, 0) + " kHz"
+                        : NumberFormat.fixed(page.viewModel.streamRate.value, 0) + " Hz"
+                }
+                CommandButton {
+                    objectName: "command-startStream"
+                    connection: page.connection
+                    kind: Command.StartStream
+                    iconPath: Icons.play
+                    text: qsTr("Start stream")
+                    ready: !page.streaming
+                }
+                CommandButton {
+                    objectName: "command-stopStream"
+                    connection: page.connection
+                    kind: Command.StopStream
+                    variant: "quiet"
+                    text: qsTr("Stop stream")
+                    ready: page.streaming
+                }
                 Item { implicitWidth: 8 }
                 IdsButton { objectName: "command-recordCsv"; iconPath: Icons.record; text: qsTr("Record CSV") }
                 IdsButton { objectName: "command-saveCsv"; variant: "quiet"; text: qsTr("Save CSV") }
-                ValueText { objectName: "value-packets"; text: "— " + qsTr("packets") }
+                ValueText { objectName: "value-packets"; text: (page.viewModel.packetCount.valid ? NumberFormat.fixed(page.viewModel.packetCount.value, 0) : "—") + " " + qsTr("packets") }
                 Item { Layout.fillWidth: true }
-                IdsButton {
+                CommandButton {
+                    id: safeStop
                     objectName: "command-safeStop"
+                    connection: page.connection
+                    kind: Command.SafeStop
                     variant: "danger"
                     iconPath: Icons.stop
                     text: qsTr("Safe stop")
@@ -107,8 +202,15 @@ ControlPageFrame {
                 compact: true
                 title: qsTr("Electrical angle")
                 subtitle: qsTr("Motor commutation calibration")
-                InfoRow { objectName: "value-rawPosition"; Layout.fillWidth: true; compact: true; label: qsTr("Raw position"); value: "—"; showDivider: false }
-                IdsButton { objectName: "command-electricalAngle"; Layout.fillWidth: true; text: qsTr("Start electrical angle calibration") }
+                InfoRow { objectName: "value-rawPosition"; Layout.fillWidth: true; compact: true; label: qsTr("Raw position"); value: page.viewModel.rawPosition.valid ? NumberFormat.fixed(page.viewModel.rawPosition.value, 0) : "—"; showDivider: false }
+                CommandButton {
+                    objectName: "command-electricalAngle"
+                    connection: page.connection
+                    kind: Command.StartElectricalAngleCalibration
+                    Layout.fillWidth: true
+                    text: qsTr("Start electrical angle calibration")
+                }
+                CalibrationProgress { kind: Command.StartElectricalAngleCalibration }
                 Hint {
                     Layout.fillWidth: true
                     kind: "warning"
@@ -123,8 +225,21 @@ ControlPageFrame {
                 title: qsTr("LRF")
                 subtitle: qsTr("Laser range finder checks")
                 ToggleRow { Layout.fillWidth: true; text: qsTr("Laser pointer") }
-                IdsButton { objectName: "command-crosstalk"; Layout.fillWidth: true; text: qsTr("Check optical crosstalk") }
-                StatusLabel { objectName: "value-crosstalk"; status: "idle"; text: qsTr("Not checked") }
+                CommandButton {
+                    objectName: "command-crosstalk"
+                    connection: page.connection
+                    kind: Command.StartCrosstalkCheck
+                    Layout.fillWidth: true
+                    text: qsTr("Check optical crosstalk")
+                }
+                CalibrationProgress { kind: Command.StartCrosstalkCheck }
+                StatusLabel {
+                    objectName: "value-crosstalk"
+                    readonly property crosstalkResult result: page.viewModel.crosstalk
+                    status: !result.valid ? "idle" : result.passed ? "ok" : "crit"
+                    text: !result.valid ? qsTr("Not checked")
+                        : (result.passed ? qsTr("Passed, %1%") : qsTr("Failed, %1%")).arg(NumberFormat.fixed(result.percent, 1))
+                }
             }
             Card {
                 Layout.fillWidth: true
@@ -137,11 +252,30 @@ ControlPageFrame {
                     Layout.fillWidth: true
                     columns: 3
                     columnSpacing: 8
-                    FormField { Layout.fillWidth: true; label: qsTr("Gyro X"); ValueField {} }
-                    FormField { Layout.fillWidth: true; label: qsTr("Gyro Y"); ValueField {} }
-                    FormField { Layout.fillWidth: true; label: qsTr("Gyro Z"); ValueField {} }
+                    FormField {
+                        Layout.fillWidth: true
+                        label: qsTr("Gyro X")
+                        ValueField { objectName: "value-gyroX"; readOnly: true; text: page.viewModel.imuBias.valid ? NumberFormat.fixed(page.viewModel.imuBias.x, 3) : ""; Accessible.name: qsTr("Gyro X bias") }
+                    }
+                    FormField {
+                        Layout.fillWidth: true
+                        label: qsTr("Gyro Y")
+                        ValueField { objectName: "value-gyroY"; readOnly: true; text: page.viewModel.imuBias.valid ? NumberFormat.fixed(page.viewModel.imuBias.y, 3) : ""; Accessible.name: qsTr("Gyro Y bias") }
+                    }
+                    FormField {
+                        Layout.fillWidth: true
+                        label: qsTr("Gyro Z")
+                        ValueField { objectName: "value-gyroZ"; readOnly: true; text: page.viewModel.imuBias.valid ? NumberFormat.fixed(page.viewModel.imuBias.z, 3) : ""; Accessible.name: qsTr("Gyro Z bias") }
+                    }
                 }
-                IdsButton { objectName: "command-imuBias"; Layout.fillWidth: true; text: qsTr("Start bias calibration") }
+                CommandButton {
+                    objectName: "command-imuBias"
+                    connection: page.connection
+                    kind: Command.StartImuBiasCalibration
+                    Layout.fillWidth: true
+                    text: qsTr("Start bias calibration")
+                }
+                CalibrationProgress { kind: Command.StartImuBiasCalibration }
                 Hint { Layout.fillWidth: true; text: qsTr("Keep the gimbal still for about 10 seconds.") }
             }
             Card {
@@ -155,8 +289,8 @@ ControlPageFrame {
                     Layout.fillWidth: true
                     columns: 2
                     columnSpacing: 8
-                    FormField { Layout.fillWidth: true; label: "Kp"; ValueField {} }
-                    FormField { Layout.fillWidth: true; label: "Ki"; ValueField {} }
+                    FormField { Layout.fillWidth: true; label: "Kp"; GainField { objectName: "input-filterKp"; key: "gimbal.filterKp"; Accessible.name: qsTr("Filter Kp") } }
+                    FormField { Layout.fillWidth: true; label: "Ki"; GainField { objectName: "input-filterKi"; key: "gimbal.filterKi"; Accessible.name: qsTr("Filter Ki") } }
                 }
             }
         }
@@ -171,7 +305,7 @@ ControlPageFrame {
                 Layout.fillWidth: true
                 spacing: 12
                 BarTitle { text: qsTr("Scope") }
-                LabelText { text: qsTr("Board mode %1").arg("—") }
+                LabelText { objectName: "value-boardMode"; text: qsTr("Board mode %1").arg(page.viewModel.boardMode.valid ? page.viewModel.boardMode.value : "—") }
                 IdsTabs { compact: true; showBaseline: false; model: [qsTr("Scope, 2 s"), qsTr("FFT"), qsTr("Bode sweep")] }
                 Item { Layout.fillWidth: true }
                 IdsComboBox {

@@ -63,6 +63,15 @@ public:
     {
         emit m_fake->parametersReceived(m_session->activeSessionId(), values);
     }
+    // The device reports a calibration result (answer to StartCrosstalkCheck / StartImuBiasCalibration).
+    Q_INVOKABLE void sendCrosstalk(bool passed, double percent)
+    {
+        emit m_fake->crosstalkResultReceived(m_session->activeSessionId(), {passed, percent, true});
+    }
+    Q_INVOKABLE void sendImuBias(double x, double y, double z)
+    {
+        emit m_fake->imuBiasReceived(m_session->activeSessionId(), {x, y, z, true});
+    }
     // A file of `bytes` bytes in the test directory (firmware file box).
     Q_INVOKABLE QUrl makeFile(const QString &name, qint64 bytes)
     {

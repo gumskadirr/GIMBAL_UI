@@ -10,7 +10,8 @@ bool anyValid(const DeviceSample &s)
         if (m.valid)
             return true;
     }
-    return s.safeControlLocked.valid || s.onTimeS.valid || s.inBootloader.valid;
+    return s.safeControlLocked.valid || s.onTimeS.valid || s.inBootloader.valid || s.streaming.valid
+           || s.streamRateHz.valid || s.packetCount.valid || s.rawPosition.valid || s.boardMode.valid;
 }
 } // namespace
 
@@ -34,6 +35,15 @@ MainControlViewModel::MainControlViewModel(DeviceSession *session, ServiceConnec
         emit bitReportChanged();
     });
 
+    connect(m_session, &DeviceSession::crosstalkResultAccepted, this, [this](const CrosstalkResult &result) {
+        m_crosstalk = result;
+        emit crosstalkChanged();
+    });
+    connect(m_session, &DeviceSession::imuBiasAccepted, this, [this](const ImuBias &bias) {
+        m_imuBias = bias;
+        emit imuBiasChanged();
+    });
+
     m_staleCheck.setInterval(kStaleAfterMs / 4);
     connect(&m_staleCheck, &QTimer::timeout, this, [this] {
         if (m_sinceSample.isValid() && m_sinceSample.elapsed() > kStaleAfterMs)
@@ -55,6 +65,14 @@ void MainControlViewModel::clearSessionData()
     if (m_bitReport.valid) {
         m_bitReport = BitReport{};
         emit bitReportChanged();
+    }
+    if (m_crosstalk.valid) {
+        m_crosstalk = CrosstalkResult{};
+        emit crosstalkChanged();
+    }
+    if (m_imuBias.valid) {
+        m_imuBias = ImuBias{};
+        emit imuBiasChanged();
     }
     if (!m_hasBoardInfo)
         return;

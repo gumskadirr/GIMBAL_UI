@@ -61,6 +61,12 @@ struct DeviceSample
     Flag safeControlLocked;
     Measurement onTimeS; // seconds since power on
     Flag inBootloader;   // false: the application is running
+    // Gimbal settings
+    Flag streaming;            // the device streams its scope data
+    Measurement streamRateHz;  // reported by the device (1 kHz or 2 kHz, architecture §17)
+    Measurement packetCount;
+    Measurement rawPosition;   // encoder counts of the electrical angle calibration
+    TextValue boardMode;       // raw device text, e.g. "Speed"
 };
 
 // Read once per session (on connect or on request), not streamed: valid until the session ends and never
@@ -128,6 +134,36 @@ public:
     bool valid = false; // false: no report in this session
 };
 
+// Result of the optical crosstalk check, read on request (StartCrosstalkCheck); valid until the session ends.
+struct CrosstalkResult
+{
+    Q_GADGET
+    Q_PROPERTY(bool passed MEMBER passed)
+    Q_PROPERTY(double percent MEMBER percent)
+    Q_PROPERTY(bool valid MEMBER valid)
+
+public:
+    bool passed = false;
+    double percent = 0.0;
+    bool valid = false; // false: not checked in this session
+};
+
+// Gyro offsets in deg/s, read on request (StartImuBiasCalibration); valid until the session ends.
+struct ImuBias
+{
+    Q_GADGET
+    Q_PROPERTY(double x MEMBER x)
+    Q_PROPERTY(double y MEMBER y)
+    Q_PROPERTY(double z MEMBER z)
+    Q_PROPERTY(bool valid MEMBER valid)
+
+public:
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+    bool valid = false;
+};
+
 // Where a service connects (architecture §2, §12). Plain values only: the API stays free of QtSerialPort and
 // QtNetwork types.
 struct ConnectionTarget
@@ -174,3 +210,5 @@ Q_DECLARE_METATYPE(ConnectionState)
 Q_DECLARE_METATYPE(DeviceSample)
 Q_DECLARE_METATYPE(BoardInfo)
 Q_DECLARE_METATYPE(BitReport)
+Q_DECLARE_METATYPE(CrosstalkResult)
+Q_DECLARE_METATYPE(ImuBias)

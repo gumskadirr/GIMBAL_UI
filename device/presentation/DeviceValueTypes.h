@@ -41,6 +41,20 @@ struct BitReportForeign
     QML_VALUE_TYPE(bitReport)
 };
 
+struct CrosstalkResultForeign
+{
+    Q_GADGET
+    QML_FOREIGN(CrosstalkResult)
+    QML_VALUE_TYPE(crosstalkResult)
+};
+
+struct ImuBiasForeign
+{
+    Q_GADGET
+    QML_FOREIGN(ImuBias)
+    QML_VALUE_TYPE(imuBias)
+};
+
 // QML: Command.AskBootloader, Command.Accepted ... (ServiceConnection.send / commandFinished).
 namespace CommandForeign {
 Q_NAMESPACE

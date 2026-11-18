@@ -112,6 +112,27 @@ private slots:
         QCOMPARE(finished.at(1).at(2).value<CommandResult>().status, Command::Accepted);
     }
 
+    void demoReportsStreamAndCalibrationResults()
+    {
+        DemoProvider p(5, 1000, 50);
+        QSignalSpy samples(&p, &IDeviceProvider::sampleReceived);
+        QSignalSpy crosstalk(&p, &IDeviceProvider::crosstalkResultReceived);
+        QSignalSpy finished(&p, &IDeviceProvider::commandFinished);
+        p.start(1, {});
+        QTRY_VERIFY(samples.count() >= 2);
+        const DeviceSample first = samples.at(0).at(1).value<DeviceSample>();
+        QCOMPARE(first.streamRateHz.value, 1000.0);
+        QVERIFY(samples.at(1).at(1).value<DeviceSample>().packetCount.value > first.packetCount.value);
+        p.send(1, 3, {Command::StartCrosstalkCheck, {}});
+        p.send(1, 4, {Command::StartImuBiasCalibration, {}}); // one long command at a time
+        QTRY_COMPARE(finished.count(), 1);
+        QCOMPARE(finished.at(0).at(2).value<CommandResult>().status, Command::Rejected);
+        QTRY_COMPARE_WITH_TIMEOUT(crosstalk.count(), 1, 10000);
+        QVERIFY(crosstalk.at(0).at(1).value<CrosstalkResult>().passed);
+        QTRY_COMPARE(finished.count(), 2);
+        QCOMPARE(finished.at(1).at(2).value<CommandResult>().status, Command::Accepted);
+    }
+
     void lateResultDroppedBySession()
     {
         DeviceSession session(std::make_unique<DemoProvider>(5, 1000, 30));

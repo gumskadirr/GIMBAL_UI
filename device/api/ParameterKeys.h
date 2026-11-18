@@ -52,6 +52,9 @@ inline const QList<ParameterSpec> &all()
         list.append({QStringLiteral("heater.enabled"), ParameterType::Bool, 0, 0});
         for (const char *zone : {"g1", "g2", "g3", "tv", "ir"})
             list.append({QLatin1String("heater.") + QLatin1String(zone) + QLatin1String("DutyPct"), ParameterType::Number, 0, 100});
+        // Complementary filter gains of the Gimbal settings design.
+        list.append({QStringLiteral("gimbal.filterKp"), ParameterType::Number, 0, 10000});
+        list.append({QStringLiteral("gimbal.filterKi"), ParameterType::Number, 0, 10000});
         return list;
     }();
     return specs;

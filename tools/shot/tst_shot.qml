@@ -42,6 +42,11 @@ TestCase {
         if (page === "heater") // values of the design
             testHelper.sendParameters({"heater.enabled": true, "heater.g1DutyPct": 35, "heater.g2DutyPct": 35,
                 "heater.g3DutyPct": 20, "heater.tvDutyPct": 60, "heater.irDutyPct": 45})
+        if (page === "gimbalSettings") { // values of the design
+            testHelper.sendParameters({"gimbal.filterKp": 1, "gimbal.filterKi": 0.01})
+            testHelper.sendCrosstalk(true, 0.4)
+            testHelper.sendImuBias(0.012, -0.004, 0.021)
+        }
         wait(50) // telemetry turns stale after 1 s
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
@@ -55,6 +60,8 @@ TestCase {
         shot(1536, 786, "motorControl-1536-light-tr.png", "light", "tr", "motorControl")
         shot(1536, 786, "heater-1536-dark-en.png", "dark", "en", "heater")
         shot(1536, 786, "heater-1536-light-tr.png", "light", "tr", "heater")
+        shot(1536, 786, "gimbalSettings-1536-dark-en.png", "dark", "en", "gimbalSettings")
+        shot(1536, 786, "gimbalSettings-1536-light-tr.png", "light", "tr", "gimbalSettings")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)

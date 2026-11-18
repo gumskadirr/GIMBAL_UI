@@ -83,5 +83,10 @@ inline DeviceSample makeFullSample()
     s.safeControlLocked = {true, true};
     s.onTimeS = {11520.0, true};
     s.inBootloader = {false, true};
+    s.streaming = {true, true};
+    s.streamRateHz = {2000.0, true}; // 2 kHz: the page must not assume 1 kHz
+    s.packetCount = {12480.0, true};
+    s.rawPosition = {18432.0, true};
+    s.boardMode = {QStringLiteral("Speed"), true};
     return s;
 }

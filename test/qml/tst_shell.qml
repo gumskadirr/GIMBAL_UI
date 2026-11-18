@@ -83,6 +83,25 @@ TestCase {
         compare(findChild(main.contentItem, "page-preferences").scale, 1)
     }
 
+    // Esc is Safe stop of the Gimbal settings page only: another visible page must not send it (18 Nov decision).
+    function test_escapeSendsSafeStopOnlyOnGimbalSettings() {
+        testHelper.setCommandsSupported(true)
+        testHelper.connectWithFullSample()
+        const main = createMain(true)
+        main.currentPageId = "motorControl"
+        main.requestActivate()
+        tryVerify(() => main.active)
+        const sent = testHelper.sentCount()
+        keyClick(Qt.Key_Escape)
+        compare(testHelper.sentCount(), sent)
+        main.currentPageId = "gimbalSettings"
+        tryVerify(() => pageItem(main, "gimbalSettings").pageActive)
+        keyClick(Qt.Key_Escape)
+        compare(testHelper.lastCommandKind(), Command.SafeStop)
+        compare(testHelper.sentCount(), sent + 1)
+        testHelper.setCommandsSupported(false)
+    }
+
     function test_pageList() {
         const main = createMain(true)
         compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "preferences"])

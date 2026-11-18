@@ -137,6 +137,38 @@ private slots:
         QVERIFY(!f.vm.inBootloader().valid);
     }
 
+    void streamTelemetryIsInvalidatedWithTheSession()
+    {
+        Fixture f;
+        f.connect();
+        emit f.fake->sampleReceived(1, makeFullSample());
+        QVERIFY(f.vm.streaming().valid && f.vm.streaming().value);
+        QCOMPARE(f.vm.streamRate().value, 2000.0); // whatever the device reports
+        QCOMPARE(f.vm.packetCount().value, 12480.0);
+        QCOMPARE(f.vm.rawPosition().value, 18432.0);
+        QCOMPARE(f.vm.boardMode().value, QStringLiteral("Speed"));
+        f.connection.disconnectDevice();
+        QVERIFY(!f.vm.streaming().valid && !f.vm.streamRate().valid && !f.vm.packetCount().valid);
+        QVERIFY(!f.vm.rawPosition().valid && !f.vm.boardMode().valid);
+    }
+
+    void calibrationResultsClearedWhenSessionEnds()
+    {
+        Fixture f;
+        f.connect();
+        QVERIFY(!f.vm.crosstalk().valid && !f.vm.imuBias().valid);
+        QSignalSpy crosstalk(&f.vm, &MainControlViewModel::crosstalkChanged);
+        emit f.fake->crosstalkResultReceived(1, {true, 0.4, true});
+        emit f.fake->imuBiasReceived(1, {0.012, -0.004, 0.021, true});
+        emit f.fake->crosstalkResultReceived(99, {false, 9.0, true}); // another session: dropped
+        QCOMPARE(crosstalk.count(), 1);
+        QVERIFY(f.vm.crosstalk().passed);
+        QCOMPARE(f.vm.crosstalk().percent, 0.4);
+        QCOMPARE(f.vm.imuBias().y, -0.004);
+        f.connection.disconnectDevice();
+        QVERIFY(!f.vm.crosstalk().valid && !f.vm.imuBias().valid);
+    }
+
     void becomesStale()
     {
         Fixture f;

@@ -35,6 +35,14 @@ class MainControlViewModel : public QObject
     // Read once per session; not affected by the telemetry stale timeout.
     Q_PROPERTY(BoardInfo boardInfo READ boardInfo NOTIFY boardInfoChanged)
     Q_PROPERTY(BitReport bitReport READ bitReport NOTIFY bitReportChanged) // valid is false without a report
+    Q_PROPERTY(Flag streaming READ streaming NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement streamRate READ streamRate NOTIFY measurementsChanged) // Hz
+    Q_PROPERTY(Measurement packetCount READ packetCount NOTIFY measurementsChanged)
+    Q_PROPERTY(Measurement rawPosition READ rawPosition NOTIFY measurementsChanged)
+    Q_PROPERTY(TextValue boardMode READ boardMode NOTIFY measurementsChanged)
+    // Calibration results, read on request; valid is false until a result arrives in this session.
+    Q_PROPERTY(CrosstalkResult crosstalk READ crosstalk NOTIFY crosstalkChanged)
+    Q_PROPERTY(ImuBias imuBias READ imuBias NOTIFY imuBiasChanged)
 
 public:
     static constexpr int kStaleAfterMs = 1000;
@@ -55,6 +63,13 @@ public:
     Flag inBootloader() const { return m_sample.inBootloader; }
     BoardInfo boardInfo() const { return m_boardInfo; }
     BitReport bitReport() const { return m_bitReport; }
+    Flag streaming() const { return m_sample.streaming; }
+    Measurement streamRate() const { return m_sample.streamRateHz; }
+    Measurement packetCount() const { return m_sample.packetCount; }
+    Measurement rawPosition() const { return m_sample.rawPosition; }
+    TextValue boardMode() const { return m_sample.boardMode; }
+    CrosstalkResult crosstalk() const { return m_crosstalk; }
+    ImuBias imuBias() const { return m_imuBias; }
 
     // -1 when there is no current (non-stale) sample.
     Q_INVOKABLE qint64 msSinceLastSample() const { return m_sinceSample.isValid() ? m_sinceSample.elapsed() : -1; }
@@ -63,6 +78,8 @@ signals:
     void measurementsChanged();
     void boardInfoChanged();
     void bitReportChanged();
+    void crosstalkChanged();
+    void imuBiasChanged();
 
 private:
     void invalidate();       // telemetry only (also on stale timeout)
@@ -78,4 +95,6 @@ private:
     BoardInfo m_boardInfo; // default-constructed = all invalid
     bool m_hasBoardInfo = false;
     BitReport m_bitReport; // valid = false until a report arrives
+    CrosstalkResult m_crosstalk;
+    ImuBias m_imuBias;
 };

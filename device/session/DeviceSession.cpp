@@ -13,6 +13,16 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
                 if (isActive(sessionId))
                     emit bitReportAccepted(report);
             });
+    connect(m_provider.get(), &IDeviceProvider::crosstalkResultReceived, this,
+            [this](quint64 sessionId, const CrosstalkResult &result) {
+                if (isActive(sessionId))
+                    emit crosstalkResultAccepted(result);
+            });
+    connect(m_provider.get(), &IDeviceProvider::imuBiasReceived, this,
+            [this](quint64 sessionId, const ImuBias &bias) {
+                if (isActive(sessionId))
+                    emit imuBiasAccepted(bias);
+            });
     connect(m_provider.get(), &IDeviceProvider::commandProgress, this,
             [this](quint64 sessionId, quint64 requestId, int percent, const QString &stage) {
                 const auto it = m_pending.constFind(requestId);

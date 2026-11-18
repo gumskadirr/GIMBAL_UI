@@ -35,6 +35,8 @@ signals:
     void sampleReceived(quint64 sessionId, const DeviceSample &sample); // streamed telemetry
     void boardInfoReceived(quint64 sessionId, const BoardInfo &info);   // read-once data, any time in a session
     void bitReportReceived(quint64 sessionId, const BitReport &report); // after RunBit and on connect
+    void crosstalkResultReceived(quint64 sessionId, const CrosstalkResult &result); // after StartCrosstalkCheck
+    void imuBiasReceived(quint64 sessionId, const ImuBias &bias);                   // after StartImuBiasCalibration
     // Progress of a long command (e.g. UpdateFirmware): percent 0-100 and a raw stage text; the final
     // answer still comes with commandFinished.
     void commandProgress(quint64 sessionId, quint64 requestId, int percent, const QString &stage);

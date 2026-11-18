@@ -20,6 +20,7 @@ void DemoProvider::start(quint64 sessionId, const ConnectionTarget &)
     stop();
     m_sessionId = sessionId;
     m_n = 0;
+    m_streaming = true;
     QTimer::singleShot(0, this, [this, sessionId] {
         if (m_sessionId != sessionId)
             return; // stopped before the connection "completed"
@@ -46,15 +47,24 @@ void DemoProvider::stop()
 
 void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceCommand &command)
 {
-    if (command.kind == Command::UpdateFirmware) { // no fixed delay: progress starts at once, the answer ends it
+    const bool calibration = command.kind == Command::StartElectricalAngleCalibration
+                             || command.kind == Command::StartCrosstalkCheck || command.kind == Command::StartImuBiasCalibration;
+    if ((command.kind == Command::UpdateFirmware || calibration) && m_firmwareRequest != 0) {
+        QTimer::singleShot(0, this, [this, sessionId, requestId] {
+            emit commandFinished(sessionId, requestId, {Command::Rejected, QStringLiteral("Another long command is running")});
+        });
+        return;
+    }
+    if (command.kind == Command::UpdateFirmware || calibration) { // no fixed delay: progress starts at once, the answer ends it
+        m_longKind = command.kind;
         m_firmwareSession = sessionId;
         m_firmwareRequest = requestId;
         m_firmwarePercent = 0;
         m_firmwareTimer.start();
-        QTimer::singleShot(0, this, [this, sessionId, requestId] { emit commandProgress(sessionId, requestId, 0, QStringLiteral("Erasing")); });
+        QTimer::singleShot(0, this, [this, sessionId, requestId, calibration] { emit commandProgress(sessionId, requestId, 0, calibration ? QString() : QStringLiteral("Erasing")); });
         return;
     }
-    if (command.kind == Command::CancelFirmwareUpdate && m_firmwareRequest != 0) {
+    if (command.kind == Command::CancelFirmwareUpdate && m_firmwareRequest != 0 && m_longKind == Command::UpdateFirmware) {
         m_firmwareTimer.stop();
         const quint64 request = std::exchange(m_firmwareRequest, 0);
         QTimer::singleShot(0, this, [this, request] { emit commandFinished(m_firmwareSession, request, {Command::Cancelled, {}}); });
@@ -78,6 +88,10 @@ void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceComman
             emit parametersReceived(sessionId, values);
             break;
         }
+        case Command::StartStream:
+        case Command::StopStream:
+            m_streaming = command.kind == Command::StartStream;
+            break;
         case Command::RunBit:
             emit bitReportReceived(sessionId, sampleBitReport(QTime::currentTime().toString(QStringLiteral("HH:mm:ss")) + QStringLiteral(" manual run")));
             break;
@@ -91,11 +105,16 @@ void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceComman
 void DemoProvider::firmwareStep()
 {
     m_firmwarePercent += 1;
-    const QString stage = m_firmwarePercent < 15 ? QStringLiteral("Erasing")
+    const QString stage = m_longKind != Command::UpdateFirmware ? QString()
+                        : m_firmwarePercent < 15 ? QStringLiteral("Erasing")
                         : m_firmwarePercent < 90 ? QStringLiteral("Writing") : QStringLiteral("Verifying");
     emit commandProgress(m_firmwareSession, m_firmwareRequest, m_firmwarePercent, stage);
     if (m_firmwarePercent >= 100) {
         m_firmwareTimer.stop();
+        if (m_longKind == Command::StartCrosstalkCheck)
+            emit crosstalkResultReceived(m_firmwareSession, {true, 0.4, true});
+        else if (m_longKind == Command::StartImuBiasCalibration)
+            emit imuBiasReceived(m_firmwareSession, {0.012, -0.004, 0.021, true});
         emit commandFinished(m_firmwareSession, std::exchange(m_firmwareRequest, 0), {Command::Accepted, {}});
     }
 }
@@ -111,6 +130,10 @@ QVariantMap DemoProvider::defaultParameters()
             values.insert(spec.key, spec.type == ParameterType::Bool ? QVariant(true)
                           : QVariant(zone == QLatin1String("g1") || zone == QLatin1String("g2") ? 35.0
                                    : zone == QLatin1String("g3") ? 20.0 : zone == QLatin1String("tv") ? 60.0 : 45.0));
+            continue;
+        }
+        if (spec.key.startsWith(QLatin1String("gimbal."))) { // values of the Gimbal settings design
+            values.insert(spec.key, spec.key.endsWith(QLatin1String("Kp")) ? 1.0 : 0.01);
             continue;
         }
         switch (spec.type) {
@@ -134,7 +157,9 @@ void DemoProvider::tick()
         emit stateChanged(m_sessionId, ConnectionState::Error, QStringLiteral("Simulated link loss"));
         return;
     }
-    emit sampleReceived(m_sessionId, sampleAt(m_n++));
+    DeviceSample sample = sampleAt(m_n++);
+    sample.streaming.value = m_streaming;
+    emit sampleReceived(m_sessionId, sample);
 }
 
 BoardInfo DemoProvider::sampleBoardInfo()
@@ -191,5 +216,10 @@ DeviceSample DemoProvider::sampleAt(int n)
     s.safeControlLocked = {(n / 100) % 2 == 0, true};
     s.onTimeS = {11520.0 + n / 10, true}; // 3 h 12 min at the start (design), 10 samples per second
     s.inBootloader = {false, true};
+    s.streaming = {true, true};
+    s.streamRateHz = {1000.0, true};
+    s.packetCount = {12480.0 + 100.0 * n, true}; // 1 kHz, 10 samples per second
+    s.rawPosition = {18432.0 + n, true};
+    s.boardMode = {QStringLiteral("Speed"), true};
     return s;
 }
