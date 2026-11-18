@@ -33,6 +33,8 @@ TestCase {
         testLocalization.setLanguage("en")
         testNotifications.clear()
         testSettings.theme = "dark"
+        testSettings.lastPage = ""
+        compare(testSettings.lastPage, "")
     }
 
     // Option 2 (plan adim-08): Gimbal info keeps the reference layout and shrinks uniformly to fit a maximized
@@ -106,6 +108,25 @@ TestCase {
         const main = createMain(true)
         compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "preferences"])
         compare(main.activePageId, "gimbalInfo")
+    }
+
+    function test_startsOnLastPage_data() {
+        return [
+            { tag: "heater", saved: "heater", shown: "heater" },
+            { tag: "removedPage", saved: "diagnostics", shown: "gimbalInfo" },
+            { tag: "empty", saved: "", shown: "gimbalInfo" }
+        ]
+    }
+    function test_startsOnLastPage(data) {
+        testSettings.lastPage = data.saved
+        const main = createMain(true)
+        compare(main.activePageId, data.shown)
+    }
+
+    function test_pageChangeWritesLastPage() {
+        const main = createMain(true)
+        main.currentPageId = "motorControl"
+        compare(testSettings.lastPage, "motorControl")
     }
 
     function test_switchingKeepsPagesAndStopsInactiveWork() {

@@ -941,23 +941,23 @@
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="48"/>
+        <location filename="../app/Main.qml" line="50"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="161"/>
+        <location filename="../app/Main.qml" line="163"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="19"/>
-        <location filename="../app/Main.qml" line="120"/>
+        <location filename="../app/Main.qml" line="122"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="156"/>
+        <location filename="../app/Main.qml" line="158"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>

@@ -89,3 +89,4 @@ Otonom uygulama sırasında verilen kararlar; en yenisi altta.
 - **T14b — Çizim:** Pencere kendi görünürlüğüyle çizer (`active: visible`); kapanınca timer durur, `version` sabit kalır. Pencere ayrı bir pencere olduğundan açık kalan sayfa durumundan bağımsızdır.
 - **T14b — Bağlantı rozeti:** Üst çubuktaki rozet durum çubuğu düğmesiyle aynı mantıkla `activeConnection`'ı gösterir (görünen sayfanın hizmeti; hizmetsiz sayfada Main control). T16 ikinci hizmeti `connections`'a ekleyince rozet kendiliğinden izler.
 - **T14b — Model düğmesi:** "GIMBAL G180 · v2.0" gösterilmez (17 Kasım kararı).
+- **T15 — Son sayfa kimliği:** `lastPage` herhangi bir dizgiyi saklar, doğrulama Main.qml'de (`currentIndex` bilinmeyen kimliği ilk sayfaya düşürür); açılışta ilk sayfa gösterilir ama kayıtlı kimlik, kullanıcı sayfa değiştirene kadar korunur — doğrulamayı tek yerde (sayfa kaydı) tutmak için.

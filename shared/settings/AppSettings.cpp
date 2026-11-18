@@ -5,6 +5,7 @@ const QStringList kThemes{QStringLiteral("dark"), QStringLiteral("light"), QStri
 const QStringList kLanguages{QStringLiteral("tr"), QStringLiteral("en")};
 const QString kThemeKey = QStringLiteral("ui/theme");
 const QString kLanguageKey = QStringLiteral("ui/language");
+const QString kLastPageKey = QStringLiteral("ui/lastPage");
 
 QString validOr(const QString &value, const QStringList &allowed)
 {
@@ -34,6 +35,7 @@ void AppSettings::load()
     const auto settings = open();
     m_theme = validOr(settings->value(kThemeKey).toString(), kThemes);
     m_language = validOr(settings->value(kLanguageKey).toString(), kLanguages);
+    m_lastPage = settings->value(kLastPageKey).toString();
 }
 
 void AppSettings::setTheme(const QString &theme)
@@ -52,6 +54,15 @@ void AppSettings::setLanguage(const QString &language)
     m_language = language;
     emit languageChanged();
     write(kLanguageKey, language);
+}
+
+void AppSettings::setLastPage(const QString &page)
+{
+    if (page == m_lastPage)
+        return;
+    m_lastPage = page;
+    emit lastPageChanged();
+    write(kLastPageKey, page);
 }
 
 void AppSettings::write(const QString &key, const QString &value)

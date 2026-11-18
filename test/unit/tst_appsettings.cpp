@@ -37,6 +37,17 @@ private slots:
         QCOMPARE(s2.language(), QStringLiteral("en"));
     }
 
+    void lastPagePersists()
+    {
+        {
+            AppSettings s(path());
+            QCOMPARE(s.lastPage(), QString());
+            s.setLastPage(QStringLiteral("heater"));
+        }
+        AppSettings s2(path());
+        QCOMPARE(s2.lastPage(), QStringLiteral("heater"));
+    }
+
     void invalidStoredValuesFallBack()
     {
         {

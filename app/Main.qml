@@ -33,7 +33,9 @@ ApplicationWindow {
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
-    property string currentPageId: ""
+    // Starts on the page open at last exit; an unknown (e.g. removed) id falls back to the first page via currentIndex.
+    property string currentPageId: settings.lastPage
+    onCurrentPageIdChanged: settings.lastPage = currentPageId
     readonly property int currentIndex: Math.max(0, pages.findIndex(page => page.id === window.currentPageId))
     readonly property string activePageId: pages[currentIndex].id
     // Connection of the visible page's service; pages without one (preferences) show the Main control service.
