@@ -25,11 +25,13 @@ ApplicationWindow {
           icon: Icons.info, component: gimbalInfoPage, designHeight: 768 },
         { id: "motorControl", service: "mainControl", group: qsTr("Control"), title: qsTr("Motor control"),
           icon: Icons.motor, component: motorControlPage, designHeight: 860 },
+        { id: "gimbalSettings", service: "mainControl", group: qsTr("Control"), title: qsTr("Gimbal settings"),
+          icon: Icons.sliders, component: gimbalSettingsPage, designHeight: 680 },
         { id: "heater", service: "mainControl", group: qsTr("Hardware"), title: qsTr("Heater"),
           icon: Icons.heater, component: heaterPage },
         { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
           component: diagnosticsPage, demoOnly: true },
-        { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.sliders,
+        { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ].filter(page => window.demoMode || !page.demoOnly)
     property string currentPageId: ""
@@ -76,6 +78,12 @@ ApplicationWindow {
     Component {
         id: motorControlPage
         MotorControlPage {
+            viewModel: window.deviceViewModel
+        }
+    }
+    Component {
+        id: gimbalSettingsPage
+        GimbalSettingsPage {
             viewModel: window.deviceViewModel
         }
     }

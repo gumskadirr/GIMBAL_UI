@@ -76,12 +76,15 @@ qt_add_qml_module(ids_gimbal
         shared/ui/IdsProgressBar.qml
         shared/ui/IdsSlider.qml
         shared/ui/ConnectionPopup.qml
+        shared/ui/Kbd.qml
+        shared/ui/IdsTabs.qml
         shared/notifications/NotificationArea.qml
         features/diagnostics/DiagnosticsPage.qml
         features/maincontrol/ControlPageFrame.qml
         features/maincontrol/SectionHeading.qml
         features/maincontrol/GimbalInfoPage.qml
         features/maincontrol/MotorControlPage.qml
+        features/maincontrol/GimbalSettingsPage.qml
         features/maincontrol/HeaterPage.qml
     RESOURCES
         assets/icons/ids_logo.png

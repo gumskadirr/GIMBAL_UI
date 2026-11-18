@@ -12,6 +12,7 @@ T.Button {
     property string iconPath: ""
     property string trailingIconPath: ""
     property bool compact: false
+    property string shortcutHint: "" // e.g. "Esc": shown as a key cap inside the button
 
     readonly property color _bg: {
         if (checked)
@@ -70,6 +71,12 @@ T.Button {
                 font: control.font
                 color: control._fg
                 visible: text !== ""
+            }
+            Kbd {
+                anchors.verticalCenter: parent.verticalCenter
+                visible: control.shortcutHint !== ""
+                text: control.shortcutHint
+                inverted: control.variant === "primary" || control.variant === "danger"
             }
             Icon {
                 width: 15; height: 15
