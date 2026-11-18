@@ -17,7 +17,7 @@ TestCase {
         testLocalization.setLanguage(lang)
         const c = Qt.createComponent("IDS_GIMBAL", "Main")
         const main = createTemporaryObject(c, testCase, { settings: testSettings, localization: testLocalization,
-            notifications: testNotifications, deviceViewModel: testDeviceViewModel, demoMode: false })
+            notifications: testNotifications, mainControl: testMainControl, demoMode: false })
         main.visibility = Window.Windowed
         main.width = w
         main.height = h

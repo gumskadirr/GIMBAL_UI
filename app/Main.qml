@@ -9,7 +9,7 @@ ApplicationWindow {
     required property AppSettings settings
     required property Localization localization
     required property NotificationModel notifications
-    required property DeviceViewModel deviceViewModel
+    required property MainControlViewModel mainControl
     required property bool demoMode
 
     // Page registry (architecture §11): the only place a page is listed; menu and content are built from it.
@@ -52,12 +52,12 @@ ApplicationWindow {
     }
     // Architecture §12, rule 1: without saved settings the connection settings open at startup (real target).
     Component.onCompleted: {
-        if (!window.demoMode && !window.deviceViewModel.connectionConfigured)
+        if (!window.demoMode && !window.mainControl.connection.configured)
             Qt.callLater(window.openConnectionSettings)
     }
     function openConnectionSettings() {
-        connectionPopup.prepare(window.deviceViewModel.connectionTarget(),
-                                window.deviceViewModel.availableSerialPorts())
+        connectionPopup.prepare(window.mainControl.connection.target(),
+                                window.mainControl.connection.availableSerialPorts())
         connectionPopup.open()
     }
 
@@ -70,25 +70,25 @@ ApplicationWindow {
     Component {
         id: gimbalInfoPage
         GimbalInfoPage {
-            viewModel: window.deviceViewModel
+            viewModel: window.mainControl
         }
     }
     Component {
         id: motorControlPage
         MotorControlPage {
-            viewModel: window.deviceViewModel
+            viewModel: window.mainControl
         }
     }
     Component {
         id: gimbalSettingsPage
         GimbalSettingsPage {
-            viewModel: window.deviceViewModel
+            viewModel: window.mainControl
         }
     }
     Component {
         id: heaterPage
         HeaterPage {
-            viewModel: window.deviceViewModel
+            viewModel: window.mainControl
         }
     }
     Component {
@@ -108,8 +108,8 @@ ApplicationWindow {
                 logoSource: Qt.resolvedUrl("../assets/icons/ids_logo.png")
                 title: "IDS Control"
                 subtitle: qsTr("Main control service")
-                connected: window.deviceViewModel.connected
-                connectionLabel: window.deviceViewModel.connectionText
+                connected: window.mainControl.connection.connected
+                connectionLabel: window.mainControl.connection.statusText
             }
             Repeater {
                 model: window.pages.length
@@ -148,11 +148,11 @@ ApplicationWindow {
             StatusLabel {
                 objectName: "connectionStatus"
                 framed: true
-                status: window.deviceViewModel.hasError ? "crit"
-                      : window.deviceViewModel.connected ? "ok"
-                      : window.deviceViewModel.busy ? "warn"
+                status: window.mainControl.connection.hasError ? "crit"
+                      : window.mainControl.connection.connected ? "ok"
+                      : window.mainControl.connection.busy ? "warn"
                       : "idle"
-                text: window.deviceViewModel.connectionText
+                text: window.mainControl.connection.statusText
             }
         }
 
@@ -237,7 +237,7 @@ ApplicationWindow {
                 StatusBarButton {
                     id: connectionButton
                     objectName: "connectionButton"
-                    text: window.deviceViewModel.connectionSummary
+                    text: window.mainControl.connection.summary
                     trailingIconPath: Icons.chevronUp
                     expanded: connectionPopup.opened
                     onClicked: connectionPopup.opened ? connectionPopup.close() : window.openConnectionSettings()
@@ -248,10 +248,10 @@ ApplicationWindow {
                         x: connectionButton.width - width
                         y: -height - 14
                         width: 400
-                        connected: window.deviceViewModel.connected
-                        canDisconnect: window.deviceViewModel.connected || window.deviceViewModel.busy
-                        onApplyRequested: settings => window.deviceViewModel.applyConnection(settings)
-                        onDisconnectRequested: window.deviceViewModel.disconnectDevice()
+                        connected: window.mainControl.connection.connected
+                        canDisconnect: window.mainControl.connection.connected || window.mainControl.connection.busy
+                        onApplyRequested: settings => window.mainControl.connection.apply(settings)
+                        onDisconnectRequested: window.mainControl.connection.disconnectDevice()
                     }
                 }
             }

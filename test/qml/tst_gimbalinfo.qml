@@ -3,7 +3,7 @@ import QtTest
 import IDS_GIMBAL
 import "TestUtils.js" as TestUtils
 
-// Gimbal info summary strip against the real DeviceViewModel (data from tst_qml.cpp's fake provider).
+// Gimbal info summary strip against the real MainControlViewModel (data from tst_qml.cpp's fake provider).
 TestCase {
     id: testCase
     name: "GimbalInfo"
@@ -16,7 +16,7 @@ TestCase {
         GimbalInfoPage {
             width: testCase.width
             height: testCase.height
-            viewModel: testDeviceViewModel
+            viewModel: testMainControl
         }
     }
 

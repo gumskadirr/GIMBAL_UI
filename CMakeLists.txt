@@ -28,7 +28,8 @@ qt_add_qml_module(ids_gimbal
         shared/notifications/NotificationModel.h shared/notifications/NotificationModel.cpp
         device/api/DeviceTypes.h device/api/IDeviceProvider.h
         device/session/DeviceSession.h device/session/DeviceSession.cpp
-        device/presentation/DeviceViewModel.h device/presentation/DeviceViewModel.cpp
+        device/presentation/ServiceConnection.h device/presentation/ServiceConnection.cpp
+        device/presentation/MainControlViewModel.h device/presentation/MainControlViewModel.cpp
         device/presentation/DeviceValueTypes.h
         device/session/ConnectionStore.h device/session/ConnectionStore.cpp
         device/transport/TransportProvider.h device/transport/TransportProvider.cpp

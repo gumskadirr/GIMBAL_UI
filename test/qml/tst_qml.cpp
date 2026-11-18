@@ -11,7 +11,7 @@
 
 #include "../unit/FakeProvider.h"
 #include "app/AppRunner.h"
-#include "device/presentation/DeviceViewModel.h"
+#include "device/presentation/MainControlViewModel.h"
 #include "device/session/DeviceSession.h"
 #include "shared/localization/Localization.h"
 #include "shared/notifications/NotificationModel.h"
@@ -73,21 +73,23 @@ public slots:
         m_fake = fake.get();
         m_session = std::make_unique<DeviceSession>(std::move(fake));
         m_session->setTarget(loopbackTarget());
-        m_viewModel = std::make_unique<DeviceViewModel>(m_session.get());
+        m_connection = std::make_unique<ServiceConnection>(m_session.get());
+        m_mainControl = std::make_unique<MainControlViewModel>(m_session.get(), m_connection.get());
         // The application's own service wiring (AppRunner), not a copy of it.
-        connectServices(*m_settings, *m_notifications, *m_localization, *m_session, *m_viewModel);
+        connectServices(*m_settings, *m_notifications, *m_localization, *m_session, *m_connection);
     }
 
     void qmlEngineAvailable(QQmlEngine *engine)
     {
         for (QObject *o : std::initializer_list<QObject *>{m_settings.get(), m_notifications.get(),
-                                                           m_localization.get(), m_viewModel.get(), this})
+                                                           m_localization.get(), m_connection.get(),
+                                                           m_mainControl.get(), this})
             QJSEngine::setObjectOwnership(o, QJSEngine::CppOwnership);
         QQmlContext *context = engine->rootContext();
         context->setContextProperty(QStringLiteral("testSettings"), m_settings.get());
         context->setContextProperty(QStringLiteral("testNotifications"), m_notifications.get());
         context->setContextProperty(QStringLiteral("testLocalization"), m_localization.get());
-        context->setContextProperty(QStringLiteral("testDeviceViewModel"), m_viewModel.get());
+        context->setContextProperty(QStringLiteral("testMainControl"), m_mainControl.get());
         context->setContextProperty(QStringLiteral("testHelper"), this);
         QObject::connect(m_localization.get(), &Localization::languageChanged, engine, &QQmlEngine::retranslate);
     }
@@ -99,7 +101,8 @@ private:
     std::unique_ptr<Localization> m_localization;
     FakeProvider *m_fake = nullptr; // owned by m_session
     std::unique_ptr<DeviceSession> m_session;
-    std::unique_ptr<DeviceViewModel> m_viewModel;
+    std::unique_ptr<ServiceConnection> m_connection;
+    std::unique_ptr<MainControlViewModel> m_mainControl;
 };
 
 QUICK_TEST_MAIN_WITH_SETUP(ids_gimbal_qml, Setup)

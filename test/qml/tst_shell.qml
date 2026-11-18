@@ -15,7 +15,7 @@ TestCase {
             settings: testSettings,
             localization: testLocalization,
             notifications: testNotifications,
-            deviceViewModel: testDeviceViewModel,
+            mainControl: testMainControl,
             demoMode: demoMode
         })
         verify(main)
@@ -151,12 +151,12 @@ TestCase {
         verify(apply.enabled)
         mouseClick(apply)
         tryCompare(popup, "opened", false)
-        const target = testDeviceViewModel.connectionTarget()
+        const target = testMainControl.connection.target()
         compare(target.transport, "udp")
         compare(target.host, "10.0.0.7")
         compare(target.port, 6000)
         compare(button.text, "IP/UDP · 10.0.0.7:6000")
-        verify(testDeviceViewModel.busy) // connecting
+        verify(testMainControl.connection.busy) // connecting
     }
 
     // Rule 1: the real application without saved settings opens them at startup; the demo does not.

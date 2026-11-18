@@ -5,7 +5,7 @@ import IDS_GIMBAL
 
 // Gimbal settings page of the final design (3D card | settings, 1:2), without the charts (later step).
 // Display only: stream, script, calibrations and gains need the device protocol (architecture §7), so values show
-// "—" and every input and command is disabled through viewModel.commandsAvailable.
+// "—" and every input and command is disabled through viewModel.connection.commandsAvailable.
 // Not taken from the design: the "1 kHz" stream badge (rate comes from the device; 1 vs 2 kHz is open, §17).
 ControlPageFrame {
     id: page
@@ -37,7 +37,7 @@ ControlPageFrame {
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: 8
-        enabled: page.viewModel.commandsAvailable // every input and command at once (Adım 10)
+        enabled: page.viewModel.connection.commandsAvailable // every input and command at once (Adım 10)
 
         // Stream
         CardBackground {

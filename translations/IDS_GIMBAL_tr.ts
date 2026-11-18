@@ -167,34 +167,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceViewModel</name>
-    <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="42"/>
-        <source>Disconnected</source>
-        <translation>Bağlantı yok</translation>
-    </message>
-    <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="43"/>
-        <source>Connecting</source>
-        <translation>Bağlanıyor</translation>
-    </message>
-    <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="44"/>
-        <source>Connected</source>
-        <translation>Bağlı</translation>
-    </message>
-    <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="45"/>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <location filename="../device/presentation/DeviceViewModel.cpp" line="63"/>
-        <source>Not configured</source>
-        <translation>Ayarlanmadı</translation>
-    </message>
-</context>
-<context>
     <name>GimbalInfoPage</name>
     <message>
         <location filename="../features/maincontrol/GimbalInfoPage.qml" line="16"/>
@@ -1113,6 +1085,34 @@
         <location filename="../shared/ui/RailBrand.qml" line="13"/>
         <source>Disconnected</source>
         <translation>Bağlantı yok</translation>
+    </message>
+</context>
+<context>
+    <name>ServiceConnection</name>
+    <message>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="17"/>
+        <source>Disconnected</source>
+        <translation>Bağlantı yok</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="18"/>
+        <source>Connecting</source>
+        <translation>Bağlanıyor</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="19"/>
+        <source>Connected</source>
+        <translation>Bağlı</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="20"/>
+        <source>Error</source>
+        <translation>Hata</translation>
+    </message>
+    <message>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="38"/>
+        <source>Not configured</source>
+        <translation>Ayarlanmadı</translation>
     </message>
 </context>
 </TS>

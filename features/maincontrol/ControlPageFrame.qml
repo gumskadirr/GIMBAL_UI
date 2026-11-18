@@ -10,7 +10,7 @@ import IDS_GIMBAL
 // Display only. No "NORMAL" badges: temperature and voltage limits are not known yet and are not invented.
 Item {
     id: page
-    required property DeviceViewModel viewModel
+    required property MainControlViewModel viewModel
     // Set by Main.qml: true only while the page is visible. Rule for every page: timers, charts, video and other
     // heavy redraws stop while it is false; data reception and connections continue (architecture §11).
     property bool pageActive: false

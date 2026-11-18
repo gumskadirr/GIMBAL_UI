@@ -5,7 +5,7 @@ import IDS_GIMBAL
 
 // Motor control page of the final design (three equal columns: 3D card | Motor configuration | Control).
 // Display only: parameters and commands need the device protocol (architecture §7, §13), so every input
-// and command is disabled through viewModel.commandsAvailable and fields stay empty.
+// and command is disabled through viewModel.connection.commandsAvailable and fields stay empty.
 // Not taken from the design: the "N UNSAVED CHANGES" badge (nothing can be edited), the command range and
 // the torque unit (device limits), and the option lists (they come from the device).
 ControlPageFrame {
@@ -35,7 +35,7 @@ ControlPageFrame {
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: 12
-        enabled: page.viewModel.commandsAvailable // every input and command at once (Adım 10)
+        enabled: page.viewModel.connection.commandsAvailable // every input and command at once (Adım 10)
 
         // Motor configuration
         ColumnLayout {

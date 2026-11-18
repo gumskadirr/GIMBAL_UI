@@ -5,7 +5,7 @@ import IDS_GIMBAL
 
 // Heater page of the final design (3D card | heater settings, 1:2).
 // Display only: duty cycles and commands need the device protocol (architecture §7), so values show "—",
-// bars stay empty and every input and command is disabled through viewModel.commandsAvailable.
+// bars stay empty and every input and command is disabled through viewModel.connection.commandsAvailable.
 // Zone names (G1, G2, G3, TV, IR) are the same in the design and in the existing application.
 ControlPageFrame {
     id: page
@@ -13,7 +13,7 @@ ControlPageFrame {
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 8
-        enabled: page.viewModel.commandsAvailable // every input and command at once (Adım 10)
+        enabled: page.viewModel.connection.commandsAvailable // every input and command at once (Adım 10)
 
         RowLayout {
             Layout.fillWidth: true

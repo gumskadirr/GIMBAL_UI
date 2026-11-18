@@ -3,7 +3,7 @@ import QtTest
 import IDS_GIMBAL
 import "TestUtils.js" as TestUtils
 
-// Heater page against the real DeviceViewModel (data from tst_qml.cpp's fake provider).
+// Heater page against the real MainControlViewModel (data from tst_qml.cpp's fake provider).
 TestCase {
     id: testCase
     name: "Heater"
@@ -16,7 +16,7 @@ TestCase {
         HeaterPage {
             width: testCase.width
             height: testCase.height
-            viewModel: testDeviceViewModel
+            viewModel: testMainControl
         }
     }
 

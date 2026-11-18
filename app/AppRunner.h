@@ -20,12 +20,12 @@ class AppSettings;
 class NotificationModel;
 class Localization;
 class DeviceSession;
-class DeviceViewModel;
+class ServiceConnection;
 
 // Connections between the application services (architecture §10: language choice is saved and C++ texts
 // are retranslated; device and settings errors become notifications). Used by runApp and by the QML test
 // setup, so the tests run the application's own wiring. QML retranslation is connected separately.
 void connectServices(AppSettings &settings, NotificationModel &notifications, Localization &localization,
-                     DeviceSession &session, DeviceViewModel &deviceViewModel);
+                     DeviceSession &session, ServiceConnection &connection);
 
 int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDeviceProvider> provider);

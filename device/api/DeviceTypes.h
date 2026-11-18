@@ -45,7 +45,7 @@ public:
 };
 
 // Streamed telemetry: arrives continuously and is treated as stale shortly after it stops
-// (DeviceViewModel::kStaleAfterMs). Display fields of the Gimbal info summary, named and scaled after the
+// (MainControlViewModel::kStaleAfterMs). Display fields of the Gimbal info summary, named and scaled after the
 // final design.
 // shortcut: names, units and scale are taken from the design, not the protocol; recheck every field
 // when the protocol document arrives (architecture §7). Commands never go into this struct.
