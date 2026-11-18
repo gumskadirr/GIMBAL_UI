@@ -93,6 +93,11 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
                          notifications.add(QStringLiteral("parameters.fileFailed"), {file}, NotificationModel::Error,
                                            reason);
                      });
+    QObject::connect(mainControl.recorder(), &CsvRecorder::failed, &notifications,
+                     [&](const QString &file, const QString &reason) {
+                         notifications.add(QStringLiteral("recording.failed"), {file}, NotificationModel::Error,
+                                           reason);
+                     });
     QQmlApplicationEngine engine;
 
     // First languageChanged handler: QML bindings are refreshed before the C++ models.

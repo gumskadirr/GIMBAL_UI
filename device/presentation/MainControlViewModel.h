@@ -6,6 +6,7 @@
 #include <QtQml/qqmlregistration.h>
 
 #include "device/api/DeviceTypes.h"
+#include "features/telemetry/CsvRecorder.h"
 #include "device/presentation/ParameterModel.h"
 #include "device/presentation/ServiceConnection.h"
 
@@ -21,6 +22,7 @@ class MainControlViewModel : public QObject
     QML_UNCREATABLE("Owned by the application")
     Q_PROPERTY(ServiceConnection *connection READ connection CONSTANT)
     Q_PROPERTY(ParameterModel *parameters READ parameters CONSTANT)
+    Q_PROPERTY(CsvRecorder *recorder READ recorder CONSTANT)
     // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
     Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement panRef READ panRef NOTIFY measurementsChanged)
@@ -51,6 +53,7 @@ public:
 
     ServiceConnection *connection() const { return m_connection; }
     ParameterModel *parameters() { return &m_parameters; }
+    CsvRecorder *recorder() { return &m_recorder; }
     Measurement pan() const { return m_sample.panDeg; }
     Measurement panRef() const { return m_sample.panRefDeg; }
     Measurement tilt() const { return m_sample.tiltDeg; }
@@ -89,6 +92,7 @@ private:
     DeviceSession *m_session;
     ServiceConnection *m_connection;
     ParameterModel m_parameters;
+    CsvRecorder m_recorder;
     DeviceSample m_sample; // default-constructed = all invalid
     QElapsedTimer m_sinceSample;
     QTimer m_staleCheck;

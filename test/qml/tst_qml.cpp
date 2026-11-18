@@ -44,6 +44,7 @@ public:
         emit m_fake->boardInfoReceived(id, makeBoardInfo());
         emit m_fake->bitReportReceived(id, makeBitReport());
     }
+    Q_INVOKABLE void sendSample() { emit m_fake->sampleReceived(m_session->activeSessionId(), makeFullSample()); }
     // Command tests: the fake provider supports commands (set before connecting), records what is sent and
     // answers or reports progress on request.
     Q_INVOKABLE void setCommandsSupported(bool supported) { m_fake->commands = supported; }

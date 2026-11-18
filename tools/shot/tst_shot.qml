@@ -46,6 +46,9 @@ TestCase {
             testHelper.sendParameters({"gimbal.filterKp": 1, "gimbal.filterKi": 0.01})
             testHelper.sendCrosstalk(true, 0.4)
             testHelper.sendImuBias(0.012, -0.004, 0.021)
+            testMainControl.recorder.start(testHelper.makeFile("record.csv", 0)) // recording in progress
+            for (let i = 0; i < 12; ++i)
+                testHelper.sendSample()
         }
         wait(50) // telemetry turns stale after 1 s
         waitForRendering(main.contentItem)

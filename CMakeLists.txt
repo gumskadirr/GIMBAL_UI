@@ -36,6 +36,7 @@ qt_add_qml_module(ids_gimbal
         device/transport/TransportProvider.h device/transport/TransportProvider.cpp
         shared/ui/Fonts.h shared/ui/Fonts.cpp
         shared/ui/FileInfo.h
+        features/telemetry/CsvRecorder.h features/telemetry/CsvRecorder.cpp
     QML_FILES
         app/Main.qml
         app/PreferencesPage.qml
@@ -96,7 +97,7 @@ qt_add_qml_module(ids_gimbal
 target_include_directories(ids_gimbal
     PUBLIC ${PROJECT_SOURCE_DIR}
     # The generated QML type registration includes headers by file name.
-    PRIVATE shared/ui shared/settings shared/localization shared/notifications device/presentation device/api
+    PRIVATE shared/ui shared/settings shared/localization shared/notifications device/presentation device/api features/telemetry
 )
 
 target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::SerialPort Qt6::Network)

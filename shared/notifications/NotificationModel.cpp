@@ -16,6 +16,8 @@ const QHash<QString, const char *> kMessages{
      QT_TRANSLATE_NOOP("NotificationModel", "Command cancelled (connection closed): %1")},
     {QStringLiteral("parameters.fileFailed"),
      QT_TRANSLATE_NOOP("NotificationModel", "Parameter file could not be used: %1")},
+    {QStringLiteral("recording.failed"),
+     QT_TRANSLATE_NOOP("NotificationModel", "CSV recording stopped: %1")},
     {QStringLiteral("fonts.loadFailed"),
      QT_TRANSLATE_NOOP("NotificationModel", "Fonts could not be loaded: %1")},
 };

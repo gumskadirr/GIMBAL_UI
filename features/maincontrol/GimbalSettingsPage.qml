@@ -1,10 +1,11 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Dialogs
 import IDS_GIMBAL
 
-// Gimbal settings page of the final design (3D card | settings, 1:2). Stream, calibrations, filter gains,
-// board mode and Safe stop are connected; CSV (T11), charts (T12) and Script (T13) are not yet.
+// Gimbal settings page of the final design (3D card | settings, 1:2). Stream, CSV recording, calibrations, filter gains,
+// board mode and Safe stop are connected; charts (T12) and Script (T13) are not yet.
 // Without command support (real target) values show "—" and every input and command is disabled through
 // viewModel.connection.commandsAvailable. The stream rate badge shows what the device reports (1 vs 2 kHz is
 // open, §17). Calibration results are read on request and shown until the session ends.
@@ -14,7 +15,17 @@ ControlPageFrame {
     readonly property ServiceConnection connection: viewModel.connection
     readonly property ParameterModel parameters: viewModel.parameters
     readonly property bool streaming: viewModel.streaming.valid && viewModel.streaming.value
+    readonly property CsvRecorder recorder: viewModel.recorder
     property bool readDone: false
+
+    FileDialog {
+        id: csvDialog
+        title: qsTr("Record CSV")
+        fileMode: FileDialog.SaveFile
+        defaultSuffix: "csv"
+        nameFilters: [qsTr("CSV file (*.csv)")]
+        onAccepted: page.recorder.start(selectedFile)
+    }
 
     // The filter gains are read once per connection, when the page is visible.
     function readOnce() {
@@ -144,9 +155,27 @@ ControlPageFrame {
                     ready: page.streaming
                 }
                 Item { implicitWidth: 8 }
-                IdsButton { objectName: "command-recordCsv"; iconPath: Icons.record; text: qsTr("Record CSV") }
-                IdsButton { objectName: "command-saveCsv"; variant: "quiet"; text: qsTr("Save CSV") }
+                IdsButton {
+                    objectName: "command-recordCsv"
+                    iconPath: Icons.record
+                    busy: page.recorder.recording
+                    enabled: page.connection.connected && !page.recorder.recording
+                    text: page.recorder.recording ? qsTr("Recording…") : qsTr("Record CSV")
+                    onClicked: csvDialog.open()
+                }
+                IdsButton {
+                    objectName: "command-saveCsv"
+                    variant: "quiet"
+                    enabled: page.recorder.recording
+                    text: qsTr("Save CSV")
+                    onClicked: page.recorder.stop()
+                }
                 ValueText { objectName: "value-packets"; text: (page.viewModel.packetCount.valid ? NumberFormat.fixed(page.viewModel.packetCount.value, 0) : "—") + " " + qsTr("packets") }
+                ValueText {
+                    objectName: "value-csvRows"
+                    visible: page.recorder.recording
+                    text: qsTr("%1 rows").arg(NumberFormat.fixed(page.recorder.rowCount, 0))
+                }
                 Item { Layout.fillWidth: true }
                 CommandButton {
                     id: safeStop
