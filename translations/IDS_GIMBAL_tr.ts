@@ -4,83 +4,83 @@
 <context>
     <name>ConnectionPopup</name>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="39"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="40"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="42"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="43"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="42"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="43"/>
         <source>Disconnected</source>
         <translation>Bağlantı yok</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="49"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="50"/>
         <source>Transport</source>
         <translation>Taşıma</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="59"/>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="88"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="60"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="89"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="60"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="61"/>
         <source>Baud rate</source>
         <translation>Baud hızı</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="61"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="62"/>
         <source>Data bits</source>
         <translation>Veri bitleri</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="64"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
         <source>Parity</source>
         <translation>Eşlik</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="66"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="66"/>
         <source>Even</source>
         <translation>Çift</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="65"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="66"/>
         <source>Odd</source>
         <translation>Tek</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="67"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="68"/>
         <source>Stop bits</source>
         <translation>Dur bitleri</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="73"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="74"/>
         <source>No serial ports found</source>
         <translation>Seri port bulunamadı</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="83"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="84"/>
         <source>IP address</source>
         <translation>IP adresi</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="106"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="107"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı kes</translation>
     </message>
     <message>
-        <location filename="../shared/ui/ConnectionPopup.qml" line="113"/>
+        <location filename="../shared/ui/ConnectionPopup.qml" line="114"/>
         <source>Apply</source>
         <translation>Uygula</translation>
     </message>
@@ -895,69 +895,74 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/Main.qml" line="25"/>
+        <location filename="../app/Main.qml" line="26"/>
         <source>Board</source>
         <translation>Kart</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="25"/>
+        <location filename="../app/Main.qml" line="26"/>
         <source>Gimbal info</source>
         <translation>Gimbal bilgisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="27"/>
-        <location filename="../app/Main.qml" line="29"/>
+        <location filename="../app/Main.qml" line="28"/>
+        <location filename="../app/Main.qml" line="30"/>
         <source>Control</source>
         <translation>Kontrol</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="27"/>
+        <location filename="../app/Main.qml" line="28"/>
         <source>Motor control</source>
         <translation>Motor kontrolü</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="29"/>
+        <location filename="../app/Main.qml" line="30"/>
         <source>Gimbal settings</source>
         <translation>Gimbal ayarları</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="31"/>
+        <location filename="../app/Main.qml" line="32"/>
         <source>Hardware</source>
         <translation>Donanım</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="31"/>
+        <location filename="../app/Main.qml" line="32"/>
         <source>Heater</source>
         <translation>Isıtıcı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="33"/>
+        <location filename="../app/Main.qml" line="34"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="33"/>
+        <location filename="../app/Main.qml" line="34"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="50"/>
+        <location filename="../app/Main.qml" line="52"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="163"/>
+        <location filename="../app/Main.qml" line="201"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="19"/>
-        <location filename="../app/Main.qml" line="122"/>
+        <location filename="../app/Main.qml" line="20"/>
+        <location filename="../app/Main.qml" line="149"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="158"/>
+        <location filename="../app/Main.qml" line="20"/>
+        <source>IDS Image service</source>
+        <translation>IDS Image hizmeti</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="196"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
@@ -965,118 +970,118 @@
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="32"/>
+        <location filename="../app/MainStatusBar.qml" line="33"/>
         <source>Updating firmware</source>
         <translation>Yazılım güncelleniyor</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="33"/>
+        <location filename="../app/MainStatusBar.qml" line="34"/>
         <source>Calibrating angle</source>
         <translation>Açı kalibre ediliyor</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="34"/>
+        <location filename="../app/MainStatusBar.qml" line="35"/>
         <source>Checking crosstalk</source>
         <translation>Karışma denetleniyor</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="35"/>
+        <location filename="../app/MainStatusBar.qml" line="36"/>
         <source>Calibrating IMU</source>
         <translation>IMU kalibre ediliyor</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="36"/>
+        <location filename="../app/MainStatusBar.qml" line="37"/>
         <source>Working</source>
         <translation>Çalışıyor</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="43"/>
+        <location filename="../app/MainStatusBar.qml" line="44"/>
         <source>%1 h %2 min</source>
         <translation>%1 sa %2 dk</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="66"/>
+        <location filename="../app/MainStatusBar.qml" line="67"/>
         <source>%1 Mbps</source>
         <translation>%1 Mbps</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="68"/>
+        <location filename="../app/MainStatusBar.qml" line="69"/>
         <source>Heartbeat</source>
         <translation>Kalp atışı</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="69"/>
+        <location filename="../app/MainStatusBar.qml" line="70"/>
         <source>On time</source>
         <translation>Çalışma süresi</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="83"/>
+        <location filename="../app/MainStatusBar.qml" line="84"/>
         <source>Fail</source>
         <translation>Kaldı</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="83"/>
+        <location filename="../app/MainStatusBar.qml" line="84"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="83"/>
+        <location filename="../app/MainStatusBar.qml" line="84"/>
         <source>Pass</source>
         <translation>Geçti</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="91"/>
+        <location filename="../app/MainStatusBar.qml" line="92"/>
         <source>All items passed</source>
         <translation>Tüm kalemler geçti</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="111"/>
+        <location filename="../app/MainStatusBar.qml" line="112"/>
         <source>Running script</source>
         <translation>Script çalışıyor</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="124"/>
+        <location filename="../app/MainStatusBar.qml" line="125"/>
         <source>Operation progress</source>
         <translation>İşlem ilerlemesi</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="167"/>
+        <location filename="../app/MainStatusBar.qml" line="169"/>
         <source>Notifications (%1)</source>
         <translation>Bildirimler (%1)</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="210"/>
-        <location filename="../app/MainStatusBar.qml" line="221"/>
+        <location filename="../app/MainStatusBar.qml" line="212"/>
+        <location filename="../app/MainStatusBar.qml" line="223"/>
         <source>Debug settings</source>
         <translation>Hata ayıklama ayarları</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="255"/>
+        <location filename="../app/MainStatusBar.qml" line="257"/>
         <source>Error detail</source>
         <translation>Hata ayrıntısı</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="264"/>
+        <location filename="../app/MainStatusBar.qml" line="266"/>
         <source>Last sample age</source>
         <translation>Son örnek yaşı</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="265"/>
+        <location filename="../app/MainStatusBar.qml" line="267"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="270"/>
+        <location filename="../app/MainStatusBar.qml" line="272"/>
         <source>Stale results dropped</source>
         <translation>Düşen eski sonuçlar</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="276"/>
+        <location filename="../app/MainStatusBar.qml" line="278"/>
         <source>Pending commands</source>
         <translation>Bekleyen komutlar</translation>
     </message>
     <message>
-        <location filename="../app/MainStatusBar.qml" line="284"/>
+        <location filename="../app/MainStatusBar.qml" line="286"/>
         <source>%1 B / %2 B</source>
         <translation>%1 B / %2 B</translation>
     </message>
@@ -1459,52 +1464,57 @@
 <context>
     <name>NotificationModel</name>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="9"/>
-        <source>Device error</source>
-        <translation>Cihaz hatası</translation>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="10"/>
+        <source>Main control service error</source>
+        <translation>Ana kontrol hizmeti hatası</translation>
     </message>
     <message>
         <location filename="../shared/notifications/NotificationModel.cpp" line="11"/>
+        <source>IDS Image service error</source>
+        <translation>IDS Image hizmeti hatası</translation>
+    </message>
+    <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="13"/>
         <source>Preferences could not be saved</source>
         <translation>Tercihler kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="14"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="16"/>
         <source>Command failed: %1</source>
         <translation>Komut başarısız: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="16"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="18"/>
         <source>Command cancelled (connection closed): %1</source>
         <translation>Komut iptal edildi (bağlantı kapandı): %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="18"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="20"/>
         <source>Parameter file could not be used: %1</source>
         <translation>Parametre dosyası kullanılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="20"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="22"/>
         <source>CSV recording stopped: %1</source>
         <translation>CSV kaydı durdu: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="21"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="23"/>
         <source>Script file could not be used: %1</source>
         <translation>Script dosyası kullanılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="23"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="25"/>
         <source>Script stopped (connection lost)</source>
         <translation>Script durdu (bağlantı koptu)</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="25"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="27"/>
         <source>Fonts could not be loaded: %1</source>
         <translation>Yazı tipleri yüklenemedi: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="13"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="15"/>
         <source>Language could not be loaded: %1</source>
         <translation>Dil yüklenemedi: %1</translation>
     </message>

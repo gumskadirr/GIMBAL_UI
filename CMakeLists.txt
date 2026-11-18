@@ -30,6 +30,7 @@ qt_add_qml_module(ids_gimbal
         device/session/DeviceSession.h device/session/DeviceSession.cpp
         device/presentation/ServiceConnection.h device/presentation/ServiceConnection.cpp
         device/presentation/MainControlViewModel.h device/presentation/MainControlViewModel.cpp
+        device/presentation/ImageViewModel.h device/presentation/ImageViewModel.cpp
         device/presentation/ParameterModel.h device/presentation/ParameterModel.cpp
         device/presentation/SeriesBuffer.h device/presentation/SeriesBuffer.cpp
         device/presentation/DeviceValueTypes.h

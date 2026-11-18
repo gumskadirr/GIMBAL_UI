@@ -10,14 +10,15 @@ ApplicationWindow {
     required property Localization localization
     required property NotificationModel notifications
     required property MainControlViewModel mainControl
+    required property ImageViewModel imageViewModel
     required property bool demoMode
 
     // Page registry (architecture §11): the only place a page is listed; menu and content are built from it.
     // Titles are bindings and follow language changes. The views use pages.length as their model, so a
     // language change does not recreate the pages.
     // Services (architecture §12): each has its own connection; pages of both may be open side by side.
-    readonly property var services: ({ mainControl: qsTr("Main control service") })
-    readonly property var connections: ({ mainControl: mainControl.connection })
+    readonly property var services: ({ mainControl: qsTr("Main control service"), idsImage: qsTr("IDS Image service") })
+    readonly property var connections: ({ mainControl: mainControl.connection, idsImage: imageViewModel.connection })
     readonly property var pages: [
         // service: key of `services`; pages without one (preferences, developer) belong to no connection.
         // designHeight: natural height of the page's (reference) layout, measured; tst_shell fails if the content
@@ -39,7 +40,8 @@ ApplicationWindow {
     readonly property int currentIndex: Math.max(0, pages.findIndex(page => page.id === window.currentPageId))
     readonly property string activePageId: pages[currentIndex].id
     // Connection of the visible page's service; pages without one (preferences) show the Main control service.
-    readonly property ServiceConnection activeConnection: connections[pages[currentIndex].service ?? "mainControl"]
+    readonly property string activeService: pages[currentIndex].service ?? "mainControl"
+    readonly property ServiceConnection activeConnection: connections[activeService]
 
     width: 1280
     height: 800
@@ -55,10 +57,17 @@ ApplicationWindow {
         property: "mode"
         value: window.settings.theme
     }
-    // Architecture §12, rule 1: without saved settings the connection settings open at startup (real target).
-    Component.onCompleted: {
+    // Architecture §12, rule 1: without saved settings the connection settings open at startup (real target)
+    // and whenever a page of such a service becomes visible. The popup belongs to the visible page's service,
+    // so a popup left open for the previous service is closed.
+    function openSettingsIfNotConfigured() {
         if (!window.demoMode && !window.activeConnection.configured)
             Qt.callLater(window.openConnectionSettings)
+    }
+    Component.onCompleted: openSettingsIfNotConfigured()
+    onActiveConnectionChanged: {
+        statusBar.connectionPopup.close()
+        openSettingsIfNotConfigured()
     }
     function openConnectionSettings() {
         statusBar.connectionPopup.prepare(window.activeConnection.target(), window.activeConnection.availableSerialPorts())
@@ -116,6 +125,24 @@ ApplicationWindow {
 
         navigation: NavRail {
             id: navRail
+            // Start of the IDS Image group: a line, then the service's logo and connection dot.
+            Component {
+                id: imageBrand
+                Column {
+                    width: navRail.expandedWidth - 24
+                    Rectangle { x: 6; width: parent.width - 12; height: 1; color: Theme.line }
+                    Item { width: 1; height: 12 }
+                    RailBrand {
+                        objectName: "railBrandImage"
+                        rail: navRail
+                        logoSource: Qt.resolvedUrl("../assets/icons/ids_logo.png")
+                        title: "IDS Image"
+                        subtitle: window.services.idsImage
+                        connected: window.imageViewModel.connection.connected
+                        connectionLabel: window.imageViewModel.connection.statusText
+                    }
+                }
+            }
             RailBrand {
                 logoSource: Qt.resolvedUrl("../assets/icons/ids_logo.png")
                 title: "IDS Control"
@@ -130,6 +157,12 @@ ApplicationWindow {
                     required property int index
                     readonly property var page: window.pages[index]
                     width: navRail.expandedWidth - 24
+                    Loader {
+                        active: navEntry.page.service === "idsImage"
+                                && (navEntry.index === 0 || window.pages[navEntry.index - 1].service !== "idsImage")
+                        visible: active
+                        sourceComponent: imageBrand
+                    }
                     NavSection {
                         rail: navRail
                         visible: navEntry.index === 0
@@ -145,6 +178,11 @@ ApplicationWindow {
                         onClicked: window.currentPageId = navEntry.page.id
                     }
                 }
+            }
+            Loader { // no IDS Image pages yet: the group shows its logo only
+                active: !window.pages.some(page => page.service === "idsImage")
+                visible: active
+                sourceComponent: imageBrand
             }
         }
 
@@ -182,6 +220,7 @@ ApplicationWindow {
             id: statusBar
             objectName: "statusBar"
             connection: window.activeConnection
+            udpOnly: window.activeService === "idsImage" // 17 Nov: IDS Image is UDP only
             viewModel: window.mainControl
             notifications: window.notifications
             services: window.services

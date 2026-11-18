@@ -15,7 +15,7 @@ TestCase {
             settings: testSettings,
             localization: testLocalization,
             notifications: testNotifications,
-            mainControl: testMainControl,
+            mainControl: testMainControl, imageViewModel: testImageViewModel,
             demoMode: demoMode
         })
         verify(main)
@@ -322,7 +322,7 @@ TestCase {
         const main = createMain(false)
         const badge = findChild(main.contentItem, "notificationsBadge")
         verify(!badge.visible)
-        testHelper.addNotification("device.error", "link lost")
+        testHelper.addNotification("device.error.mainControl", "link lost")
         tryCompare(badge, "visible", true)
 
         const button = findChild(main.contentItem, "notificationsButton")
@@ -425,5 +425,41 @@ TestCase {
         main.currentPageId = "preferences"
         compare(button.text, "IP/UDP · 127.0.0.1:5000")
         compare(main.activeConnection, testMainControl.connection)
+    }
+
+    // Two services, two connections: both open at once, cutting one leaves the other running.
+    function test_twoConnectionsAreIndependent() {
+        createMain(true)
+        testHelper.connectBare()
+        testHelper.connectImage()
+        verify(testMainControl.connection.connected)
+        verify(testImageViewModel.connection.connected)
+        testHelper.disconnectImage()
+        verify(!testImageViewModel.connection.connected)
+        verify(testMainControl.connection.connected)
+        testHelper.disconnectDevice()
+        testHelper.disconnectImage()
+    }
+
+    // Debug settings lists both services; the rail shows the IDS Image logo (no page yet).
+    function test_imageServiceShown() {
+        const main = createMain(true)
+        const button = findChild(main.contentItem, "debugButton")
+        mouseClick(button)
+        const popup = findChild(button, "debugPopup")
+        tryCompare(popup, "opened", true)
+        verify(findChild(popup.contentItem, "debugStatus-mainControl"))
+        verify(findChild(popup.contentItem, "debugStatus-idsImage"))
+        popup.close()
+        compare(main.connections.idsImage, testImageViewModel.connection)
+        verify(findChild(main.contentItem, "railBrandImage"))
+    }
+
+    // Device errors name their service.
+    function test_deviceErrorNamesService() {
+        testNotifications.clear()
+        testHelper.failImage("no route")
+        compare(testNotifications.rowCount(), 1)
+        compare(testHelper.lastNotificationCode(), "device.error.idsImage")
     }
 }

@@ -6,7 +6,9 @@
 namespace {
 // Message codes are language independent; the source text is translated at display time.
 const QHash<QString, const char *> kMessages{
-    {QStringLiteral("device.error"), QT_TRANSLATE_NOOP("NotificationModel", "Device error")},
+    {QStringLiteral("device.error.mainControl"),
+     QT_TRANSLATE_NOOP("NotificationModel", "Main control service error")},
+    {QStringLiteral("device.error.idsImage"), QT_TRANSLATE_NOOP("NotificationModel", "IDS Image service error")},
     {QStringLiteral("settings.writeFailed"),
      QT_TRANSLATE_NOOP("NotificationModel", "Preferences could not be saved")},
     {QStringLiteral("language.loadFailed"),

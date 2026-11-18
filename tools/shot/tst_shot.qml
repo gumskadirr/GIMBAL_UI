@@ -17,7 +17,7 @@ TestCase {
         testLocalization.setLanguage(lang)
         const c = Qt.createComponent("IDS_GIMBAL", "Main")
         const main = createTemporaryObject(c, testCase, { settings: testSettings, localization: testLocalization,
-            notifications: testNotifications, mainControl: testMainControl, demoMode: false })
+            notifications: testNotifications, mainControl: testMainControl, imageViewModel: testImageViewModel, demoMode: false })
         main.visibility = Window.Windowed
         main.width = w
         main.height = h
@@ -74,7 +74,7 @@ TestCase {
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
         if (realtime) { // the Realtime graph and logger window, with scope history and a notification
-            testHelper.addNotification("device.error", "link lost")
+            testHelper.addNotification("device.error.mainControl", "link lost")
             const win = findChild(main, "realtimeWindow")
             win.show()
             for (let i = 0; i < 25; ++i) {

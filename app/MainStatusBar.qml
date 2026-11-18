@@ -15,6 +15,7 @@ StatusBar {
     required property var services    // key -> display name
     required property var connections // key -> ServiceConnection
 
+    property bool udpOnly: false // the visible service offers IP/UDP only
     signal connectionSettingsRequested() // the owner fills the popup (ConnectionPopup.prepare) and opens it
 
     readonly property alias connectionPopup: connectionPopup
@@ -148,6 +149,7 @@ StatusBar {
                 x: connectionButton.width - width
                 y: -height - 14
                 width: 400
+                udpOnly: root.udpOnly
                 connected: root.connection.connected
                 canDisconnect: root.connection.connected || root.connection.busy
                 onApplyRequested: settings => root.connection.apply(settings)

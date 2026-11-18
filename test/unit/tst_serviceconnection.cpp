@@ -25,6 +25,19 @@ class tst_ServiceConnection : public QObject
     };
 
 private slots:
+    // Two services: both connected at once; cutting one leaves the other connected.
+    void twoConnectionsAreIndependent()
+    {
+        Fixture main, image;
+        main.connect();
+        image.connect();
+        QVERIFY(main.vm.connected() && image.vm.connected());
+        image.session.disconnectDevice();
+        QVERIFY(!image.vm.connected());
+        QVERIFY(main.vm.connected());
+        QCOMPARE(main.fake->stops, 0);
+    }
+
     void trafficActivityAndRate()
     {
         Fixture f;

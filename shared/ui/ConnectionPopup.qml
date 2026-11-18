@@ -13,10 +13,11 @@ IdsPopup {
 
     property bool connected: false
     property bool canDisconnect: false
+    property bool udpOnly: false // offers IP/UDP only (IDS Image)
     signal applyRequested(var settings)
     signal disconnectRequested()
 
-    readonly property bool udp: transportBox.currentIndex === 1
+    readonly property bool udp: udpOnly || transportBox.currentIndex === 1
     readonly property list<string> baudRates: ["9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"]
     readonly property list<string> parityCodes: ["none", "even", "odd"]
     readonly property bool valid: udp ? hostField.text.trim().length > 0 && portField.acceptableInput
@@ -26,7 +27,7 @@ IdsPopup {
     function prepare(settings: var, ports: list<string>) {
         const saved = settings.serialPort || ""
         serialPorts = saved !== "" && ports.indexOf(saved) < 0 ? ports.concat([saved]) : ports // keep an unplugged port
-        transportBox.currentIndex = settings.transport === "udp" ? 1 : 0
+        transportBox.currentIndex = udpOnly ? 0 : settings.transport === "udp" ? 1 : 0
         portBox.currentIndex = Math.max(0, serialPorts.indexOf(saved))
         baudBox.currentIndex = Math.max(0, baudRates.indexOf(String(settings.baudRate || 115200)))
         dataBox.currentIndex = settings.dataBits === 7 ? 1 : 0
@@ -47,7 +48,7 @@ IdsPopup {
     FormField {
         Layout.fillWidth: true
         label: qsTr("Transport")
-        IdsComboBox { id: transportBox; objectName: "connection-transport"; model: ["UART", "IP/UDP"] }
+        IdsComboBox { id: transportBox; objectName: "connection-transport"; model: root.udpOnly ? ["IP/UDP"] : ["UART", "IP/UDP"] }
     }
 
     GridLayout {

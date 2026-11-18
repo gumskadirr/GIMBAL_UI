@@ -10,6 +10,7 @@ class IDeviceProvider;
 
 // Each service's key in ConnectionStore and in the page registry (Main.qml `services`).
 inline constexpr const char *kMainControlService = "mainControl";
+inline constexpr const char *kIdsImageService = "idsImage";
 
 struct AppConfig
 {
@@ -28,10 +29,10 @@ class ServiceConnection;
 
 // Connections between the application services (architecture §10: language choice is saved and C++ texts
 // are retranslated; settings errors become notifications). connectDeviceService does the same for one device
-// service (its errors become notifications). Used by runApp and by the QML test setup, so the tests run the
+// service (its errors become notifications, coded with the service key). Used by runApp and by the QML test setup, so the tests run the
 // application's own wiring. QML retranslation is connected separately.
 void connectServices(AppSettings &settings, NotificationModel &notifications, Localization &localization);
 void connectDeviceService(NotificationModel &notifications, Localization &localization, DeviceSession &session,
-                          ServiceConnection &connection);
+                          ServiceConnection &connection, const QString &service);
 
 int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders providers);

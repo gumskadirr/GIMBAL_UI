@@ -7,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
+#include "device/presentation/ImageViewModel.h"
 #include "device/presentation/MainControlViewModel.h"
 #include "device/session/ConnectionStore.h"
 #include "device/session/DeviceSession.h"
@@ -32,7 +33,7 @@ void connectServices(AppSettings &settings, NotificationModel &notifications, Lo
 }
 
 void connectDeviceService(NotificationModel &notifications, Localization &localization, DeviceSession &session,
-                          ServiceConnection &connection)
+                          ServiceConnection &connection, const QString &service)
 {
     QObject::connect(&localization, &Localization::languageChanged, &connection, &ServiceConnection::retranslate);
     QObject::connect(&session, &DeviceSession::commandFinished, &notifications,
@@ -46,9 +47,9 @@ void connectDeviceService(NotificationModel &notifications, Localization &locali
                              notifications.add(QStringLiteral("command.failed"), {kind}, NotificationModel::Error,
                                                result.detail);
                      });
-    QObject::connect(&session, &DeviceSession::stateChanged, &notifications, [&] {
+    QObject::connect(&session, &DeviceSession::stateChanged, &notifications, [&, service] {
         if (session.state() == ConnectionState::Error)
-            notifications.add(QStringLiteral("device.error"), {}, NotificationModel::Error, session.detail());
+            notifications.add(QStringLiteral("device.error.") + service, {}, NotificationModel::Error, session.detail());
     });
 }
 
@@ -88,6 +89,9 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
     Service *main = byKey.value(QString::fromLatin1(kMainControlService));
     Q_ASSERT(main); // every target provides the main control service
     MainControlViewModel mainControl(main->session.get(), main->connection.get());
+    Service *image = byKey.value(QString::fromLatin1(kIdsImageService));
+    Q_ASSERT(image); // so does IDS Image
+    ImageViewModel imageViewModel(image->connection.get());
     QObject::connect(mainControl.parameters(), &ParameterModel::profileFailed, &notifications,
                      [&](const QString &file, const QString &reason) {
                          notifications.add(QStringLiteral("parameters.fileFailed"), {file}, NotificationModel::Error,
@@ -122,7 +126,7 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
     });
     for (Service &s : services) {
         DeviceSession *session = s.session.get();
-        connectDeviceService(notifications, localization, *session, *s.connection);
+        connectDeviceService(notifications, localization, *session, *s.connection, s.key);
         // Stop data production before services and engine go away.
         QObject::connect(&app, &QCoreApplication::aboutToQuit, session, &DeviceSession::disconnectDevice);
         QObject::connect(s.connection.get(), &ServiceConnection::applied, &connections,
@@ -137,7 +141,7 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
         QJSEngine::setObjectOwnership(s.connection.get(), QJSEngine::CppOwnership);
     }
 
-    for (QObject *o : std::initializer_list<QObject *>{&settings, &notifications, &localization, &mainControl})
+    for (QObject *o : std::initializer_list<QObject *>{&settings, &notifications, &localization, &mainControl, &imageViewModel})
         QJSEngine::setObjectOwnership(o, QJSEngine::CppOwnership);
 
     engine.setInitialProperties({
@@ -145,6 +149,7 @@ int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders provi
         {QStringLiteral("localization"), QVariant::fromValue(&localization)},
         {QStringLiteral("notifications"), QVariant::fromValue(&notifications)},
         {QStringLiteral("mainControl"), QVariant::fromValue(&mainControl)},
+        {QStringLiteral("imageViewModel"), QVariant::fromValue(&imageViewModel)},
         {QStringLiteral("demoMode"), config.demoMode},
     });
     QObject::connect(

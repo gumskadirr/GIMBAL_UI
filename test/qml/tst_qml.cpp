@@ -14,6 +14,7 @@
 
 #include "../unit/FakeProvider.h"
 #include "app/AppRunner.h"
+#include "device/presentation/ImageViewModel.h"
 #include "device/presentation/MainControlViewModel.h"
 #include "device/session/DeviceSession.h"
 #include "shared/localization/Localization.h"
@@ -116,6 +117,22 @@ public:
         return QUrl::fromLocalFile(file.fileName());
     }
     Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
+    // The IDS Image service: its own fake provider, session and connection.
+    Q_INVOKABLE void connectImage()
+    {
+        m_imageSession->connectDevice();
+        emit m_imageFake->stateChanged(m_imageSession->activeSessionId(), ConnectionState::Connected, {});
+    }
+    Q_INVOKABLE QString lastNotificationCode() const
+    {
+        return m_notifications->data(m_notifications->index(0), NotificationModel::CodeRole).toString();
+    }
+    Q_INVOKABLE void failImage(const QString &detail)
+    {
+        m_imageSession->connectDevice();
+        emit m_imageFake->stateChanged(m_imageSession->activeSessionId(), ConnectionState::Error, detail);
+    }
+    Q_INVOKABLE void disconnectImage() { m_imageSession->disconnectDevice(); }
     // Design comparison screenshots (tools/shot/tst_shot.qml, docs/gelistirme.md); not used by the tests.
     Q_INVOKABLE bool saveWindowImage(QQuickWindow *window, const QString &path)
     {
@@ -150,22 +167,32 @@ public slots:
         m_session->setTarget(loopbackTarget());
         m_connection = std::make_unique<ServiceConnection>(m_session.get());
         m_mainControl = std::make_unique<MainControlViewModel>(m_session.get(), m_connection.get());
+        auto imageFake = std::make_unique<FakeProvider>();
+        m_imageFake = imageFake.get();
+        m_imageSession = std::make_unique<DeviceSession>(std::move(imageFake));
+        m_imageSession->setTarget(loopbackTarget());
+        m_imageConnection = std::make_unique<ServiceConnection>(m_imageSession.get());
+        m_image = std::make_unique<ImageViewModel>(m_imageConnection.get());
         // The application's own service wiring (AppRunner), not a copy of it.
         connectServices(*m_settings, *m_notifications, *m_localization);
-        connectDeviceService(*m_notifications, *m_localization, *m_session, *m_connection);
+        connectDeviceService(*m_notifications, *m_localization, *m_session, *m_connection,
+                             QString::fromLatin1(kMainControlService));
+        connectDeviceService(*m_notifications, *m_localization, *m_imageSession, *m_imageConnection,
+                             QString::fromLatin1(kIdsImageService));
     }
 
     void qmlEngineAvailable(QQmlEngine *engine)
     {
         for (QObject *o : std::initializer_list<QObject *>{m_settings.get(), m_notifications.get(),
                                                            m_localization.get(), m_connection.get(),
-                                                           m_mainControl.get(), this})
+                                                           m_mainControl.get(), m_imageConnection.get(), m_image.get(), this})
             QJSEngine::setObjectOwnership(o, QJSEngine::CppOwnership);
         QQmlContext *context = engine->rootContext();
         context->setContextProperty(QStringLiteral("testSettings"), m_settings.get());
         context->setContextProperty(QStringLiteral("testNotifications"), m_notifications.get());
         context->setContextProperty(QStringLiteral("testLocalization"), m_localization.get());
         context->setContextProperty(QStringLiteral("testMainControl"), m_mainControl.get());
+        context->setContextProperty(QStringLiteral("testImageViewModel"), m_image.get());
         context->setContextProperty(QStringLiteral("testHelper"), this);
         QObject::connect(m_localization.get(), &Localization::languageChanged, engine, &QQmlEngine::retranslate);
     }
@@ -179,6 +206,10 @@ private:
     std::unique_ptr<DeviceSession> m_session;
     std::unique_ptr<ServiceConnection> m_connection;
     std::unique_ptr<MainControlViewModel> m_mainControl;
+    FakeProvider *m_imageFake = nullptr; // owned by m_imageSession
+    std::unique_ptr<DeviceSession> m_imageSession;
+    std::unique_ptr<ServiceConnection> m_imageConnection;
+    std::unique_ptr<ImageViewModel> m_image;
 };
 
 QUICK_TEST_MAIN_WITH_SETUP(ids_gimbal_qml, Setup)

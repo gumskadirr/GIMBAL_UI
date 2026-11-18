@@ -64,8 +64,8 @@ private slots:
     void appDetailFollowsLanguage()
     {
         NotificationModel m;
-        m.add("device.error", {}, NotificationModel::Error, "No serial port selected");
-        m.add("device.error", {}, NotificationModel::Error, "RAW-ERR 0x12");
+        m.add("device.error.mainControl", {}, NotificationModel::Error, "No serial port selected");
+        m.add("device.error.mainControl", {}, NotificationModel::Error, "RAW-ERR 0x12");
         Localization l;
         QVERIFY(l.setLanguage("tr"));
         QCOMPARE(at(m, 1, NotificationModel::DetailRole).toString(),
