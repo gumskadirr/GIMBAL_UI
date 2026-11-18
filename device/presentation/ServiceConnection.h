@@ -1,6 +1,8 @@
 #pragma once
 
+#include <QElapsedTimer>
 #include <QObject>
+#include <QTimer>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
 
@@ -30,8 +32,22 @@ class ServiceConnection : public QObject
     Q_PROPERTY(int progressKind READ progressKind NOTIFY progressChanged)
     Q_PROPERTY(int progressPercent READ progressPercent NOTIFY progressChanged)
     Q_PROPERTY(QString progressStage READ progressStage NOTIFY progressChanged)
+    // Traffic counted by the transport (no protocol needed). Active = bytes seen in the last kActiveMs; the rate
+    // is bits per second of TX + RX over the last kRateWindowMs, 0 when nothing flows.
+    Q_PROPERTY(bool txActive READ txActive NOTIFY trafficChanged)
+    Q_PROPERTY(bool rxActive READ rxActive NOTIFY trafficChanged)
+    Q_PROPERTY(double dataRateBps READ dataRateBps NOTIFY trafficChanged)
+    Q_PROPERTY(double txBytes READ txBytes NOTIFY trafficChanged)
+    Q_PROPERTY(double rxBytes READ rxBytes NOTIFY trafficChanged)
+    // Results of old sessions dropped so far (Debug settings).
+    Q_PROPERTY(int staleDropped READ staleDropped NOTIFY trafficChanged)
+    // Raw Command.Kind names of pendingCommands, for the Debug settings window (not translated).
+    Q_PROPERTY(QStringList pendingCommandNames READ pendingCommandNames NOTIFY pendingChanged)
 
 public:
+    static constexpr int kActiveMs = 200;
+    static constexpr int kRateWindowMs = 1000;
+
     explicit ServiceConnection(DeviceSession *session, QObject *parent = nullptr);
 
     QString statusText() const;
@@ -44,6 +60,13 @@ public:
     QString summary() const;
     bool configured() const;
     QList<int> pendingCommands() const;
+    QStringList pendingCommandNames() const;
+    bool txActive() const { return m_txActive; }
+    bool rxActive() const { return m_rxActive; }
+    double dataRateBps() const { return m_rateBps; }
+    double txBytes() const;
+    double rxBytes() const;
+    int staleDropped() const;
     int progressKind() const { return m_progressKind; }
     int progressPercent() const { return m_progressPercent; }
     QString progressStage() const { return m_progressStage; }
@@ -66,12 +89,28 @@ signals:
     void changed();
     void applied(); // the session target changed from the UI; the owner saves it
     void pendingChanged();
+    void trafficChanged();
     void progressChanged();
     // kind: Command.Kind, status: Command.Status. Failures also become notifications (AppRunner).
     void commandFinished(int kind, int status, const QString &detail);
 
 private:
+    void updateTraffic();
+
     DeviceSession *m_session;
+    QTimer m_tick; // 100 ms: activity decays and the rate moves even when no byte arrives
+    QElapsedTimer m_clock;
+    qint64 m_lastTxMs = -kActiveMs - 1;
+    qint64 m_lastRxMs = -kActiveMs - 1;
+    quint64 m_seenTx = 0;
+    quint64 m_seenRx = 0;
+    QList<std::pair<qint64, quint64>> m_window; // (ms, tx + rx) per tick
+    bool m_txActive = false;
+    bool m_rxActive = false;
+    double m_rateBps = 0;
+    int m_seenStale = 0;
+    quint64 m_shownTx = 0;
+    quint64 m_shownRx = 0;
     int m_progressKind = -1;
     int m_progressPercent = 0;
     QString m_progressStage; // raw provider text

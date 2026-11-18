@@ -17,6 +17,7 @@ ApplicationWindow {
     // language change does not recreate the pages.
     // Services (architecture §12): each has its own connection; pages of both may be open side by side.
     readonly property var services: ({ mainControl: qsTr("Main control service") })
+    readonly property var connections: ({ mainControl: mainControl.connection })
     readonly property var pages: [
         // service: key of `services`; pages without one (preferences, developer) belong to no connection.
         // designHeight: natural height of the page's (reference) layout, measured; tst_shell fails if the content
@@ -35,6 +36,8 @@ ApplicationWindow {
     property string currentPageId: ""
     readonly property int currentIndex: Math.max(0, pages.findIndex(page => page.id === window.currentPageId))
     readonly property string activePageId: pages[currentIndex].id
+    // Connection of the visible page's service; pages without one (preferences) show the Main control service.
+    readonly property ServiceConnection activeConnection: connections[pages[currentIndex].service ?? "mainControl"]
 
     width: 1280
     height: 800
@@ -52,13 +55,12 @@ ApplicationWindow {
     }
     // Architecture §12, rule 1: without saved settings the connection settings open at startup (real target).
     Component.onCompleted: {
-        if (!window.demoMode && !window.mainControl.connection.configured)
+        if (!window.demoMode && !window.activeConnection.configured)
             Qt.callLater(window.openConnectionSettings)
     }
     function openConnectionSettings() {
-        connectionPopup.prepare(window.mainControl.connection.target(),
-                                window.mainControl.connection.availableSerialPorts())
-        connectionPopup.open()
+        statusBar.connectionPopup.prepare(window.activeConnection.target(), window.activeConnection.availableSerialPorts())
+        statusBar.connectionPopup.open()
     }
 
     Binding {
@@ -156,105 +158,15 @@ ApplicationWindow {
             }
         }
 
-        statusBar: StatusBar {
-            StatusBarSection {
-                Layout.fillWidth: true
-                Item {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 24
-
-                    // Newest notification (row 0) in one line; the model stays the single source.
-                    ListView {
-                        id: latestNotification
-                        objectName: "latestNotification"
-                        anchors.fill: parent
-                        model: window.notifications
-                        interactive: false
-                        clip: true
-                        delegate: RowLayout {
-                            id: latestRow
-                            required property string text
-                            required property int severity
-                            required property int count
-                            width: ListView.view.width
-                            height: 24
-                            spacing: Theme.spacingNormal
-                            Badge {
-                                kind: latestRow.severity === NotificationModel.Error ? "crit"
-                                    : latestRow.severity === NotificationModel.Warning ? "warn"
-                                    : "info"
-                                text: latestRow.severity === NotificationModel.Error ? qsTr("Error")
-                                    : latestRow.severity === NotificationModel.Warning ? qsTr("Warning")
-                                    : qsTr("Info")
-                            }
-                            Text {
-                                Layout.fillWidth: true
-                                text: latestRow.count > 1 ? latestRow.text + "  ×" + latestRow.count : latestRow.text
-                                elide: Text.ElideRight
-                                font.family: Theme.fontSans
-                                font.pixelSize: Theme.fsSmall
-                                color: Theme.text2
-                            }
-                        }
-                    }
-                    Text {
-                        visible: latestNotification.count === 0
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        text: qsTr("No notifications")
-                        font.family: Theme.fontSans
-                        font.pixelSize: Theme.fsSmall
-                        color: Theme.label
-                    }
-                }
-            }
-            StatusBarSection {
-                StatusBarButton {
-                    id: notificationsButton
-                    objectName: "notificationsButton"
-                    text: qsTr("Notifications (%1)").arg(latestNotification.count)
-                    trailingIconPath: Icons.chevronUp
-                    expanded: notificationsPopup.opened
-                    onClicked: notificationsPopup.opened ? notificationsPopup.close() : notificationsPopup.open()
-
-                    IdsPopup {
-                        id: notificationsPopup
-                        objectName: "notificationsPopup"
-                        x: notificationsButton.width - width
-                        y: -height - 14
-                        width: 400
-                        NotificationArea {
-                            model: window.notifications
-                            color: "transparent"
-                            border.width: 0
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 400
-                        }
-                    }
-                }
-            }
-            StatusBarSection {
-                StatusBarButton {
-                    id: connectionButton
-                    objectName: "connectionButton"
-                    text: window.mainControl.connection.summary
-                    trailingIconPath: Icons.chevronUp
-                    expanded: connectionPopup.opened
-                    onClicked: connectionPopup.opened ? connectionPopup.close() : window.openConnectionSettings()
-
-                    ConnectionPopup {
-                        id: connectionPopup
-                        objectName: "connectionPopup"
-                        x: connectionButton.width - width
-                        y: -height - 14
-                        width: 400
-                        connected: window.mainControl.connection.connected
-                        canDisconnect: window.mainControl.connection.connected || window.mainControl.connection.busy
-                        onApplyRequested: settings => window.mainControl.connection.apply(settings)
-                        onDisconnectRequested: window.mainControl.connection.disconnectDevice()
-                    }
-                }
-            }
+        statusBar: MainStatusBar {
+            id: statusBar
+            objectName: "statusBar"
+            connection: window.activeConnection
+            viewModel: window.mainControl
+            notifications: window.notifications
+            services: window.services
+            connections: window.connections
+            onConnectionSettingsRequested: window.openConnectionSettings()
         }
 
         StackLayout {

@@ -26,6 +26,8 @@ public:
 
     static constexpr int kCommandDelayMs = 400;
     static constexpr int kFirmwareStepMs = 50;
+    static constexpr quint64 kTxPerTick = 25;   // made-up traffic: the demo has no real link
+    static constexpr quint64 kRxPerTick = 1100;
 
     // Deterministic sample number n (pure; public for tests).
     static DeviceSample sampleAt(int n);
@@ -48,5 +50,7 @@ private:
     quint64 m_firmwareRequest = 0; // 0: no long command running
     Command::Kind m_longKind = Command::UpdateFirmware;
     int m_firmwarePercent = 0;
+    quint64 m_tx = 0;
+    quint64 m_rx = 0;
     bool m_streaming = true; // StartStream / StopStream; the packet counter keeps counting
 };

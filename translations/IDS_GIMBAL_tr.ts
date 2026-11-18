@@ -156,12 +156,12 @@
 <context>
     <name>Detail</name>
     <message>
-        <location filename="../device/transport/TransportProvider.cpp" line="62"/>
+        <location filename="../device/transport/TransportProvider.cpp" line="90"/>
         <source>No serial port selected</source>
         <translation>Seri port seçilmedi</translation>
     </message>
     <message>
-        <location filename="../device/transport/TransportProvider.cpp" line="80"/>
+        <location filename="../device/transport/TransportProvider.cpp" line="108"/>
         <source>Invalid UDP address</source>
         <translation>Geçersiz UDP adresi</translation>
     </message>
@@ -895,91 +895,185 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/Main.qml" line="24"/>
+        <location filename="../app/Main.qml" line="25"/>
         <source>Board</source>
         <translation>Kart</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="24"/>
+        <location filename="../app/Main.qml" line="25"/>
         <source>Gimbal info</source>
         <translation>Gimbal bilgisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="26"/>
-        <location filename="../app/Main.qml" line="28"/>
+        <location filename="../app/Main.qml" line="27"/>
+        <location filename="../app/Main.qml" line="29"/>
         <source>Control</source>
         <translation>Kontrol</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="26"/>
+        <location filename="../app/Main.qml" line="27"/>
         <source>Motor control</source>
         <translation>Motor kontrolü</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="28"/>
+        <location filename="../app/Main.qml" line="29"/>
         <source>Gimbal settings</source>
         <translation>Gimbal ayarları</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="30"/>
+        <location filename="../app/Main.qml" line="31"/>
         <source>Hardware</source>
         <translation>Donanım</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="30"/>
+        <location filename="../app/Main.qml" line="31"/>
         <source>Heater</source>
         <translation>Isıtıcı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="32"/>
+        <location filename="../app/Main.qml" line="33"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="32"/>
+        <location filename="../app/Main.qml" line="33"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="45"/>
+        <location filename="../app/Main.qml" line="48"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="19"/>
-        <location filename="../app/Main.qml" line="110"/>
+        <location filename="../app/Main.qml" line="112"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="146"/>
+        <location filename="../app/Main.qml" line="148"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
+</context>
+<context>
+    <name>MainStatusBar</name>
     <message>
-        <location filename="../app/Main.qml" line="186"/>
-        <source>Error</source>
-        <translation>Hata</translation>
+        <location filename="../app/MainStatusBar.qml" line="32"/>
+        <source>Updating firmware</source>
+        <translation>Yazılım güncelleniyor</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="187"/>
+        <location filename="../app/MainStatusBar.qml" line="33"/>
+        <source>Calibrating angle</source>
+        <translation>Açı kalibre ediliyor</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="34"/>
+        <source>Checking crosstalk</source>
+        <translation>Karışma denetleniyor</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="35"/>
+        <source>Calibrating IMU</source>
+        <translation>IMU kalibre ediliyor</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="36"/>
+        <source>Working</source>
+        <translation>Çalışıyor</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="43"/>
+        <source>%1 h %2 min</source>
+        <translation>%1 sa %2 dk</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="66"/>
+        <source>%1 Mbps</source>
+        <translation>%1 Mbps</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="68"/>
+        <source>Heartbeat</source>
+        <translation>Kalp atışı</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="69"/>
+        <source>On time</source>
+        <translation>Çalışma süresi</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="83"/>
+        <source>Fail</source>
+        <translation>Kaldı</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="83"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="188"/>
-        <source>Info</source>
-        <translation>Bilgi</translation>
+        <location filename="../app/MainStatusBar.qml" line="83"/>
+        <source>Pass</source>
+        <translation>Geçti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="204"/>
-        <source>No notifications</source>
-        <translation>Bildirim yok</translation>
+        <location filename="../app/MainStatusBar.qml" line="91"/>
+        <source>All items passed</source>
+        <translation>Tüm kalemler geçti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="215"/>
+        <location filename="../app/MainStatusBar.qml" line="111"/>
+        <source>Running script</source>
+        <translation>Script çalışıyor</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="124"/>
+        <source>Operation progress</source>
+        <translation>İşlem ilerlemesi</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="167"/>
         <source>Notifications (%1)</source>
         <translation>Bildirimler (%1)</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="210"/>
+        <location filename="../app/MainStatusBar.qml" line="221"/>
+        <source>Debug settings</source>
+        <translation>Hata ayıklama ayarları</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="255"/>
+        <source>Error detail</source>
+        <translation>Hata ayrıntısı</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="264"/>
+        <source>Last sample age</source>
+        <translation>Son örnek yaşı</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="265"/>
+        <source>%1 ms</source>
+        <translation>%1 ms</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="270"/>
+        <source>Stale results dropped</source>
+        <translation>Düşen eski sonuçlar</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="276"/>
+        <source>Pending commands</source>
+        <translation>Bekleyen komutlar</translation>
+    </message>
+    <message>
+        <location filename="../app/MainStatusBar.qml" line="284"/>
+        <source>%1 B / %2 B</source>
+        <translation>%1 B / %2 B</translation>
     </message>
 </context>
 <context>
@@ -1731,27 +1825,27 @@
 <context>
     <name>ServiceConnection</name>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="54"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="106"/>
         <source>Disconnected</source>
         <translation>Bağlantı yok</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="55"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="107"/>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="56"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="108"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="57"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="109"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="75"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="127"/>
         <source>Not configured</source>
         <translation>Ayarlanmadı</translation>
     </message>

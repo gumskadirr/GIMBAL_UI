@@ -45,6 +45,16 @@ public:
         emit m_fake->boardInfoReceived(id, makeBoardInfo());
         emit m_fake->bitReportReceived(id, makeBitReport());
     }
+    // The link is open but the device says nothing (the real target without a protocol).
+    Q_INVOKABLE void connectBare()
+    {
+        m_session->connectDevice();
+        emit m_fake->stateChanged(m_session->activeSessionId(), ConnectionState::Connected, {});
+    }
+    Q_INVOKABLE void sendTraffic(double txBytes, double rxBytes)
+    {
+        emit m_fake->trafficCounted(m_session->activeSessionId(), quint64(txBytes), quint64(rxBytes));
+    }
     Q_INVOKABLE void sendSample() { emit m_fake->sampleReceived(m_session->activeSessionId(), makeFullSample()); }
     // Command tests: the fake provider supports commands (set before connecting), records what is sent and
     // answers or reports progress on request.

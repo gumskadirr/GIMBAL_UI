@@ -20,12 +20,17 @@ public:
 
     void start(quint64 sessionId, const ConnectionTarget &target) override;
     void stop() override;
+    // The only way out to the device; counted as TX. False when no link is open or not everything was written.
+    bool write(const QByteArray &bytes);
 
 private:
     QString openSerial(const ConnectionTarget &target); // error text, empty on success
     QString openUdp(const ConnectionTarget &target);
+    void count(quint64 tx, quint64 rx);
 
     quint64 m_sessionId = 0;
+    quint64 m_tx = 0;
+    quint64 m_rx = 0;
     bool m_open = false; // set only after a successful open, so open errors are not reported twice
     QSerialPort m_serial;
     QUdpSocket m_udp;

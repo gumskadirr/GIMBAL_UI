@@ -38,6 +38,9 @@ class MainControlViewModel : public QObject
     Q_PROPERTY(Flag safeControl READ safeControl NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement onTime READ onTime NOTIFY measurementsChanged) // seconds since power on
     Q_PROPERTY(Flag inBootloader READ inBootloader NOTIFY measurementsChanged)
+    // Heartbeat of the link: telemetry samples are arriving (the last one is not stale). Derived from sample age,
+    // not a protocol field; false on the real target until a protocol delivers samples.
+    Q_PROPERTY(bool heartbeat READ heartbeat NOTIFY heartbeatChanged)
     // Read once per session; not affected by the telemetry stale timeout.
     Q_PROPERTY(BoardInfo boardInfo READ boardInfo NOTIFY boardInfoChanged)
     Q_PROPERTY(BitReport bitReport READ bitReport NOTIFY bitReportChanged) // valid is false without a report
@@ -71,6 +74,7 @@ public:
     Flag safeControl() const { return m_sample.safeControlLocked; }
     Measurement onTime() const { return m_sample.onTimeS; }
     Flag inBootloader() const { return m_sample.inBootloader; }
+    bool heartbeat() const { return m_sinceSample.isValid(); }
     BoardInfo boardInfo() const { return m_boardInfo; }
     BitReport bitReport() const { return m_bitReport; }
     Flag streaming() const { return m_sample.streaming; }
@@ -87,6 +91,7 @@ public:
 
 signals:
     void measurementsChanged();
+    void heartbeatChanged();
     void boardInfoChanged();
     void bitReportChanged();
     void crosstalkChanged();

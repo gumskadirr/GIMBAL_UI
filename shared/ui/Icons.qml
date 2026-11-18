@@ -22,6 +22,7 @@ QtObject {
     readonly property string cube: "M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5"
     readonly property string file: "M6 3h8l4 4v14H6zM14 3v4h4"
     readonly property string bug: "M8 9a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0zM12 9v9M4 13h4M16 13h4M5 7l3 2M19 7l-3 2M5 19l3-2M19 19l-3-2"
+    readonly property string bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"
     readonly property string check: "M5 12l5 5L20 7"
     readonly property string close: "M6 6l12 12M18 6L6 18"
     readonly property string play: "M8 5l11 7-11 7z"

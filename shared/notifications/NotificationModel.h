@@ -11,6 +11,7 @@ class NotificationModel : public QAbstractListModel
     Q_OBJECT
     QML_ELEMENT
     QML_UNCREATABLE("Owned by the application")
+    Q_PROPERTY(int total READ rowCount NOTIFY totalChanged) // entries shown in the list
 
 public:
     enum Severity { Info, Warning, Error };
@@ -30,6 +31,9 @@ public:
     int rowCount(const QModelIndex &parent = {}) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
+
+signals:
+    void totalChanged();
 
 public slots:
     void retranslate();

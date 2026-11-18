@@ -39,6 +39,14 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
                 if (isActive(sessionId))
                     emit parametersAccepted(values);
             });
+    connect(m_provider.get(), &IDeviceProvider::trafficCounted, this,
+            [this](quint64 sessionId, quint64 txBytes, quint64 rxBytes) {
+                if (!isActive(sessionId))
+                    return;
+                m_txBytes = txBytes;
+                m_rxBytes = rxBytes;
+                emit trafficAccepted();
+            });
     connect(m_provider.get(), &IDeviceProvider::commandFinished, this, &DeviceSession::onProviderCommandFinished);
 }
 
@@ -53,6 +61,7 @@ void DeviceSession::connectDevice()
 {
     disconnectDevice();
     m_activeId = m_nextId++;
+    m_txBytes = m_rxBytes = 0;
     setState(ConnectionState::Connecting, {});
     emit sessionStarted(m_activeId);
     m_provider->start(m_activeId, m_target);

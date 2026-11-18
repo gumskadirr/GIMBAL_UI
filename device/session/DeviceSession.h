@@ -27,6 +27,8 @@ public:
     QString detail() const { return m_detail; }
     quint64 activeSessionId() const { return m_activeId; } // 0 = none
     quint64 staleDropped() const { return m_staleDropped; }
+    quint64 txBytes() const { return m_txBytes; } // of the current or last session
+    quint64 rxBytes() const { return m_rxBytes; }
 
     bool supportsCommands() const { return m_provider->supportsCommands(); }
     // Request id (> 0) of the sent command; 0 when not connected or the provider has no commands.
@@ -47,6 +49,7 @@ signals:
     void parametersAccepted(const QVariantMap &values);
     void commandFinished(quint64 requestId, const DeviceCommand &command, const CommandResult &result);
     void pendingChanged();
+    void trafficAccepted();
 
 private:
     void onProviderState(quint64 sessionId, ConnectionState state, const QString &detail);
@@ -63,6 +66,8 @@ private:
     quint64 m_activeId = 0;
     quint64 m_nextId = 1;
     quint64 m_staleDropped = 0;
+    quint64 m_txBytes = 0;
+    quint64 m_rxBytes = 0;
     ConnectionTarget m_target;
     QHash<quint64, DeviceCommand> m_pending; // request id -> command, current session only
     quint64 m_nextRequestId = 1;

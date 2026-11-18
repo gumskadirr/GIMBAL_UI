@@ -25,6 +25,50 @@ class tst_ServiceConnection : public QObject
     };
 
 private slots:
+    void trafficActivityAndRate()
+    {
+        Fixture f;
+        f.connect();
+        const quint64 id = f.session.activeSessionId();
+        QSignalSpy changed(&f.vm, &ServiceConnection::trafficChanged);
+        QVERIFY(!f.vm.txActive() && !f.vm.rxActive());
+        QCOMPARE(f.vm.dataRateBps(), 0.0);
+
+        emit f.fake->trafficCounted(id, 100, 12500);
+        QTRY_VERIFY(f.vm.rxActive());
+        QVERIFY(f.vm.txActive());
+        QCOMPARE(f.vm.txBytes(), 100.0);
+        QCOMPARE(f.vm.rxBytes(), 12500.0);
+        QTRY_VERIFY(f.vm.dataRateBps() > 0.0);
+
+        QTRY_VERIFY(!f.vm.rxActive()); // no new byte: the LED goes out after kActiveMs
+        QVERIFY(!f.vm.txActive());
+        emit f.fake->trafficCounted(id, 100, 12600); // only RX grows
+        QTRY_VERIFY(f.vm.rxActive());
+        QVERIFY(!f.vm.txActive());
+        QTRY_COMPARE_WITH_TIMEOUT(f.vm.dataRateBps(), 0.0, 3000); // the window empties
+        QVERIFY(changed.count() > 0);
+    }
+
+    void trafficOfOldSessionIsDropped()
+    {
+        Fixture f;
+        f.connect();
+        const int before = f.vm.staleDropped();
+        emit f.fake->trafficCounted(f.session.activeSessionId() + 7, 5, 5);
+        QCOMPARE(f.vm.txBytes(), 0.0);
+        QCOMPARE(f.vm.staleDropped(), before + 1);
+    }
+
+    void pendingCommandNamesAreRawKinds()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.connect();
+        QVERIFY(f.vm.send(Command::RunBit));
+        QCOMPARE(f.vm.pendingCommandNames(), QStringList{QStringLiteral("RunBit")});
+    }
+
     void progressFollowsTheRunningCommand()
     {
         Fixture f;

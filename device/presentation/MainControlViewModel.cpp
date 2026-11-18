@@ -62,9 +62,12 @@ MainControlViewModel::MainControlViewModel(DeviceSession *session, ServiceConnec
 
 void MainControlViewModel::onSample(const DeviceSample &sample)
 {
+    const bool wasAlive = heartbeat();
     m_sample = sample;
     m_sinceSample.start();
     m_staleCheck.start();
+    if (!wasAlive)
+        emit heartbeatChanged();
     emit measurementsChanged();
 }
 
@@ -97,7 +100,10 @@ void MainControlViewModel::clearSessionData()
 void MainControlViewModel::invalidate()
 {
     m_staleCheck.stop();
+    const bool wasAlive = heartbeat();
     m_sinceSample.invalidate();
+    if (wasAlive)
+        emit heartbeatChanged();
     if (!anyValid(m_sample))
         return;
     m_sample = DeviceSample{}; // every field invalid

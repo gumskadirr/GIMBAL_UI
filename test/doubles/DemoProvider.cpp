@@ -20,6 +20,7 @@ void DemoProvider::start(quint64 sessionId, const ConnectionTarget &)
     stop();
     m_sessionId = sessionId;
     m_n = 0;
+    m_tx = m_rx = 0;
     m_streaming = true;
     QTimer::singleShot(0, this, [this, sessionId] {
         if (m_sessionId != sessionId)
@@ -164,6 +165,10 @@ void DemoProvider::tick()
     DeviceSample sample = sampleAt(m_n++);
     sample.streaming.value = m_streaming;
     emit sampleReceived(m_sessionId, sample);
+    // ~0.09 Mbps at the default 100 ms interval (kRxPerTick + kTxPerTick bytes per tick).
+    m_tx += kTxPerTick;
+    m_rx += kRxPerTick;
+    emit trafficCounted(m_sessionId, m_tx, m_rx);
 }
 
 BoardInfo DemoProvider::sampleBoardInfo()

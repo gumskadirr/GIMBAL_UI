@@ -69,6 +69,7 @@ TestCase {
             if (dialog)
                 findChild(main.contentItem, "command-scriptDetails").clicked()
         }
+        testHelper.sendTraffic(250, 11000) // ~0.09 Mbps over the 1 s window, as in the design
         wait(dialog ? 300 : 50) // telemetry turns stale after 1 s; the window fades in
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))

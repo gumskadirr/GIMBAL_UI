@@ -43,6 +43,7 @@ qt_add_qml_module(ids_gimbal
     QML_FILES
         app/Main.qml
         app/PreferencesPage.qml
+        app/MainStatusBar.qml
         shared/ui/Theme.qml
         shared/ui/Icons.qml
         shared/ui/NumberFormat.qml
@@ -64,6 +65,7 @@ qt_add_qml_module(ids_gimbal
         shared/ui/StatusBarButton.qml
         shared/ui/StatusLabel.qml
         shared/ui/StatusDot.qml
+        shared/ui/Led.qml
         shared/ui/Badge.qml
         shared/ui/IdsPopup.qml
         shared/ui/CardBackground.qml

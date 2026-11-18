@@ -238,15 +238,16 @@ TestCase {
         compare(main.activePageId, "preferences")
     }
 
-    function test_notificationInStatusBarAndPopup() {
+    // Bell button with a count badge opens the list; errors must not stay hidden (T14).
+    function test_notificationBellAndPopup() {
         const main = createMain(false)
-        const latest = findChild(main.contentItem, "latestNotification")
-        compare(latest.count, 0)
+        const badge = findChild(main.contentItem, "notificationsBadge")
+        verify(!badge.visible)
         testHelper.addNotification("device.error", "link lost")
-        tryCompare(latest, "count", 1)
+        tryCompare(badge, "visible", true)
 
         const button = findChild(main.contentItem, "notificationsButton")
-        tryCompare(button, "text", "Notifications (1)")
+        compare(button.Accessible.name, "Notifications (1)")
         mouseClick(button)
         const popup = findChild(button, "notificationsPopup")
         tryCompare(popup, "opened", true)
@@ -256,5 +257,94 @@ TestCase {
         }
         popup.close()
         tryCompare(popup, "visible", false)
+    }
+
+    // Demo-like data: every field of the status bar is filled.
+    function test_statusBarShowsAllFields() {
+        const main = createMain(true)
+        testHelper.connectWithFullSample()
+        testHelper.sendTraffic(2500, 110000)
+        const bar = findChild(main.contentItem, "statusBar")
+        tryCompare(findChild(bar, "txLed"), "active", true)
+        tryCompare(findChild(bar, "rxLed"), "active", true)
+        verify(findChild(bar, "heartbeatLed").active)
+        compare(findChild(bar, "onTime").text, "3 h 12 min")
+        verify(findChild(bar, "bitBadge").visible)
+        compare(findChild(bar, "bitBadge").text, "Warning")
+        compare(findChild(bar, "bitMessage").text, "Pan motor: OK")
+        tryVerify(() => findChild(bar, "dataRate").text !== "0.00 Mbps")
+        verify(findChild(bar, "dataRate").text.endsWith(" Mbps"))
+        tryCompare(findChild(bar, "txLed"), "active", false) // no new bytes
+        testHelper.sendSample() // keep the heartbeat alive for the next checks
+    }
+
+    // Real target without a protocol: link open, nothing decoded; protocol fields show "—" (no invented data).
+    function test_statusBarWithoutProtocolShowsDashes() {
+        const main = createMain(false)
+        testHelper.connectBare()
+        const bar = findChild(main.contentItem, "statusBar")
+        compare(findChild(bar, "onTime").text, "—")
+        compare(findChild(bar, "bitMessage").text, "—")
+        verify(!findChild(bar, "bitBadge").visible)
+        verify(!findChild(bar, "heartbeatLed").active)
+        verify(!findChild(bar, "txLed").active)
+        verify(!findChild(bar, "rxLed").active)
+        testHelper.sendTraffic(0, 40) // bytes arrive even without a protocol
+        tryCompare(findChild(bar, "rxLed"), "active", true)
+        testHelper.disconnectDevice()
+        compare(findChild(bar, "dataRate").text, "—")
+    }
+
+    // The running operation shows name and percent; the section keeps its width when it ends.
+    function test_statusBarOperation() {
+        testHelper.setCommandsSupported(true)
+        testHelper.connectWithFullSample()
+        const main = createMain(true)
+        const bar = findChild(main.contentItem, "statusBar")
+        const section = findChild(bar, "operationSection")
+        const name = findChild(bar, "operationName")
+        const width = section.width
+        verify(!name.visible)
+        verify(testMainControl.connection.send(Command.UpdateFirmware, { file: "x.bin" }))
+        testHelper.reportProgress(40, "Writing")
+        tryCompare(name, "visible", true)
+        compare(name.text, "Updating firmware")
+        compare(findChild(bar, "operationPercent").text, "40%")
+        verify(testLocalization.setLanguage("tr"))
+        compare(name.text, "Yazılım güncelleniyor")
+        testHelper.answerLastCommand(Command.Accepted)
+        tryCompare(name, "visible", false)
+        compare(section.width, width)
+        testHelper.setCommandsSupported(false)
+    }
+
+    // Debug settings: service state, sample age, dropped stale results, pending commands, byte totals.
+    function test_debugSettingsPopup() {
+        testHelper.setCommandsSupported(true)
+        testHelper.connectWithFullSample()
+        testHelper.sendTraffic(7, 90)
+        const main = createMain(true)
+        const button = findChild(main.contentItem, "debugButton")
+        mouseClick(button)
+        const popup = findChild(button, "debugPopup")
+        tryCompare(popup, "opened", true)
+        compare(findChild(popup.contentItem, "debugStatus-mainControl").text, "Connected")
+        tryVerify(() => findChild(popup.contentItem, "debugSampleAge").value !== "—")
+        compare(findChild(popup.contentItem, "debugPending").value, "—")
+        verify(testMainControl.connection.send(Command.RunBit))
+        compare(findChild(popup.contentItem, "debugPending").value, "RunBit")
+        tryCompare(findChild(popup.contentItem, "debugTraffic"), "value", "7 B / 90 B")
+        popup.close()
+        testHelper.answerLastCommand(Command.Accepted)
+        testHelper.setCommandsSupported(false)
+    }
+
+    // The connection button belongs to the service of the visible page; the preferences show Main control's.
+    function test_connectionButtonFollowsPageService() {
+        const main = createMain(true)
+        const button = findChild(main.contentItem, "connectionButton")
+        main.currentPageId = "preferences"
+        compare(button.text, "IP/UDP · 127.0.0.1:5000")
+        compare(main.activeConnection, testMainControl.connection)
     }
 }

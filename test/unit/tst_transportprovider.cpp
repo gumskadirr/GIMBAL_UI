@@ -1,4 +1,6 @@
+#include <QNetworkDatagram>
 #include <QSignalSpy>
+#include <QUdpSocket>
 #include <QTest>
 
 #include "device/transport/TransportProvider.h"
@@ -74,6 +76,38 @@ private slots:
         QCOMPARE(stateOf(states, 0), ConnectionState::Connected);
         p.stop();
         p.stop(); // idempotent
+    }
+
+    // TX is what write() sends, RX what arrives; totals since start(), counted without any protocol.
+    void udpTrafficIsCounted()
+    {
+        QUdpSocket peer;
+        QVERIFY(peer.bind(QHostAddress::LocalHost, 0));
+        TransportProvider p;
+        QSignalSpy states(&p, &IDeviceProvider::stateChanged);
+        QSignalSpy traffic(&p, &IDeviceProvider::trafficCounted);
+        QVERIFY(!p.write("no link")); // nothing open yet
+        p.start(3, udp(QStringLiteral("127.0.0.1"), peer.localPort()));
+        QTRY_COMPARE(states.count(), 1);
+        QVERIFY(p.write("abcd"));
+        QCOMPARE(traffic.last().at(0).toULongLong(), 3u);
+        QCOMPARE(traffic.last().at(1).toULongLong(), 4u);
+        QCOMPARE(traffic.last().at(2).toULongLong(), 0u);
+
+        QTRY_VERIFY(peer.hasPendingDatagrams());
+        const QNetworkDatagram request = peer.receiveDatagram();
+        peer.writeDatagram(QByteArray("hello!"), request.senderAddress(), request.senderPort());
+        QTRY_COMPARE(traffic.last().at(2).toULongLong(), 6u);
+        QCOMPARE(traffic.last().at(1).toULongLong(), 4u);
+
+        p.stop();
+        const int counted = traffic.count();
+        QVERIFY(!p.write("closed"));
+        QCOMPARE(traffic.count(), counted);
+        p.start(4, udp(QStringLiteral("127.0.0.1"), peer.localPort())); // totals restart with the session
+        QTRY_COMPARE(states.count(), 2);
+        QVERIFY(p.write("x"));
+        QCOMPARE(traffic.last().at(1).toULongLong(), 1u);
     }
 
     // A result of a session stopped before delivery must not be reported.

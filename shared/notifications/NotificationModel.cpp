@@ -26,7 +26,12 @@ const QHash<QString, const char *> kMessages{
 };
 } // namespace
 
-NotificationModel::NotificationModel(QObject *parent) : QAbstractListModel(parent) {}
+NotificationModel::NotificationModel(QObject *parent) : QAbstractListModel(parent)
+{
+    connect(this, &QAbstractItemModel::rowsInserted, this, &NotificationModel::totalChanged);
+    connect(this, &QAbstractItemModel::rowsRemoved, this, &NotificationModel::totalChanged);
+    connect(this, &QAbstractItemModel::modelReset, this, &NotificationModel::totalChanged);
+}
 
 void NotificationModel::add(const QString &code, const QStringList &args, Severity severity,
                             const QString &detail)

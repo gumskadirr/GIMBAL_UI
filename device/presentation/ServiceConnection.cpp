@@ -11,6 +11,14 @@ ServiceConnection::ServiceConnection(DeviceSession *session, QObject *parent)
 {
     connect(m_session, &DeviceSession::stateChanged, this, &ServiceConnection::changed);
     connect(m_session, &DeviceSession::pendingChanged, this, &ServiceConnection::pendingChanged);
+    connect(m_session, &DeviceSession::sessionStarted, this, [this] { // the byte totals restart with a session
+        m_seenTx = m_seenRx = 0;
+        m_window = {{m_clock.elapsed(), 0}}; // the rate of the first bytes is measured from the session start
+    });
+    m_clock.start();
+    m_tick.setInterval(100);
+    connect(&m_tick, &QTimer::timeout, this, &ServiceConnection::updateTraffic);
+    m_tick.start();
     connect(m_session, &DeviceSession::commandProgressed, this,
             [this](quint64, const DeviceCommand &command, int percent, const QString &stage) {
                 m_progressKind = command.kind;
@@ -38,6 +46,50 @@ QList<int> ServiceConnection::pendingCommands() const
     for (const DeviceCommand &c : m_session->pendingCommands())
         kinds << c.kind;
     return kinds;
+}
+
+QStringList ServiceConnection::pendingCommandNames() const
+{
+    QStringList names;
+    for (int kind : pendingCommands())
+        names << QString::fromLatin1(QMetaEnum::fromType<Command::Kind>().valueToKey(kind));
+    return names;
+}
+
+double ServiceConnection::txBytes() const { return double(m_session->txBytes()); }
+double ServiceConnection::rxBytes() const { return double(m_session->rxBytes()); }
+int ServiceConnection::staleDropped() const { return int(m_session->staleDropped()); }
+
+void ServiceConnection::updateTraffic()
+{
+    const qint64 now = m_clock.elapsed();
+    const quint64 tx = m_session->txBytes();
+    const quint64 rx = m_session->rxBytes();
+    if (tx > m_seenTx)
+        m_lastTxMs = now;
+    if (rx > m_seenRx)
+        m_lastRxMs = now;
+    m_seenTx = tx;
+    m_seenRx = rx;
+    m_window.append({now, tx + rx});
+    while (m_window.size() > 1 && now - m_window.first().first > kRateWindowMs)
+        m_window.removeFirst();
+    const qint64 span = now - m_window.first().first;
+    const double rate = span > 0 ? double(m_window.last().second - m_window.first().second) * 8000.0 / double(span) : 0.0;
+
+    const bool txActive = now - m_lastTxMs <= kActiveMs;
+    const bool rxActive = now - m_lastRxMs <= kActiveMs;
+    const int stale = staleDropped();
+    const bool changed = txActive != m_txActive || rxActive != m_rxActive || rate != m_rateBps || stale != m_seenStale
+                         || tx != m_shownTx || rx != m_shownRx;
+    m_txActive = txActive;
+    m_rxActive = rxActive;
+    m_rateBps = rate;
+    m_seenStale = stale;
+    m_shownTx = tx;
+    m_shownRx = rx;
+    if (changed)
+        emit trafficChanged();
 }
 
 bool ServiceConnection::send(int kind, const QVariantMap &args)
