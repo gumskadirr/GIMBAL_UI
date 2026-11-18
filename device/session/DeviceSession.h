@@ -1,12 +1,14 @@
 #pragma once
 
+#include <QHash>
 #include <QObject>
 #include <memory>
 
 #include "device/api/IDeviceProvider.h"
 
-// The single active device session. Each connect gets a new id; results carrying any other id
+// The single active device session of one service. Each connect gets a new id; results carrying any other id
 // are counted and dropped, so a late result of an old session can never change the current one.
+// Commands sent in a session are pending until answered; when the session ends they finish as Cancelled.
 class DeviceSession : public QObject
 {
     Q_OBJECT
@@ -26,16 +28,25 @@ public:
     quint64 activeSessionId() const { return m_activeId; } // 0 = none
     quint64 staleDropped() const { return m_staleDropped; }
 
+    bool supportsCommands() const { return m_provider->supportsCommands(); }
+    // Request id (> 0) of the sent command; 0 when not connected or the provider has no commands.
+    quint64 send(const DeviceCommand &command);
+    QList<DeviceCommand> pendingCommands() const { return m_pending.values(); }
+
 signals:
     void stateChanged();
     void sessionStarted(quint64 sessionId);
     void sampleAccepted(const DeviceSample &sample);
     void boardInfoAccepted(const BoardInfo &info);
+    void commandFinished(quint64 requestId, const DeviceCommand &command, const CommandResult &result);
+    void pendingChanged();
 
 private:
     void onProviderState(quint64 sessionId, ConnectionState state, const QString &detail);
     void onProviderSample(quint64 sessionId, const DeviceSample &sample);
     void onProviderBoardInfo(quint64 sessionId, const BoardInfo &info);
+    void onProviderCommandFinished(quint64 sessionId, quint64 requestId, const CommandResult &result);
+    void cancelPending();
     void setState(ConnectionState state, const QString &detail);
     bool isActive(quint64 sessionId);
 
@@ -46,4 +57,6 @@ private:
     quint64 m_nextId = 1;
     quint64 m_staleDropped = 0;
     ConnectionTarget m_target;
+    QHash<quint64, DeviceCommand> m_pending; // request id -> command, current session only
+    quint64 m_nextRequestId = 1;
 };

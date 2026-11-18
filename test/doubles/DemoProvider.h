@@ -7,7 +7,7 @@
 // Deterministic sample data for the demo target and tests. Not a gimbal simulator and does not
 // exercise any protocol parser. Scenarios: steady data, periodic invalid temperature (samples
 // 40-49 of every 100), link loss after `linkLossAfter` samples, and a delayed result carrying
-// the old session id after stop().
+// the old session id after stop(). Commands: every command is accepted after `commandDelayMs` (mock).
 class DemoProvider : public IDeviceProvider
 {
     Q_OBJECT
@@ -18,6 +18,10 @@ public:
 
     void start(quint64 sessionId, const ConnectionTarget &target = {}) override; // target ignored
     void stop() override;
+    bool supportsCommands() const override { return true; }
+    void send(quint64 sessionId, quint64 requestId, const DeviceCommand &command) override;
+
+    static constexpr int kCommandDelayMs = 400;
 
     // Deterministic sample number n (pure; public for tests).
     static DeviceSample sampleAt(int n);

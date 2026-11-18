@@ -120,6 +120,73 @@ private slots:
         QCOMPARE(changed.count(), 0);
         QCOMPARE(f.fake->stops, 0);
     }
+    void commandNeedsConnectionAndSupport()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        QCOMPARE(f.session.send({Command::RunBit, {}}), 0u); // not connected
+        f.session.connectDevice();
+        emit f.fake->stateChanged(1, ConnectionState::Connected, {});
+        f.fake->commands = false;
+        QCOMPARE(f.session.send({Command::RunBit, {}}), 0u); // provider has no commands
+        QVERIFY(f.fake->sent.isEmpty());
+    }
+
+    void commandAnsweredOnce()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.session.connectDevice();
+        emit f.fake->stateChanged(1, ConnectionState::Connected, {});
+        QSignalSpy finished(&f.session, &DeviceSession::commandFinished);
+        const quint64 id = f.session.send({Command::StartBootBridge, {{QStringLiteral("board"), QStringLiteral("PMCB")}}});
+        QVERIFY(id > 0);
+        QCOMPARE(f.fake->lastCommandSessionId, 1u);
+        QCOMPARE(f.fake->sent.at(0).args.value(QStringLiteral("board")).toString(), QStringLiteral("PMCB"));
+        QCOMPARE(f.session.pendingCommands().size(), 1);
+
+        emit f.fake->commandFinished(1, id, {Command::Rejected, QStringLiteral("busy")});
+        emit f.fake->commandFinished(1, id, {Command::Accepted, {}}); // duplicate answer ignored
+        QCOMPARE(finished.count(), 1);
+        QCOMPARE(finished.at(0).at(2).value<CommandResult>().status, Command::Rejected);
+        QCOMPARE(finished.at(0).at(1).value<DeviceCommand>().kind, Command::StartBootBridge);
+        QVERIFY(f.session.pendingCommands().isEmpty());
+    }
+
+    void pendingCommandCancelledWhenSessionEnds()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.session.connectDevice();
+        emit f.fake->stateChanged(1, ConnectionState::Connected, {});
+        QSignalSpy finished(&f.session, &DeviceSession::commandFinished);
+        const quint64 a = f.session.send({Command::RunBit, {}});
+        f.session.disconnectDevice();
+        QCOMPARE(finished.count(), 1);
+        QCOMPARE(finished.at(0).at(0).toULongLong(), a);
+        QCOMPARE(finished.at(0).at(2).value<CommandResult>().status, Command::Cancelled);
+
+        f.session.connectDevice(); // session 2
+        emit f.fake->stateChanged(2, ConnectionState::Connected, {});
+        f.session.send({Command::RunBit, {}});
+        emit f.fake->stateChanged(2, ConnectionState::Error, QStringLiteral("link lost")); // link loss cancels too
+        QCOMPARE(finished.count(), 2);
+        QCOMPARE(finished.at(1).at(2).value<CommandResult>().status, Command::Cancelled);
+    }
+
+    void commandResultOfOldSessionDropped()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.session.connectDevice();
+        emit f.fake->stateChanged(1, ConnectionState::Connected, {});
+        const quint64 id = f.session.send({Command::RunBit, {}});
+        f.session.connectDevice(); // session 2; the command was cancelled
+        QSignalSpy finished(&f.session, &DeviceSession::commandFinished);
+        emit f.fake->commandFinished(1, id, {Command::Accepted, {}}); // late answer of session 1
+        QCOMPARE(finished.count(), 0);
+        QCOMPARE(f.session.staleDropped(), 1u);
+    }
 };
 
 QTEST_GUILESS_MAIN(tst_DeviceSession)

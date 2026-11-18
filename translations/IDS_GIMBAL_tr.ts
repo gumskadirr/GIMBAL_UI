@@ -1034,7 +1034,17 @@
         <translation>Tercihler kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="15"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="14"/>
+        <source>Command failed: %1</source>
+        <translation>Komut başarısız: %1</translation>
+    </message>
+    <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="16"/>
+        <source>Command cancelled (connection closed): %1</source>
+        <translation>Komut iptal edildi (bağlantı kapandı): %1</translation>
+    </message>
+    <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="18"/>
         <source>Fonts could not be loaded: %1</source>
         <translation>Yazı tipleri yüklenemedi: %1</translation>
     </message>
@@ -1090,27 +1100,27 @@
 <context>
     <name>ServiceConnection</name>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="17"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="41"/>
         <source>Disconnected</source>
         <translation>Bağlantı yok</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="18"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="42"/>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="19"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="43"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="20"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="44"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../device/presentation/ServiceConnection.cpp" line="38"/>
+        <location filename="../device/presentation/ServiceConnection.cpp" line="62"/>
         <source>Not configured</source>
         <translation>Ayarlanmadı</translation>
     </message>

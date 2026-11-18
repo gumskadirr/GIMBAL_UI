@@ -23,6 +23,8 @@ class ServiceConnection : public QObject
     // Status bar text of the connection settings, e.g. "UART · COM3 · 115200 8N1".
     Q_PROPERTY(QString summary READ summary NOTIFY changed)
     Q_PROPERTY(bool configured READ configured NOTIFY changed)
+    // Command kinds (Command.Kind) waiting for an answer; their buttons look busy and cannot be pressed again.
+    Q_PROPERTY(QList<int> pendingCommands READ pendingCommands NOTIFY pendingChanged)
 
 public:
     explicit ServiceConnection(DeviceSession *session, QObject *parent = nullptr);
@@ -31,11 +33,12 @@ public:
     bool connected() const;
     bool busy() const;
     bool hasError() const;
-    // shortcut: always false (architecture §7, no protocol yet); T5 makes it connected && supportsCommands.
-    bool commandsAvailable() const { return false; }
+    // The real target has no protocol yet, so its provider reports no command support (architecture §7).
+    bool commandsAvailable() const;
     QString errorDetail() const;
     QString summary() const;
     bool configured() const;
+    QList<int> pendingCommands() const;
 
     Q_INVOKABLE void connectDevice();
     Q_INVOKABLE void disconnectDevice();
@@ -45,6 +48,8 @@ public:
     // Sets the target, asks the owner to save it (applied) and connects (architecture §12, rule 5).
     Q_INVOKABLE void apply(const QVariantMap &settings);
     Q_INVOKABLE QStringList availableSerialPorts() const;
+    // kind: Command.Kind. False (nothing sent) when commands are unavailable or the same kind is pending.
+    Q_INVOKABLE bool send(int kind, const QVariantMap &args = {});
 
 public slots:
     void retranslate(); // C++ texts are not refreshed by QQmlEngine::retranslate()
@@ -52,6 +57,9 @@ public slots:
 signals:
     void changed();
     void applied(); // the session target changed from the UI; the owner saves it
+    void pendingChanged();
+    // kind: Command.Kind, status: Command.Status. Failures also become notifications (AppRunner).
+    void commandFinished(int kind, int status, const QString &detail);
 
 private:
     DeviceSession *m_session;

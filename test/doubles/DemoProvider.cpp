@@ -35,6 +35,13 @@ void DemoProvider::stop()
     QTimer::singleShot(m_lateResultDelayMs, this, [this, old, late] { emit sampleReceived(old, late); });
 }
 
+void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceCommand &)
+{
+    QTimer::singleShot(kCommandDelayMs, this, [this, sessionId, requestId] {
+        emit commandFinished(sessionId, requestId, {Command::Accepted, {}});
+    });
+}
+
 void DemoProvider::tick()
 {
     if (m_n >= m_linkLossAfter) {

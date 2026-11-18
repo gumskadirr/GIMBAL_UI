@@ -15,11 +15,22 @@ public:
         ++starts;
     }
     void stop() override { ++stops; }
+    bool supportsCommands() const override { return commands; }
+    void send(quint64 sessionId, quint64 requestId, const DeviceCommand &command) override
+    {
+        sent << command;
+        lastCommandSessionId = sessionId;
+        lastRequestId = requestId;
+    }
 
     quint64 lastSessionId = 0;
     ConnectionTarget lastTarget;
     int starts = 0;
     int stops = 0;
+    bool commands = false; // like the real target until a protocol exists
+    QList<DeviceCommand> sent;
+    quint64 lastCommandSessionId = 0;
+    quint64 lastRequestId = 0;
 };
 
 // Pan angle and gimbal temperature only; every other field stays invalid.

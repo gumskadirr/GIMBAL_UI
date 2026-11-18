@@ -11,6 +11,9 @@ const QHash<QString, const char *> kMessages{
      QT_TRANSLATE_NOOP("NotificationModel", "Preferences could not be saved")},
     {QStringLiteral("language.loadFailed"),
      QT_TRANSLATE_NOOP("NotificationModel", "Language could not be loaded: %1")},
+    {QStringLiteral("command.failed"), QT_TRANSLATE_NOOP("NotificationModel", "Command failed: %1")},
+    {QStringLiteral("command.cancelled"),
+     QT_TRANSLATE_NOOP("NotificationModel", "Command cancelled (connection closed): %1")},
     {QStringLiteral("fonts.loadFailed"),
      QT_TRANSLATE_NOOP("NotificationModel", "Fonts could not be loaded: %1")},
 };

@@ -1,7 +1,9 @@
 #include <QSignalSpy>
 #include <QTest>
 
+#include "DemoProvider.h"
 #include "FakeProvider.h"
+#include "device/transport/TransportProvider.h"
 #include "device/presentation/ServiceConnection.h"
 #include "device/session/DeviceSession.h"
 #include "shared/localization/Localization.h"
@@ -47,6 +49,48 @@ private slots:
         f.connect();
         QVERIFY(f.vm.connected());
         QVERIFY(!f.vm.commandsAvailable()); // connected is not enough while there is no protocol
+        QVERIFY(!f.vm.send(Command::RunBit));
+        QVERIFY(f.fake->sent.isEmpty());
+    }
+
+    void commandBusyUntilAnswered()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.connect();
+        QVERIFY(f.vm.commandsAvailable());
+        QSignalSpy finished(&f.vm, &ServiceConnection::commandFinished);
+        QVERIFY(f.vm.send(Command::RunBit));
+        QCOMPARE(f.vm.pendingCommands(), QList<int>{Command::RunBit});
+        QVERIFY(!f.vm.send(Command::RunBit)); // pressed again while waiting
+        QVERIFY(!f.vm.send(9999));            // not a command kind
+        QCOMPARE(f.fake->sent.size(), 1);
+
+        emit f.fake->commandFinished(1, f.fake->lastRequestId, {Command::Failed, QStringLiteral("timeout")});
+        QVERIFY(f.vm.pendingCommands().isEmpty());
+        QCOMPARE(finished.count(), 1);
+        QCOMPARE(finished.at(0).at(0).toInt(), int(Command::RunBit));
+        QCOMPARE(finished.at(0).at(1).toInt(), int(Command::Failed));
+        QCOMPARE(finished.at(0).at(2).toString(), QStringLiteral("timeout"));
+    }
+
+    // Demo target: commands are mocked and accepted; real target: no protocol, so buttons stay disabled.
+    void demoTargetHasCommandsRealTargetHasNot()
+    {
+        DeviceSession demoSession{std::make_unique<DemoProvider>(10, 1000, 10)};
+        ServiceConnection demo{&demoSession};
+        demo.connectDevice();
+        QTRY_VERIFY(demo.connected());
+        QVERIFY(demo.commandsAvailable());
+        QSignalSpy finished(&demo, &ServiceConnection::commandFinished);
+        QVERIFY(demo.send(Command::AskBootloader));
+        QTRY_COMPARE(finished.count(), 1);
+        QCOMPARE(finished.at(0).at(1).toInt(), int(Command::Accepted));
+
+        DeviceSession realSession{std::make_unique<TransportProvider>()};
+        QVERIFY(!realSession.supportsCommands());
+        ServiceConnection real{&realSession};
+        QVERIFY(!real.commandsAvailable());
     }
 
     void connectionSettingsFromUi()

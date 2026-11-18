@@ -29,6 +29,13 @@ TestCase {
         NumberFormat.language = "en"
     }
 
+    // The command contract (device/api/DeviceCommand.h) is reachable from QML.
+    function test_commandEnumsInQml() {
+        compare(Command.RunBit, 3)
+        compare(Command.Cancelled, 3)
+        verify(!testMainControl.connection.commandsAvailable) // the test provider has no commands
+    }
+
     // Decimal separator follows the UI language (user decision 2026-11-17).
     function test_turkishDecimalComma() {
         const page = createTemporaryObject(pageComponent, testCase)

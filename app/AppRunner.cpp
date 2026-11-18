@@ -2,6 +2,7 @@
 
 #include <QFont>
 #include <QHash>
+#include <QMetaEnum>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
@@ -34,6 +35,17 @@ void connectDeviceService(NotificationModel &notifications, Localization &locali
                           ServiceConnection &connection)
 {
     QObject::connect(&localization, &Localization::languageChanged, &connection, &ServiceConnection::retranslate);
+    QObject::connect(&session, &DeviceSession::commandFinished, &notifications,
+                     [&](quint64, const DeviceCommand &command, const CommandResult &result) {
+                         if (result.status == Command::Accepted)
+                             return;
+                         const QString kind = QString::fromLatin1(QMetaEnum::fromType<Command::Kind>().valueToKey(command.kind));
+                         if (result.status == Command::Cancelled)
+                             notifications.add(QStringLiteral("command.cancelled"), {kind}, NotificationModel::Warning);
+                         else
+                             notifications.add(QStringLiteral("command.failed"), {kind}, NotificationModel::Error,
+                                               result.detail);
+                     });
     QObject::connect(&session, &DeviceSession::stateChanged, &notifications, [&] {
         if (session.state() == ConnectionState::Error)
             notifications.add(QStringLiteral("device.error"), {}, NotificationModel::Error, session.detail());

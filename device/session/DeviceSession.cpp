@@ -1,11 +1,14 @@
 #include "DeviceSession.h"
 
+#include <utility>
+
 DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject *parent)
     : QObject(parent), m_provider(std::move(provider))
 {
     connect(m_provider.get(), &IDeviceProvider::stateChanged, this, &DeviceSession::onProviderState);
     connect(m_provider.get(), &IDeviceProvider::sampleReceived, this, &DeviceSession::onProviderSample);
     connect(m_provider.get(), &IDeviceProvider::boardInfoReceived, this, &DeviceSession::onProviderBoardInfo);
+    connect(m_provider.get(), &IDeviceProvider::commandFinished, this, &DeviceSession::onProviderCommandFinished);
 }
 
 DeviceSession::~DeviceSession()
@@ -30,7 +33,29 @@ void DeviceSession::disconnectDevice()
         return;
     m_activeId = 0;
     m_provider->stop();
+    cancelPending();
     setState(ConnectionState::Disconnected, {});
+}
+
+quint64 DeviceSession::send(const DeviceCommand &command)
+{
+    if (m_state != ConnectionState::Connected || !m_provider->supportsCommands())
+        return 0;
+    const quint64 requestId = m_nextRequestId++;
+    m_pending.insert(requestId, command);
+    emit pendingChanged();
+    m_provider->send(m_activeId, requestId, command);
+    return requestId;
+}
+
+void DeviceSession::cancelPending()
+{
+    if (m_pending.isEmpty())
+        return;
+    const auto pending = std::exchange(m_pending, {});
+    emit pendingChanged();
+    for (auto it = pending.cbegin(); it != pending.cend(); ++it)
+        emit commandFinished(it.key(), it.value(), {Command::Cancelled, {}});
 }
 
 bool DeviceSession::isActive(quint64 sessionId)
@@ -48,6 +73,7 @@ void DeviceSession::onProviderState(quint64 sessionId, ConnectionState state, co
     if (state == ConnectionState::Error || state == ConnectionState::Disconnected) {
         m_activeId = 0; // the provider ended this session; later results of it are stale
         m_provider->stop();
+        cancelPending();
     }
     setState(state, detail);
 }
@@ -62,6 +88,19 @@ void DeviceSession::onProviderBoardInfo(quint64 sessionId, const BoardInfo &info
 {
     if (isActive(sessionId))
         emit boardInfoAccepted(info);
+}
+
+void DeviceSession::onProviderCommandFinished(quint64 sessionId, quint64 requestId, const CommandResult &result)
+{
+    if (!isActive(sessionId))
+        return;
+    const auto it = m_pending.constFind(requestId);
+    if (it == m_pending.cend())
+        return; // already answered
+    const DeviceCommand command = it.value();
+    m_pending.erase(it);
+    emit pendingChanged();
+    emit commandFinished(requestId, command, result);
 }
 
 void DeviceSession::setState(ConnectionState state, const QString &detail)

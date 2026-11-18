@@ -2,6 +2,7 @@
 
 #include <QtQml/qqmlregistration.h>
 
+#include "device/api/DeviceCommand.h"
 #include "device/api/DeviceTypes.h"
 
 // QML value types for the device API gadgets, kept here so device/api has no QML dependency.
@@ -25,6 +26,13 @@ struct BoardInfoForeign
     QML_FOREIGN(BoardInfo)
     QML_VALUE_TYPE(boardInfo)
 };
+
+// QML: Command.AskBootloader, Command.Accepted ... (ServiceConnection.send / commandFinished).
+namespace CommandForeign {
+Q_NAMESPACE
+QML_FOREIGN_NAMESPACE(Command)
+QML_NAMED_ELEMENT(Command)
+}
 
 struct FlagForeign
 {

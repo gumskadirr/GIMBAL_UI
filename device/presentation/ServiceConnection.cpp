@@ -3,12 +3,36 @@
 #include "device/session/DeviceSession.h"
 
 #include <QCoreApplication>
+#include <QMetaEnum>
 #include <QSerialPortInfo>
 
 ServiceConnection::ServiceConnection(DeviceSession *session, QObject *parent)
     : QObject(parent), m_session(session)
 {
     connect(m_session, &DeviceSession::stateChanged, this, &ServiceConnection::changed);
+    connect(m_session, &DeviceSession::pendingChanged, this, &ServiceConnection::pendingChanged);
+    connect(m_session, &DeviceSession::commandFinished, this,
+            [this](quint64, const DeviceCommand &command, const CommandResult &result) {
+                emit commandFinished(command.kind, result.status, result.detail);
+            });
+}
+
+bool ServiceConnection::commandsAvailable() const { return connected() && m_session->supportsCommands(); }
+
+QList<int> ServiceConnection::pendingCommands() const
+{
+    QList<int> kinds;
+    for (const DeviceCommand &c : m_session->pendingCommands())
+        kinds << c.kind;
+    return kinds;
+}
+
+bool ServiceConnection::send(int kind, const QVariantMap &args)
+{
+    if (!commandsAvailable() || pendingCommands().contains(kind)
+        || !QMetaEnum::fromType<Command::Kind>().valueToKey(kind))
+        return false;
+    return m_session->send({Command::Kind(kind), args}) != 0;
 }
 
 QString ServiceConnection::statusText() const
