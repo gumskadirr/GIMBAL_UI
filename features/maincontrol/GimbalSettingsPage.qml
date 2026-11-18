@@ -160,7 +160,7 @@ ControlPageFrame {
                     iconPath: Icons.record
                     busy: page.recorder.recording
                     enabled: page.connection.connected && !page.recorder.recording
-                    text: page.recorder.recording ? qsTr("Recording…") : qsTr("Record CSV")
+                    text: qsTr("Record CSV")
                     onClicked: csvDialog.open()
                 }
                 IdsButton {

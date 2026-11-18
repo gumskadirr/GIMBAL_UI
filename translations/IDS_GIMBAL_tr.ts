@@ -533,7 +533,7 @@
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="23"/>
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="163"/>
         <source>Record CSV</source>
-        <translation>CSV kaydet</translation>
+        <translation>Kayıt</translation>
     </message>
     <message>
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="26"/>
@@ -541,14 +541,13 @@
         <translation>CSV dosyası (*.csv)</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="163"/>
         <source>Recording…</source>
-        <translation>Kaydediliyor…</translation>
+        <translation type="vanished">Kaydediliyor…</translation>
     </message>
     <message>
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="170"/>
         <source>Save CSV</source>
-        <translation>CSV&apos;yi dışa aktar</translation>
+        <translation>CSV&apos;yi kaydet</translation>
     </message>
     <message>
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="173"/>

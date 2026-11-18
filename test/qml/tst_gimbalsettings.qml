@@ -32,6 +32,23 @@ TestCase {
         verify(findChild(page, "command-safeStop"))
     }
 
+    // The stream row keeps Safe stop inside the card while recording, in the longest language.
+    function test_streamRowFitsWhileRecording() {
+        testHelper.setCommandsSupported(true)
+        testHelper.connectWithFullSample()
+        testLocalization.setLanguage("tr")
+        const page = createTemporaryObject(pageComponent, testCase, { width: 1472 })
+        verify(testMainControl.recorder.start(testHelper.makeFile("fit.csv", 0)))
+        for (let i = 0; i < 12345; i += 1000)
+            testHelper.sendSample()
+        const stop = findChild(page, "command-safeStop")
+        const right = stop.mapToItem(page, stop.width, 0).x
+        testMainControl.recorder.stop()
+        testLocalization.setLanguage("en")
+        testHelper.setCommandsSupported(false)
+        verify(right <= page.width - 12, "Safe stop right edge " + right)
+    }
+
     // Without a device no value is invented (nor after the telemetry stopped).
     function test_noInventedValues() {
         const page = createTemporaryObject(pageComponent, testCase)
