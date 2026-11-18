@@ -92,6 +92,9 @@ void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceComman
         case Command::StopStream:
             m_streaming = command.kind == Command::StartStream;
             break;
+        case Command::StepResponse:
+            emit stepMetricsReceived(sessionId, {18.0, 20.5, 92.0, 0.02, 3.0, true}); // values of the design
+            break;
         case Command::RunBit:
             emit bitReportReceived(sessionId, sampleBitReport(QTime::currentTime().toString(QStringLiteral("HH:mm:ss")) + QStringLiteral(" manual run")));
             break;
@@ -221,5 +224,20 @@ DeviceSample DemoProvider::sampleAt(int n)
     s.packetCount = {12480.0 + 100.0 * n, true}; // 1 kHz, 10 samples per second
     s.rawPosition = {18432.0 + n, true};
     s.boardMode = {QStringLiteral("Speed"), true};
+    // Scope: pan rate follows a step of the reference (second order, ~20 % overshoot) every 4 s; tilt follows a
+    // sine of the same period with a small lag. Sample period 100 ms.
+    const double t = (n % 40) * 0.1; // seconds into the 4 s cycle
+    const double stepAt = 1.0;
+    s.panRateRefDps = {t >= stepAt ? 8.0 : 0.0, true};
+    double y = 0.0;
+    if (t >= stepAt) {
+        const double u = t - stepAt, wn = 10.0, zeta = 0.45, wd = wn * std::sqrt(1.0 - zeta * zeta);
+        y = 8.0 * (1.0 - std::exp(-zeta * wn * u) * (std::cos(wd * u) + zeta * wn / wd * std::sin(wd * u)));
+    }
+    s.panRateDps = {y, true};
+    s.tiltRateRefDps = {5.0 * std::sin(2.0 * kPi * n / 40.0), true};
+    s.tiltRateDps = {5.0 * std::sin(2.0 * kPi * n / 40.0 - 0.3), true};
+    s.panTorqueA = {2.0 * std::sin(phase), true};
+    s.tiltTorqueA = {1.0 * std::sin(phase / 2.0), true};
     return s;
 }

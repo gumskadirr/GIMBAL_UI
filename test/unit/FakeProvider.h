@@ -88,5 +88,11 @@ inline DeviceSample makeFullSample()
     s.packetCount = {12480.0, true};
     s.rawPosition = {18432.0, true};
     s.boardMode = {QStringLiteral("Speed"), true};
+    s.panRateDps = {4.0, true};
+    s.panRateRefDps = {5.0, true};
+    s.tiltRateDps = {-2.0, true};
+    s.tiltRateRefDps = {-2.5, true};
+    s.panTorqueA = {1.5, true};
+    s.tiltTorqueA = {-0.5, true};
     return s;
 }

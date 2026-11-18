@@ -9,7 +9,7 @@
 // 40-49 of every 100), link loss after `linkLossAfter` samples, and a delayed result carrying
 // the old session id after stop(). Commands: every command is accepted after kCommandDelayMs (mock);
 // UpdateFirmware reports progress for about 5 s (kFirmwareStepMs x 100) and is accepted at the end,
-// CancelFirmwareUpdate ends it as Cancelled; StartStream / StopStream switch the streaming flag; the three calibrations run the same way for about 5 s and then send
+// CancelFirmwareUpdate ends it as Cancelled; StepResponse is accepted and answers with stepMetricsReceived; StartStream / StopStream switch the streaming flag; the three calibrations run the same way for about 5 s and then send
 // their result (raw position stays telemetry); a second long command while one runs is Rejected; parameters behave like a device: read returns them, write changes them, defaults restores them.
 class DemoProvider : public IDeviceProvider
 {

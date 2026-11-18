@@ -31,6 +31,7 @@ qt_add_qml_module(ids_gimbal
         device/presentation/ServiceConnection.h device/presentation/ServiceConnection.cpp
         device/presentation/MainControlViewModel.h device/presentation/MainControlViewModel.cpp
         device/presentation/ParameterModel.h device/presentation/ParameterModel.cpp
+        device/presentation/SeriesBuffer.h device/presentation/SeriesBuffer.cpp
         device/presentation/DeviceValueTypes.h
         device/session/ConnectionStore.h device/session/ConnectionStore.cpp
         device/transport/TransportProvider.h device/transport/TransportProvider.cpp
@@ -83,6 +84,7 @@ qt_add_qml_module(ids_gimbal
         shared/ui/ConnectionPopup.qml
         shared/ui/Kbd.qml
         shared/ui/IdsTabs.qml
+        shared/ui/LineChart.qml
         shared/notifications/NotificationArea.qml
         features/maincontrol/ControlPageFrame.qml
         features/maincontrol/SectionHeading.qml

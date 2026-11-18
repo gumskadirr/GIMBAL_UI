@@ -8,6 +8,7 @@
 #include "device/api/DeviceTypes.h"
 #include "features/telemetry/CsvRecorder.h"
 #include "device/presentation/ParameterModel.h"
+#include "device/presentation/SeriesBuffer.h"
 #include "device/presentation/ServiceConnection.h"
 
 class DeviceSession;
@@ -23,6 +24,7 @@ class MainControlViewModel : public QObject
     Q_PROPERTY(ServiceConnection *connection READ connection CONSTANT)
     Q_PROPERTY(ParameterModel *parameters READ parameters CONSTANT)
     Q_PROPERTY(CsvRecorder *recorder READ recorder CONSTANT)
+    Q_PROPERTY(SeriesBuffer *scope READ scope CONSTANT) // scope history; filled while the page is hidden too
     // Units: angles in degrees, temperatures in °C, voltage in V (see DeviceSample).
     Q_PROPERTY(Measurement pan READ pan NOTIFY measurementsChanged)
     Q_PROPERTY(Measurement panRef READ panRef NOTIFY measurementsChanged)
@@ -45,6 +47,7 @@ class MainControlViewModel : public QObject
     // Calibration results, read on request; valid is false until a result arrives in this session.
     Q_PROPERTY(CrosstalkResult crosstalk READ crosstalk NOTIFY crosstalkChanged)
     Q_PROPERTY(ImuBias imuBias READ imuBias NOTIFY imuBiasChanged)
+    Q_PROPERTY(StepMetrics stepMetrics READ stepMetrics NOTIFY stepMetricsChanged)
 
 public:
     static constexpr int kStaleAfterMs = 1000;
@@ -54,6 +57,7 @@ public:
     ServiceConnection *connection() const { return m_connection; }
     ParameterModel *parameters() { return &m_parameters; }
     CsvRecorder *recorder() { return &m_recorder; }
+    SeriesBuffer *scope() { return &m_scope; }
     Measurement pan() const { return m_sample.panDeg; }
     Measurement panRef() const { return m_sample.panRefDeg; }
     Measurement tilt() const { return m_sample.tiltDeg; }
@@ -73,6 +77,7 @@ public:
     TextValue boardMode() const { return m_sample.boardMode; }
     CrosstalkResult crosstalk() const { return m_crosstalk; }
     ImuBias imuBias() const { return m_imuBias; }
+    StepMetrics stepMetrics() const { return m_stepMetrics; }
 
     // -1 when there is no current (non-stale) sample.
     Q_INVOKABLE qint64 msSinceLastSample() const { return m_sinceSample.isValid() ? m_sinceSample.elapsed() : -1; }
@@ -83,6 +88,7 @@ signals:
     void bitReportChanged();
     void crosstalkChanged();
     void imuBiasChanged();
+    void stepMetricsChanged();
 
 private:
     void invalidate();       // telemetry only (also on stale timeout)
@@ -93,6 +99,7 @@ private:
     ServiceConnection *m_connection;
     ParameterModel m_parameters;
     CsvRecorder m_recorder;
+    SeriesBuffer m_scope;
     DeviceSample m_sample; // default-constructed = all invalid
     QElapsedTimer m_sinceSample;
     QTimer m_staleCheck;
@@ -101,4 +108,5 @@ private:
     BitReport m_bitReport; // valid = false until a report arrives
     CrosstalkResult m_crosstalk;
     ImuBias m_imuBias;
+    StepMetrics m_stepMetrics;
 };

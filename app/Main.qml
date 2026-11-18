@@ -26,7 +26,7 @@ ApplicationWindow {
         { id: "motorControl", service: "mainControl", group: qsTr("Control"), title: qsTr("Motor control"),
           icon: Icons.motor, component: motorControlPage, designHeight: 900 },
         { id: "gimbalSettings", service: "mainControl", group: qsTr("Control"), title: qsTr("Gimbal settings"),
-          icon: Icons.sliders, component: gimbalSettingsPage, designHeight: 680 },
+          icon: Icons.sliders, component: gimbalSettingsPage, designHeight: 720 },
         { id: "heater", service: "mainControl", group: qsTr("Hardware"), title: qsTr("Heater"),
           icon: Icons.heater, component: heaterPage },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,

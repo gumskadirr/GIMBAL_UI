@@ -23,6 +23,11 @@ DeviceSession::DeviceSession(std::unique_ptr<IDeviceProvider> provider, QObject 
                 if (isActive(sessionId))
                     emit imuBiasAccepted(bias);
             });
+    connect(m_provider.get(), &IDeviceProvider::stepMetricsReceived, this,
+            [this](quint64 sessionId, const StepMetrics &metrics) {
+                if (isActive(sessionId))
+                    emit stepMetricsAccepted(metrics);
+            });
     connect(m_provider.get(), &IDeviceProvider::commandProgress, this,
             [this](quint64 sessionId, quint64 requestId, int percent, const QString &stage) {
                 const auto it = m_pending.constFind(requestId);

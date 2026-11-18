@@ -55,6 +55,13 @@ struct ImuBiasForeign
     QML_VALUE_TYPE(imuBias)
 };
 
+struct StepMetricsForeign
+{
+    Q_GADGET
+    QML_FOREIGN(StepMetrics)
+    QML_VALUE_TYPE(stepMetrics)
+};
+
 // QML: Command.AskBootloader, Command.Accepted ... (ServiceConnection.send / commandFinished).
 namespace CommandForeign {
 Q_NAMESPACE

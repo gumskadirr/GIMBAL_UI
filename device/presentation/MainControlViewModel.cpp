@@ -10,13 +10,17 @@ bool anyValid(const DeviceSample &s)
         if (m.valid)
             return true;
     }
+    for (const Measurement &m : {s.panRateDps, s.panRateRefDps, s.tiltRateDps, s.tiltRateRefDps, s.panTorqueA, s.tiltTorqueA}) {
+        if (m.valid)
+            return true;
+    }
     return s.safeControlLocked.valid || s.onTimeS.valid || s.inBootloader.valid || s.streaming.valid
            || s.streamRateHz.valid || s.packetCount.valid || s.rawPosition.valid || s.boardMode.valid;
 }
 } // namespace
 
 MainControlViewModel::MainControlViewModel(DeviceSession *session, ServiceConnection *connection, QObject *parent)
-    : QObject(parent), m_session(session), m_connection(connection), m_parameters(session, connection), m_recorder(session)
+    : QObject(parent), m_session(session), m_connection(connection), m_parameters(session, connection), m_recorder(session), m_scope(session)
 {
     connect(m_session, &DeviceSession::stateChanged, this, [this] {
         if (m_session->state() != ConnectionState::Connected)
@@ -42,6 +46,11 @@ MainControlViewModel::MainControlViewModel(DeviceSession *session, ServiceConnec
     connect(m_session, &DeviceSession::imuBiasAccepted, this, [this](const ImuBias &bias) {
         m_imuBias = bias;
         emit imuBiasChanged();
+    });
+
+    connect(m_session, &DeviceSession::stepMetricsAccepted, this, [this](const StepMetrics &metrics) {
+        m_stepMetrics = metrics;
+        emit stepMetricsChanged();
     });
 
     m_staleCheck.setInterval(kStaleAfterMs / 4);
@@ -73,6 +82,10 @@ void MainControlViewModel::clearSessionData()
     if (m_imuBias.valid) {
         m_imuBias = ImuBias{};
         emit imuBiasChanged();
+    }
+    if (m_stepMetrics.valid) {
+        m_stepMetrics = StepMetrics{};
+        emit stepMetricsChanged();
     }
     if (!m_hasBoardInfo)
         return;

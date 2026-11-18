@@ -143,4 +143,89 @@ TestCase {
         keyClick(Qt.Key_Escape)
         compare(testHelper.sentCount(), sent)
     }
+
+    // Step + / Step - are keys of the visible page; the answer fills the measurement row.
+    function test_stepKeysAndMetrics() {
+        const page = openWithDevice()
+        compare(findChild(page, "value-rise").text, "—")
+        page.forceActiveFocus()
+        keyClick(Qt.Key_Plus)
+        compare(testHelper.lastCommandKind(), Command.StepResponse)
+        compare(testHelper.lastCommandArgs().direction, 1)
+        testHelper.answerLastCommand(Command.Accepted)
+        testHelper.sendStepMetrics()
+        compare(findChild(page, "value-rise").text, "18 ms")
+        compare(findChild(page, "value-overshoot").text, "20.5%")
+        compare(findChild(page, "value-settling").text, "92 ms")
+        compare(findChild(page, "value-ssError").text, "0.02 deg/s")
+        compare(findChild(page, "value-latency").text, "3 ms")
+        keyClick(Qt.Key_Minus)
+        compare(testHelper.lastCommandArgs().direction, -1)
+        testHelper.answerLastCommand(Command.Accepted)
+        page.pageActive = false // hidden page: the keys do nothing
+        const sent = testHelper.sentCount()
+        keyClick(Qt.Key_Plus)
+        compare(testHelper.sentCount(), sent)
+        testHelper.disconnectDevice()
+        compare(findChild(page, "value-rise").text, "—")
+    }
+
+    // The history keeps filling while the page is hidden; the chart redraws only while it is visible.
+    function test_chartRedrawsOnlyWhileVisible() {
+        const page = openWithDevice()
+        page.pageActive = false
+        const chart = findChild(page, "chart-inline")
+        wait(100) // a redraw queued before the page was hidden
+        const before = chart.version
+        const size = testMainControl.scope.size()
+        for (let i = 0; i < 5; ++i)
+            testHelper.sendSample()
+        wait(150)
+        compare(chart.version, before)
+        compare(testMainControl.scope.size(), size + 5)
+        page.pageActive = true
+        tryVerify(() => chart.version > before)
+        verify(chart.hasData)
+        compare(chart.linePaths.length, 4)
+        verify(chart.linePaths[0].length >= 1 && chart.linePaths[0][0].length >= 2)
+        page.pageActive = false
+        const hiddenAt = chart.version
+        wait(150)
+        compare(chart.version, hiddenAt)
+    }
+
+    function test_viewListAndTabs() {
+        const page = openWithDevice()
+        const chart = findChild(page, "chart-inline")
+        compare(chart.series.length, 4)
+        compare(chart.series[1].name, "panRateRef")
+        verify(chart.series[1].dashed && !chart.series[0].dashed)
+        findChild(page, "scope-view").activated(2)
+        compare(chart.series.length, 2)
+        compare(chart.yMax, 10)
+        findChild(page, "scope-view").activated(1)
+        compare(chart.yMax, 180)
+        findChild(page, "scope-tabs").activated(1)
+        compare(page.tab, 1)
+        compare(findChild(page, "value-scopeNoData").text, "No data")
+        verify(!chart.active)
+    }
+
+    // The pop-out window draws from the same buffer while it is visible, also when the page is hidden.
+    function test_popOutDrawsWhilePageHidden() {
+        const page = openWithDevice()
+        page.pageActive = false
+        findChild(page, "command-popOut").clicked()
+        const window = findChild(page, "scope-window")
+        verify(window.visible)
+        const chart = findChild(window.contentItem, "chart-popout")
+        verify(chart)
+        testHelper.sendSample()
+        tryVerify(() => chart.hasData)
+        const before = chart.version
+        tryVerify(() => chart.version > before)
+        window.visible = false
+        testCase.Window.window.requestActivate() // the keyboard goes back to the test window
+        verify(!findChild(window.contentItem, "chart-popout"))
+    }
 }

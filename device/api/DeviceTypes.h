@@ -67,6 +67,13 @@ struct DeviceSample
     Measurement packetCount;
     Measurement rawPosition;   // encoder counts of the electrical angle calibration
     TextValue boardMode;       // raw device text, e.g. "Speed"
+    // Scope series (Gimbal settings), streamed with the rest.
+    Measurement panRateDps;    // deg/s
+    Measurement panRateRefDps;
+    Measurement tiltRateDps;
+    Measurement tiltRateRefDps;
+    Measurement panTorqueA;    // Iq in A
+    Measurement tiltTorqueA;
 };
 
 // Read once per session (on connect or on request), not streamed: valid until the session ends and never
@@ -164,6 +171,26 @@ public:
     bool valid = false;
 };
 
+// Result of a step response measurement, read on request (StepResponse); valid until the session ends.
+struct StepMetrics
+{
+    Q_GADGET
+    Q_PROPERTY(double riseMs MEMBER riseMs)
+    Q_PROPERTY(double overshootPct MEMBER overshootPct)
+    Q_PROPERTY(double settlingMs MEMBER settlingMs)
+    Q_PROPERTY(double ssErrorDps MEMBER ssErrorDps)
+    Q_PROPERTY(double latencyMs MEMBER latencyMs)
+    Q_PROPERTY(bool valid MEMBER valid)
+
+public:
+    double riseMs = 0.0;
+    double overshootPct = 0.0;
+    double settlingMs = 0.0;
+    double ssErrorDps = 0.0; // steady-state error, deg/s
+    double latencyMs = 0.0;
+    bool valid = false; // false: no measurement in this session
+};
+
 // Where a service connects (architecture §2, §12). Plain values only: the API stays free of QtSerialPort and
 // QtNetwork types.
 struct ConnectionTarget
@@ -212,3 +239,4 @@ Q_DECLARE_METATYPE(BoardInfo)
 Q_DECLARE_METATYPE(BitReport)
 Q_DECLARE_METATYPE(CrosstalkResult)
 Q_DECLARE_METATYPE(ImuBias)
+Q_DECLARE_METATYPE(StepMetrics)

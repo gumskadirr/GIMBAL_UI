@@ -41,6 +41,7 @@ signals:
     void bitReportAccepted(const BitReport &report);
     void crosstalkResultAccepted(const CrosstalkResult &result);
     void imuBiasAccepted(const ImuBias &bias);
+    void stepMetricsAccepted(const StepMetrics &metrics);
     // A pending command made progress (progress of a finished or stale request is dropped).
     void commandProgressed(quint64 requestId, const DeviceCommand &command, int percent, const QString &stage);
     void parametersAccepted(const QVariantMap &values);

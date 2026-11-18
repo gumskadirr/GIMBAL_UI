@@ -5,7 +5,7 @@ import QtQuick.Dialogs
 import IDS_GIMBAL
 
 // Gimbal settings page of the final design (3D card | settings, 1:2). Stream, CSV recording, calibrations, filter gains,
-// board mode and Safe stop are connected; charts (T12) and Script (T13) are not yet.
+// board mode, Safe stop and the Scope are connected; Script (T13) is not yet.
 // Without command support (real target) values show "—" and every input and command is disabled through
 // viewModel.connection.commandsAvailable. The stream rate badge shows what the device reports (1 vs 2 kHz is
 // open, §17). Calibration results are read on request and shown until the session ends.
@@ -17,6 +17,30 @@ ControlPageFrame {
     readonly property bool streaming: viewModel.streaming.valid && viewModel.streaming.value
     readonly property CsvRecorder recorder: viewModel.recorder
     property bool readDone: false
+    property int tab: 0  // Scope, FFT, Bode sweep
+    property int view: 0 // Speed loop, Position loop, Torque loop
+    readonly property var scopeSeries: [
+        [{index: SeriesBuffer.PanRate, name: "panRate", dashed: false, color: Theme.acc},
+         {index: SeriesBuffer.PanRateRef, name: "panRateRef", dashed: true, color: Theme.acc},
+         {index: SeriesBuffer.TiltRate, name: "tiltRate", dashed: false, color: Theme.series2},
+         {index: SeriesBuffer.TiltRateRef, name: "tiltRateRef", dashed: true, color: Theme.series2}],
+        [{index: SeriesBuffer.PanPosition, name: "panPos", dashed: false, color: Theme.acc},
+         {index: SeriesBuffer.PanPositionRef, name: "panPosRef", dashed: true, color: Theme.acc},
+         {index: SeriesBuffer.TiltPosition, name: "tiltPos", dashed: false, color: Theme.series2},
+         {index: SeriesBuffer.TiltPositionRef, name: "tiltPosRef", dashed: true, color: Theme.series2}],
+        [{index: SeriesBuffer.PanTorque, name: "panIq", dashed: false, color: Theme.acc},
+         {index: SeriesBuffer.TiltTorque, name: "tiltIq", dashed: false, color: Theme.series2}]
+    ]
+    // shortcut: fixed Y ranges (deg/s, deg, A) until the protocol document gives real limits.
+    readonly property var scopeRange: [10, 180, 10]
+
+    // Step +/- are keys (the design shows them as key hints), live only while this page is visible.
+    function step(direction) {
+        if (pageActive && connection.commandsAvailable)
+            connection.send(Command.StepResponse, {direction: direction})
+    }
+    Shortcut { sequence: "+"; enabled: page.pageActive; onActivated: page.step(1) }
+    Shortcut { sequence: "-"; enabled: page.pageActive; onActivated: page.step(-1) }
 
     FileDialog {
         id: csvDialog
@@ -102,6 +126,35 @@ ControlPageFrame {
         Connections {
             target: NumberFormat
             function onLanguageChanged() { gain.show() }
+        }
+    }
+    component Metric: Row {
+        property string label
+        property alias text: metricValue.text
+        property alias valueName: metricValue.objectName
+        spacing: 5
+        LabelText { text: parent.label }
+        ValueText { id: metricValue; font.weight: Font.DemiBold }
+    }
+    // The chart of the Scope tab, or "No data" for the tabs without one; used inline and in the pop-out window.
+    component ScopeArea: Item {
+        property alias chart: lineChart
+        property bool drawing: false
+        LineChart {
+            id: lineChart
+            anchors.fill: parent
+            visible: page.tab === 0
+            buffer: page.viewModel.scope
+            series: page.scopeSeries[page.view]
+            yMax: page.scopeRange[page.view]
+            active: parent.drawing && page.tab === 0
+            emptyText: qsTr("No stream data")
+        }
+        LabelText {
+            objectName: "value-scopeNoData"
+            anchors.centerIn: parent
+            visible: page.tab !== 0
+            text: qsTr("No data")
         }
     }
     component CalibrationProgress: IdsProgressBar {
@@ -324,7 +377,7 @@ ControlPageFrame {
             }
         }
 
-        // Scope: charts come in a later step; the area says honestly that there is no data.
+        // Scope
         Card {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -335,24 +388,86 @@ ControlPageFrame {
                 spacing: 12
                 BarTitle { text: qsTr("Scope") }
                 LabelText { objectName: "value-boardMode"; text: qsTr("Board mode %1").arg(page.viewModel.boardMode.valid ? page.viewModel.boardMode.value : "—") }
-                IdsTabs { compact: true; showBaseline: false; model: [qsTr("Scope, 2 s"), qsTr("FFT"), qsTr("Bode sweep")] }
+                IdsTabs {
+                    objectName: "scope-tabs"
+                    compact: true
+                    showBaseline: false
+                    model: [qsTr("Scope, 2 s"), qsTr("FFT"), qsTr("Bode sweep")]
+                    onActivated: index => page.tab = index
+                }
                 Item { Layout.fillWidth: true }
                 IdsComboBox {
+                    objectName: "scope-view"
                     Layout.preferredWidth: 260
                     compact: true
                     model: [qsTr("Speed loop: rate and rate ref"), qsTr("Position loop"), qsTr("Torque loop: Iq")]
+                    Accessible.name: qsTr("Scope view")
+                    onActivated: index => page.view = index
                 }
-                IdsButton { objectName: "command-popOut"; variant: "quiet"; compact: true; iconPath: Icons.popOut; text: qsTr("Pop out") }
+                IdsButton {
+                    objectName: "command-popOut"
+                    variant: "quiet"
+                    compact: true
+                    iconPath: Icons.popOut
+                    text: qsTr("Pop out")
+                    onClicked: popOut.show()
+                }
             }
-            Zone {
+            ScopeArea {
+                objectName: "scope-inline"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: 120 // grows into the spare height
-                LabelText {
-                    objectName: "value-scopeEmpty"
-                    Layout.alignment: Qt.AlignCenter
-                    text: qsTr("No stream data")
+                Layout.preferredHeight: 160 // legend and plot; grows into the spare height
+                drawing: page.pageActive
+                chart.objectName: "chart-inline"
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 20
+                readonly property stepMetrics metrics: page.viewModel.stepMetrics
+                Metric { label: qsTr("Rise"); valueName: "value-rise"; text: parent.metrics.valid ? NumberFormat.fixed(parent.metrics.riseMs, 0) + " ms" : "—" }
+                Metric { label: qsTr("Overshoot"); valueName: "value-overshoot"; text: parent.metrics.valid ? NumberFormat.fixed(parent.metrics.overshootPct, 1) + "%" : "—" }
+                Metric { label: qsTr("Settling"); valueName: "value-settling"; text: parent.metrics.valid ? NumberFormat.fixed(parent.metrics.settlingMs, 0) + " ms" : "—" }
+                Metric { label: qsTr("SS error"); valueName: "value-ssError"; text: parent.metrics.valid ? NumberFormat.fixed(parent.metrics.ssErrorDps, 2) + " deg/s" : "—" }
+                Metric { label: qsTr("Latency"); valueName: "value-latency"; text: parent.metrics.valid ? NumberFormat.fixed(parent.metrics.latencyMs, 0) + " ms" : "—" }
+                Item { Layout.fillWidth: true }
+                LabelText { text: qsTr("Press") }
+                Kbd {
+                    objectName: "key-stepPlus"
+                    text: qsTr("Step +")
+                    Accessible.role: Accessible.Button
+                    Accessible.name: qsTr("Step +")
+                    TapHandler { onTapped: page.step(1) }
                 }
+                LabelText { text: qsTr("or") }
+                Kbd {
+                    objectName: "key-stepMinus"
+                    text: qsTr("Step -")
+                    Accessible.role: Accessible.Button
+                    Accessible.name: qsTr("Step -")
+                    TapHandler { onTapped: page.step(-1) }
+                }
+                LabelText { text: qsTr("to measure") }
+            }
+        }
+    }
+
+    // The same buffer and view in its own window. It draws while it is visible, also when this page is hidden.
+    Window {
+        id: popOut
+        objectName: "scope-window"
+        transientParent: page.Window.window // closes with the main window
+        title: qsTr("Scope")
+        width: 900
+        height: 460
+        color: Theme.bg
+        Loader {
+            anchors.fill: parent
+            anchors.margins: 16
+            active: popOut.visible
+            sourceComponent: ScopeArea {
+                drawing: popOut.visible
+                chart.objectName: "chart-popout"
             }
         }
     }

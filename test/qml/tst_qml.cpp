@@ -1,4 +1,5 @@
 #include <QDir>
+#include <cmath>
 #include <QFile>
 #include <QFileInfo>
 #include <QUrl>
@@ -68,6 +69,22 @@ public:
     Q_INVOKABLE void sendCrosstalk(bool passed, double percent)
     {
         emit m_fake->crosstalkResultReceived(m_session->activeSessionId(), {passed, percent, true});
+    }
+    // A scope sample of the design: pan rate steps at n = 10 with an overshoot, tilt rate is a sine (n * 0.1 s).
+    Q_INVOKABLE void sendScopeSample(int n)
+    {
+        DeviceSample s = makeFullSample();
+        const double t = n * 0.1 - 1.0;
+        const double wd = 10.0 * std::sqrt(1.0 - 0.45 * 0.45);
+        s.panRateRefDps = {t >= 0 ? 8.0 : 0.0, true};
+        s.panRateDps = {t < 0 ? 0.0 : 8.0 * (1.0 - std::exp(-4.5 * t) * (std::cos(wd * t) + 4.5 / wd * std::sin(wd * t))), true};
+        s.tiltRateRefDps = {5.0 * std::sin(n * 0.157), true};
+        s.tiltRateDps = {5.0 * std::sin(n * 0.157 - 0.3), true};
+        emit m_fake->sampleReceived(m_session->activeSessionId(), s);
+    }
+    Q_INVOKABLE void sendStepMetrics()
+    {
+        emit m_fake->stepMetricsReceived(m_session->activeSessionId(), {18.0, 20.5, 92.0, 0.02, 3.0, true});
     }
     Q_INVOKABLE void sendImuBias(double x, double y, double z)
     {

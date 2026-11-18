@@ -37,6 +37,7 @@ signals:
     void bitReportReceived(quint64 sessionId, const BitReport &report); // after RunBit and on connect
     void crosstalkResultReceived(quint64 sessionId, const CrosstalkResult &result); // after StartCrosstalkCheck
     void imuBiasReceived(quint64 sessionId, const ImuBias &bias);                   // after StartImuBiasCalibration
+    void stepMetricsReceived(quint64 sessionId, const StepMetrics &metrics);        // after StepResponse
     // Progress of a long command (e.g. UpdateFirmware): percent 0-100 and a raw stage text; the final
     // answer still comes with commandFinished.
     void commandProgress(quint64 sessionId, quint64 requestId, int percent, const QString &stage);

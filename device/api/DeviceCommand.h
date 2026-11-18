@@ -40,6 +40,7 @@ enum Kind {
     StartElectricalAngleCalibration,
     StartCrosstalkCheck,
     StartImuBiasCalibration,
+    StepResponse, // direction: int (+1 or -1); the result arrives as stepMetricsReceived
 };
 Q_ENUM_NS(Kind)
 

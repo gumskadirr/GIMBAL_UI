@@ -169,6 +169,20 @@ private slots:
         QVERIFY(!f.vm.crosstalk().valid && !f.vm.imuBias().valid);
     }
 
+    void stepMetricsAndScopeHistoryFollowTheSession()
+    {
+        Fixture f;
+        f.connect();
+        emit f.fake->sampleReceived(1, makeFullSample());
+        QCOMPARE(f.vm.scope()->size(), 1); // filled by the session, no page involved
+        emit f.fake->stepMetricsReceived(1, {18.0, 20.5, 92.0, 0.02, 3.0, true});
+        emit f.fake->stepMetricsReceived(99, {1.0, 1.0, 1.0, 1.0, 1.0, true}); // another session: dropped
+        QCOMPARE(f.vm.stepMetrics().riseMs, 18.0);
+        f.connection.disconnectDevice();
+        QVERIFY(!f.vm.stepMetrics().valid);
+        QCOMPARE(f.vm.scope()->size(), 0);
+    }
+
     void becomesStale()
     {
         Fixture f;
