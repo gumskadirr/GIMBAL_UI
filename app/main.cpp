@@ -9,5 +9,7 @@ Q_IMPORT_QML_PLUGIN(IDS_GIMBALPlugin)
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-    return runApp(app, {QStringLiteral("IDS_GIMBAL"), false}, std::make_unique<TransportProvider>());
+    ServiceProviders providers;
+    providers.emplace_back(QString::fromLatin1(kMainControlService), std::make_unique<TransportProvider>());
+    return runApp(app, {QStringLiteral("IDS_GIMBAL"), false}, std::move(providers));
 }

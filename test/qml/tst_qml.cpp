@@ -76,7 +76,8 @@ public slots:
         m_connection = std::make_unique<ServiceConnection>(m_session.get());
         m_mainControl = std::make_unique<MainControlViewModel>(m_session.get(), m_connection.get());
         // The application's own service wiring (AppRunner), not a copy of it.
-        connectServices(*m_settings, *m_notifications, *m_localization, *m_session, *m_connection);
+        connectServices(*m_settings, *m_notifications, *m_localization);
+        connectDeviceService(*m_notifications, *m_localization, *m_session, *m_connection);
     }
 
     void qmlEngineAvailable(QQmlEngine *engine)

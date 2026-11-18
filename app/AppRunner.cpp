@@ -1,6 +1,7 @@
 #include "AppRunner.h"
 
 #include <QFont>
+#include <QHash>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
@@ -13,8 +14,7 @@
 #include "shared/settings/AppSettings.h"
 #include "shared/ui/Fonts.h"
 
-void connectServices(AppSettings &settings, NotificationModel &notifications, Localization &localization,
-                     DeviceSession &session, ServiceConnection &connection)
+void connectServices(AppSettings &settings, NotificationModel &notifications, Localization &localization)
 {
     QObject::connect(&settings, &AppSettings::writeFailed, &notifications, [&](const QString &key) {
         notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error, key);
@@ -26,16 +26,21 @@ void connectServices(AppSettings &settings, NotificationModel &notifications, Lo
                      });
     QObject::connect(&localization, &Localization::languageChanged, &settings, [&] {
         notifications.retranslate();
-        connection.retranslate();
         settings.setLanguage(localization.language());
     });
+}
+
+void connectDeviceService(NotificationModel &notifications, Localization &localization, DeviceSession &session,
+                          ServiceConnection &connection)
+{
+    QObject::connect(&localization, &Localization::languageChanged, &connection, &ServiceConnection::retranslate);
     QObject::connect(&session, &DeviceSession::stateChanged, &notifications, [&] {
         if (session.state() == ConnectionState::Error)
             notifications.add(QStringLiteral("device.error"), {}, NotificationModel::Error, session.detail());
     });
 }
 
-int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDeviceProvider> provider)
+int runApp(QGuiApplication &app, const AppConfig &config, ServiceProviders providers)
 {
     QCoreApplication::setOrganizationName(QStringLiteral("IDS"));
     QCoreApplication::setApplicationName(config.applicationName);
@@ -51,21 +56,35 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
     AppSettings settings;
     NotificationModel notifications;
     Localization localization;
-    DeviceSession session(std::move(provider));
-    ServiceConnection mainConnection(&session);
-    MainControlViewModel mainControl(&session, &mainConnection);
     ConnectionStore connections;
+    // One session and connection per service (architecture §12); each service's view model reads its own.
+    struct Service
+    {
+        QString key;
+        std::unique_ptr<DeviceSession> session;
+        std::unique_ptr<ServiceConnection> connection;
+    };
+    std::vector<Service> services;
+    services.reserve(providers.size()); // byKey keeps pointers into it
+    QHash<QString, Service *> byKey;
+    for (auto &[key, provider] : providers) {
+        auto session = std::make_unique<DeviceSession>(std::move(provider));
+        auto connection = std::make_unique<ServiceConnection>(session.get());
+        services.push_back({key, std::move(session), std::move(connection)});
+        byKey.insert(key, &services.back());
+    }
+    Service *main = byKey.value(QString::fromLatin1(kMainControlService));
+    Q_ASSERT(main); // every target provides the main control service
+    MainControlViewModel mainControl(main->session.get(), main->connection.get());
     QQmlApplicationEngine engine;
 
     // First languageChanged handler: QML bindings are refreshed before the C++ models.
     QObject::connect(&localization, &Localization::languageChanged, &engine, &QQmlEngine::retranslate);
 
-    connectServices(settings, notifications, localization, session, mainConnection);
+    connectServices(settings, notifications, localization);
     if (!missingFonts.isEmpty())
         notifications.add(QStringLiteral("fonts.loadFailed"), {missingFonts.join(QStringLiteral(", "))},
                           NotificationModel::Warning);
-    // Stop data production before services and engine go away.
-    QObject::connect(&app, &QCoreApplication::aboutToQuit, &session, &DeviceSession::disconnectDevice);
 
     localization.setLanguage(settings.language());
 
@@ -73,18 +92,24 @@ int runApp(QGuiApplication &app, const AppConfig &config, std::unique_ptr<IDevic
         notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error,
                           QStringLiteral("connection/") + service);
     });
-    QObject::connect(&mainConnection, &ServiceConnection::applied, &connections,
-                     [&] { connections.save(QString::fromLatin1(kMainControlService), session.target()); });
-    // Startup (architecture §12, rule 2): connect when settings were saved; the demo needs none.
-    const QString service = QString::fromLatin1(kMainControlService);
-    if (const auto target = connections.load(service)) {
-        session.setTarget(*target);
-        session.connectDevice();
-    } else if (config.demoMode) {
-        session.connectDevice();
+    for (Service &s : services) {
+        DeviceSession *session = s.session.get();
+        connectDeviceService(notifications, localization, *session, *s.connection);
+        // Stop data production before services and engine go away.
+        QObject::connect(&app, &QCoreApplication::aboutToQuit, session, &DeviceSession::disconnectDevice);
+        QObject::connect(s.connection.get(), &ServiceConnection::applied, &connections,
+                         [&connections, key = s.key, session] { connections.save(key, session->target()); });
+        // Startup (architecture §12, rule 2): connect when settings were saved; the demo needs none.
+        if (const auto target = connections.load(s.key)) {
+            session->setTarget(*target);
+            session->connectDevice();
+        } else if (config.demoMode) {
+            session->connectDevice();
+        }
+        QJSEngine::setObjectOwnership(s.connection.get(), QJSEngine::CppOwnership);
     }
 
-    for (QObject *o : std::initializer_list<QObject *>{&settings, &notifications, &localization, &mainConnection, &mainControl})
+    for (QObject *o : std::initializer_list<QObject *>{&settings, &notifications, &localization, &mainControl})
         QJSEngine::setObjectOwnership(o, QJSEngine::CppOwnership);
 
     engine.setInitialProperties({
