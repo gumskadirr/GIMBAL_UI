@@ -79,7 +79,6 @@ qt_add_qml_module(ids_gimbal
         shared/ui/Kbd.qml
         shared/ui/IdsTabs.qml
         shared/notifications/NotificationArea.qml
-        features/diagnostics/DiagnosticsPage.qml
         features/maincontrol/ControlPageFrame.qml
         features/maincontrol/SectionHeading.qml
         features/maincontrol/GimbalInfoPage.qml

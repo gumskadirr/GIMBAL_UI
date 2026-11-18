@@ -29,11 +29,9 @@ ApplicationWindow {
           icon: Icons.sliders, component: gimbalSettingsPage, designHeight: 680 },
         { id: "heater", service: "mainControl", group: qsTr("Hardware"), title: qsTr("Heater"),
           icon: Icons.heater, component: heaterPage },
-        { id: "diagnostics", group: qsTr("Developer"), title: qsTr("Diagnostics"), icon: Icons.bug,
-          component: diagnosticsPage, demoOnly: true },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
-    ].filter(page => window.demoMode || !page.demoOnly)
+    ]
     property string currentPageId: ""
     readonly property int currentIndex: Math.max(0, pages.findIndex(page => page.id === window.currentPageId))
     readonly property string activePageId: pages[currentIndex].id
@@ -90,12 +88,6 @@ ApplicationWindow {
     Component {
         id: heaterPage
         HeaterPage {
-            viewModel: window.deviceViewModel
-        }
-    }
-    Component {
-        id: diagnosticsPage
-        DiagnosticsPage {
             viewModel: window.deviceViewModel
         }
     }

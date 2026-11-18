@@ -82,35 +82,31 @@ TestCase {
         compare(findChild(main.contentItem, "page-preferences").scale, 1)
     }
 
-    function test_demoOnlyPageHiddenInRealTarget() {
-        const real = createMain(false)
-        compare(real.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "preferences"])
-        compare(findChild(real.contentItem, "nav-diagnostics"), null)
-        compare(real.activePageId, "gimbalInfo")
-
-        const demo = createMain(true)
-        compare(demo.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "diagnostics", "preferences"])
-        verify(findChild(demo.contentItem, "nav-diagnostics"))
+    function test_pageList() {
+        const main = createMain(true)
+        compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "preferences"])
+        compare(main.activePageId, "gimbalInfo")
     }
 
     function test_switchingKeepsPagesAndStopsInactiveWork() {
         const main = createMain(true)
-        const diagnostics = pageItem(main, "diagnostics")
-        const preferences = pageItem(main, "preferences")
-        verify(diagnostics && preferences)
-        verify(!diagnostics.pageActive) // Gimbal info is the start page
+        const info = pageItem(main, "gimbalInfo")
+        const motor = pageItem(main, "motorControl")
+        verify(info && motor)
+        verify(info.pageActive) // Gimbal info is the start page
+        verify(!motor.pageActive)
 
-        mouseClick(findChild(main.contentItem, "nav-diagnostics"), 20, 20)
-        verify(diagnostics.pageActive)
-        mouseClick(findChild(main.contentItem, "nav-preferences"), 20, 20)
-        compare(main.activePageId, "preferences")
-        verify(!diagnostics.pageActive)
+        mouseClick(findChild(main.contentItem, "nav-motorControl"), 20, 20)
+        compare(main.activePageId, "motorControl")
+        verify(motor.pageActive)
+        verify(!info.pageActive)
 
-        mouseClick(findChild(main.contentItem, "nav-diagnostics"), 20, 20)
-        compare(main.activePageId, "diagnostics")
-        compare(pageItem(main, "diagnostics"), diagnostics)
-        compare(pageItem(main, "preferences"), preferences)
-        verify(diagnostics.pageActive)
+        mouseClick(findChild(main.contentItem, "nav-gimbalInfo"), 20, 20)
+        compare(main.activePageId, "gimbalInfo")
+        compare(pageItem(main, "gimbalInfo"), info)
+        compare(pageItem(main, "motorControl"), motor)
+        verify(info.pageActive)
+        verify(!motor.pageActive)
     }
 
     // A mouse click must not keep the rail open: it would cover the page that was just selected.
@@ -185,7 +181,7 @@ TestCase {
             const item = pageItem(main, page.id)
             return item && "pageActive" in item
         })
-        verify(pagesWithActivity.length >= 4) // the three frame pages and diagnostics
+        verify(pagesWithActivity.length >= 4) // the pages with a connection
         for (const shown of pagesWithActivity) {
             main.currentPageId = shown.id
             for (const page of pagesWithActivity)
