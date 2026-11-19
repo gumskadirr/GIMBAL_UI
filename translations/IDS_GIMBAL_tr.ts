@@ -1052,6 +1052,49 @@
     </message>
 </context>
 <context>
+    <name>GimbalStatePage</name>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="40"/>
+        <source>Gimbal state</source>
+        <translation>Gimbal durumu</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="49"/>
+        <source>Rate</source>
+        <translation>Hız</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="60"/>
+        <source>Stop</source>
+        <translation>Durdur</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="60"/>
+        <source>Start</source>
+        <translation>Başlat</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="69"/>
+        <source>Flags</source>
+        <translation>Bayraklar</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="110"/>
+        <source>TRUE</source>
+        <translation>DOĞRU</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="110"/>
+        <source>FALSE</source>
+        <translation>YANLIŞ</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/GimbalStatePage.qml" line="125"/>
+        <source>Values</source>
+        <translation>Değerler</translation>
+    </message>
+</context>
+<context>
     <name>HeaterPage</name>
     <message>
         <location filename="../features/maincontrol/HeaterPage.qml" line="45"/>
@@ -1207,27 +1250,32 @@
     </message>
     <message>
         <location filename="../app/Main.qml" line="40"/>
+        <source>Gimbal state</source>
+        <translation>Gimbal durumu</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="42"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="40"/>
+        <location filename="../app/Main.qml" line="42"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="58"/>
+        <location filename="../app/Main.qml" line="60"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="228"/>
+        <location filename="../app/Main.qml" line="237"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="176"/>
+        <location filename="../app/Main.qml" line="185"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1237,7 +1285,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="223"/>
+        <location filename="../app/Main.qml" line="232"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>

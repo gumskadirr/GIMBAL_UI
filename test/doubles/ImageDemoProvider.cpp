@@ -1,6 +1,7 @@
 #include "ImageDemoProvider.h"
 #include <limits>
 #include "DesignErrorItems.h"
+#include "DesignGimbalState.h"
 
 ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
 {
@@ -12,6 +13,9 @@ ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
         // One item fails for kFailTicks of every kCycleTicks, so the highlight can be seen.
         const int phase = int(m_tx / kTxPerTick) % kCycleTicks;
         m_state.errors = designErrorItems(phase >= kCycleTicks - kFailTicks ? QStringLiteral("MACB_LRF") : QString());
+        // The state stream (Gimbal state page) refreshes at the chosen rate; the design values never change.
+        if (m_state.stateStreaming.value && int(m_tx / kTxPerTick) % (10 / m_stateRateHz) == 0)
+            fillGimbalState();
         emit imageSampleReceived(m_sessionId, m_state);
     });
     // Values of the View & control design; no LRF reading and no polarity yet.
@@ -39,6 +43,7 @@ ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
     m_state.errorsValid = true;
     m_state.dhcp = {false, true};
     m_state.ipAddress = {QStringLiteral("192.168.1.50"), true};
+    m_state.stateStreaming = {false, true}; // idle until Start; no values yet
     m_state.gainMode = m_state.irisMode = m_state.shutterMode = {1.0, true}; // Auto
 }
 
@@ -111,10 +116,26 @@ void ImageDemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceC
         if (!m_state.dhcp.value)
             m_state.ipAddress = {a.value(QStringLiteral("address")).toString(), true};
         break;
+    case Command::ImageGimbalState:
+        m_state.stateStreaming = {a.value(QStringLiteral("running")).toBool(), true};
+        m_stateRateHz = a.value(QStringLiteral("rateHz"), 5).toInt();
+        if (m_stateRateHz != 1 && m_stateRateHz != 10)
+            m_stateRateHz = 5;
+        if (m_state.stateStreaming.value)
+            fillGimbalState();
+        break;
     case Command::ImageFollowTarget: m_state.followTarget = {a.value(QStringLiteral("enabled")).toBool(), true}; break;
     default: break;
     }
     QTimer::singleShot(kCommandDelayMs, this, [this, sessionId, requestId] {
         emit commandFinished(sessionId, requestId, {Command::Accepted, {}});
     });
+}
+
+void ImageDemoProvider::fillGimbalState()
+{
+    m_state.stateFlags = designStateFlags();
+    m_state.stateValues = designStateValues();
+    m_state.stateFlagsRaw = 0xfff;
+    m_state.stateValid = true;
 }

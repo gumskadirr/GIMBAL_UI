@@ -105,6 +105,7 @@ qt_add_qml_module(ids_gimbal
         features/idsimage/ViewControlPage.qml
         features/idsimage/AlignmentPage.qml
         features/idsimage/ErrorsPage.qml
+        features/idsimage/GimbalStatePage.qml
     RESOURCES
         assets/icons/ids_logo.png
 )

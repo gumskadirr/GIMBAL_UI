@@ -109,7 +109,7 @@ TestCase {
 
     function test_pageList() {
         const main = createMain(true)
-        compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "viewControl", "alignment", "errors", "preferences"])
+        compare(main.pages.map(page => page.id), ["gimbalInfo", "motorControl", "gimbalSettings", "heater", "viewControl", "alignment", "errors", "gimbalState", "preferences"])
         compare(main.activePageId, "gimbalInfo")
     }
 

@@ -67,6 +67,8 @@ enum Kind {
     ImageCameraStep,       // param: QString ("gain"|"iris"|"shutter"), delta: int (+1, -1)
     // IDS Image (Errors).
     ImageSetIp,            // dhcp: bool, address: QString (IPv4; empty when dhcp)
+    // IDS Image (Gimbal state).
+    ImageGimbalState,      // running: bool (start / stop the state stream), rateHz: int (1, 5 or 10)
 };
 Q_ENUM_NS(Kind)
 

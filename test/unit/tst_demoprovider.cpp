@@ -57,6 +57,19 @@ private slots:
         const int seen = samples.count();
         QTRY_VERIFY(samples.count() > seen);
         QCOMPARE(samples.last().at(1).value<ImageSample>().brightness.value, 90.0);
+
+        // The state stream is idle until Start, then shows the design values; Stop ends it.
+        QVERIFY(!s.stateValid);
+        QVERIFY(!s.stateStreaming.value);
+        p.send(1, 2, {Command::ImageGimbalState, {{"running", true}, {"rateHz", 10}}});
+        QTRY_VERIFY(samples.last().at(1).value<ImageSample>().stateStreaming.value);
+        s = samples.last().at(1).value<ImageSample>();
+        QVERIFY(s.stateValid);
+        QCOMPARE(s.stateFlags.size(), 9);
+        QCOMPARE(s.stateValues.size(), 10);
+        QCOMPARE(s.stateFlagsRaw, 0xfff);
+        p.send(1, 3, {Command::ImageGimbalState, {{"running", false}, {"rateHz", 10}}});
+        QTRY_VERIFY(!samples.last().at(1).value<ImageSample>().stateStreaming.value);
     }
 
     void sendsBoardInfoOnceAfterConnecting()

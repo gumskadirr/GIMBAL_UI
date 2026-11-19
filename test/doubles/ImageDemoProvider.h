@@ -6,7 +6,7 @@
 
 // Sample provider of the IDS Image service (demo target): connects, makes up traffic and the telemetry of the
 // View & control design, and accepts every command after kCommandDelayMs. Stream settings and attitude commands
-// take effect at once, so the next telemetry shows them. T20 adds the last page's data.
+// take effect at once, so the next telemetry shows them. the state stream starts and stops with ImageGimbalState.
 class ImageDemoProvider : public IDeviceProvider
 {
     Q_OBJECT
@@ -27,7 +27,10 @@ public:
     static constexpr quint64 kRxPerTick = 4000;
 
 private:
+    void fillGimbalState();
+
     ImageSample m_state; // what the "device" holds
+    int m_stateRateHz = 5;
     QTimer m_timer;
     quint64 m_sessionId = 0;
     quint64 m_tx = 0;

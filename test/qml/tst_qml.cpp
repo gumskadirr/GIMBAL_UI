@@ -151,6 +151,15 @@ public:
         s.errors = designErrorItems(failing);
         emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
     }
+    Q_INVOKABLE void sendImageGimbalState(bool streaming, double yaw, bool flags = true)
+    {
+        ImageSample s = makeImageSample();
+        s.stateStreaming = {streaming, true};
+        s.stateValues = designStateValues(yaw);
+        s.stateFlags = designStateFlags(flags);
+        s.stateFlagsRaw = flags ? 0xfff : 0;
+        emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
+    }
     Q_INVOKABLE int imageSentCount() const { return int(m_imageFake->sent.size()); }
     Q_INVOKABLE int lastImageCommandKind() const { return m_imageFake->sent.isEmpty() ? -1 : int(m_imageFake->sent.last().kind); }
     Q_INVOKABLE QVariantMap lastImageCommandArgs() const

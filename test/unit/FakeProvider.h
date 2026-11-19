@@ -3,6 +3,7 @@
 #include <limits>
 #include "device/api/IDeviceProvider.h"
 #include "../doubles/DesignErrorItems.h"
+#include "../doubles/DesignGimbalState.h"
 
 // Records calls; tests emit results directly with `emit provider->stateChanged(...)`.
 class FakeProvider : public IDeviceProvider
@@ -136,5 +137,10 @@ inline ImageSample makeImageSample()
     s.errorsValid = true;
     s.dhcp = {false, true};
     s.ipAddress = {QStringLiteral("192.168.1.50"), true};
+    s.stateFlags = designStateFlags();
+    s.stateValues = designStateValues();
+    s.stateFlagsRaw = 0xfff;
+    s.stateValid = true;
+    s.stateStreaming = {false, true};
     return s;
 }

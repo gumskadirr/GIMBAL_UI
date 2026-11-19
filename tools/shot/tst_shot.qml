@@ -76,6 +76,8 @@ TestCase {
         waitForRendering(main.contentItem)
         // The first frame can take over a second (telemetry stale): send again; Errors with `dialog` shows a failed item.
         testHelper.sendImageErrors(page === "errors" && dialog ? "MACB_LRF" : "")
+        if (page === "gimbalState") // stream started, values on screen
+            testHelper.sendImageGimbalState(true, 0)
         mouseMove(main.contentItem, main.width / 2, main.height / 2) // off the nav rail: hover expands it
         wait(100)
         waitForRendering(main.contentItem)
@@ -118,6 +120,8 @@ TestCase {
         shot(1536, 786, "errors-1536-dark-en.png", "dark", "en", "errors")
         shot(1536, 786, "errors-1536-light-tr.png", "light", "tr", "errors")
         shot(1536, 786, "errorsFail-1536-dark-en.png", "dark", "en", "errors", true)
+        shot(1536, 786, "gimbalState-1536-dark-en.png", "dark", "en", "gimbalState")
+        shot(1536, 786, "gimbalState-1536-light-tr.png", "light", "tr", "gimbalState")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)

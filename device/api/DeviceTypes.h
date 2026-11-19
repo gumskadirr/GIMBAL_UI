@@ -155,6 +155,11 @@ struct ImageSample
     Q_PROPERTY(bool errorsValid MEMBER errorsValid)
     Q_PROPERTY(Flag dhcp MEMBER dhcp)
     Q_PROPERTY(TextValue ipAddress MEMBER ipAddress)
+    Q_PROPERTY(QVariantList stateFlags MEMBER stateFlags)
+    Q_PROPERTY(QVariantList stateValues MEMBER stateValues)
+    Q_PROPERTY(int stateFlagsRaw MEMBER stateFlagsRaw)
+    Q_PROPERTY(bool stateValid MEMBER stateValid)
+    Q_PROPERTY(Flag stateStreaming MEMBER stateStreaming)
 
 public:
     Measurement rollDeg;
@@ -196,6 +201,13 @@ public:
     bool errorsValid = false;
     Flag dhcp;           // IP settings: the device gets its address by DHCP
     TextValue ipAddress; // the address it holds now
+    // Gimbal state page. Names are device text, never translated: stateFlags is {name, value: bool}, stateValues
+    // {name, value: double}; stateFlagsRaw is the raw flag word; stateValid false means no state was read.
+    QVariantList stateFlags;
+    QVariantList stateValues;
+    int stateFlagsRaw = 0;
+    bool stateValid = false;
+    Flag stateStreaming; // the device is sending the state stream now
 };
 
 // One built-in test item; name and description are raw device text.

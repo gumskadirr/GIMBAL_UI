@@ -37,6 +37,8 @@ ApplicationWindow {
           icon: Icons.target, component: alignmentPage, designHeight: 819 },
         { id: "errors", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("Errors"),
           icon: Icons.warning, component: errorsPage, designHeight: 743 },
+        { id: "gimbalState", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("Gimbal state"),
+          icon: Icons.list, component: gimbalStatePage, designHeight: 656 },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
@@ -127,6 +129,13 @@ ApplicationWindow {
     Component {
         id: errorsPage
         ErrorsPage {
+            viewModel: window.imageViewModel
+            settings: window.settings
+        }
+    }
+    Component {
+        id: gimbalStatePage
+        GimbalStatePage {
             viewModel: window.imageViewModel
             settings: window.settings
         }
