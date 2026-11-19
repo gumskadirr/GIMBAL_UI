@@ -58,7 +58,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
 
 ## A. Toparlama
 
-- [ ] **T1 — Eski yorum ve belgelerin güncellenmesi**
+- [x] **T1 — Eski yorum ve belgelerin güncellenmesi**
   - **Amaç:** Koddaki ve mimarideki eskimiş ifadeleri gidermek; karar günlüğünü açmak.
   - **Dosyalar:**
     - `CMakeLists.txt`: gerçek hedef yorumu.
@@ -66,7 +66,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
     - `docs/kararlar.md` (yeni).
   - **Bitti:** "no device transport yet" ve "bağlantısız sağlayıcı" ifadeleri koddan ve belgeden kalkmış.
 
-- [ ] **T2 — Diagnostics sayfasının kaldırılması**
+- [x] **T2 — Diagnostics sayfasının kaldırılması**
   - **Amaç:** 1. aşamanın doğrulama sayfasını menüden kaldırmak. Oturum ayrıntıları (son örnek yaşı, düşen eski sonuç sayısı, hata ayrıntısı) T14'te durum çubuğundaki "Debug settings" penceresine taşınır.
   - **Dosyalar:**
     - `features/diagnostics/` (silinir).
@@ -76,7 +76,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
     - Demo menüsünde Diagnostics yok.
     - Sayfa etkinliği testi başka sayfayla geçiyor.
 
-- [ ] **T3 — Bağlantının sunum modelinden ayrılması**
+- [x] **T3 — Bağlantının sunum modelinden ayrılması**
   - **Amaç:** `DeviceViewModel` ikiye bölünür. Davranış değişmez.
     - `ServiceConnection`: hizmet başına; durum, özet, uygula, bağlan/kes, portlar, `commandsAvailable`.
     - `MainControlViewModel`: Main control verisi.
@@ -86,14 +86,14 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
     - `app/AppRunner.*`, `app/Main.qml`, `features/maincontrol/*.qml`, `test/unit/tst_deviceviewmodel.cpp` (bölünür), `test/qml/*`.
   - **Bitti:** Bütün testler yeni adlarla geçiyor; QML'de bağlantı alanları `connection.*` üzerinden okunuyor.
 
-- [ ] **T4 — Hizmetlerin AppRunner'da listeyle kurulması**
+- [x] **T4 — Hizmetlerin AppRunner'da listeyle kurulması**
   - **Amaç:** Oturum, bağlantı, kayıt ve açılışta bağlanma her hizmet için tek döngüde kurulur. İkinci hizmet kopya kod gerektirmez.
   - **Dosyalar:** `app/AppRunner.*`, `app/main.cpp`, `test/app/main.cpp`, `test/qml/tst_qml.cpp`.
   - **Bitti:** Main control davranışı ve testleri aynı; sağlayıcılar hizmet anahtarıyla veriliyor.
 
 ## B. Protokol sınırı (arayüz + mock)
 
-- [ ] **T5 — Komut sözleşmesi**
+- [x] **T5 — Komut sözleşmesi**
   - **Amaç:** Arayüzün komut gönderebileceği, protokolden bağımsız bir sınır kurmak.
   - **Sözleşme:**
     - `DeviceCommand { Kind; QVariantMap args }` ve `CommandResult { Accepted | Rejected | Failed | Cancelled | Unsupported; detail }`.
@@ -109,7 +109,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Bitti:**
     - Testler şunları kanıtlıyor: bekleyen komut kopmada iptal ediliyor; eski oturumun sonucu düşüyor; demo hedefinde komutlar açık; gerçek hedefte kapalı.
 
-- [ ] **T6 — Parametre sözleşmesi ve modeli (§13)**
+- [x] **T6 — Parametre sözleşmesi ve modeli (§13)**
   - **Amaç:** Parametreler için protokolden bağımsız sözleşme ve model.
   - **Sözleşme:** Anahtar listesi (`device/api/ParameterKeys.h`), `parametersReceived(sessionId, QVariantMap)`, Read / Write / Save to flash / Defaults komutları.
   - **`ParameterModel`:** Üç durumu tutar (cihazdaki, düzenlenen, dosyadaki) ve "N unsaved changes" sayısını verir.
@@ -119,7 +119,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
 
 ## C. Main control — eksik frontend
 
-- [ ] **T7 — Gimbal info bağlantıları**
+- [x] **T7 — Gimbal info bağlantıları**
   - **Amaç:** Gimbal info'daki eksik değer ve komutları bağlamak.
     - On time (telemetri).
     - BIT listesi ve özeti (istekle okunan `BitReport`).
@@ -136,7 +136,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `DeviceTypes.h`, `MainControlViewModel.*`, `GimbalInfoPage.qml`, `DemoProvider`, testler.
   - **Bitti:** Demo'da tasarımdaki değerler görünüyor; gerçek hedefte "—" ve kapalı düğmeler.
 
-- [ ] **T8 — Motor control bağlantıları**
+- [x] **T8 — Motor control bağlantıları**
   - **Amaç:** Motor control'ü parametre modeline ve komutlara bağlamak.
     - Pan/Tilt parametreleri `ParameterModel`'e bağlanır; "N UNSAVED CHANGES" gösterilir.
     - Read / Write / Save to flash / Defaults.
@@ -151,14 +151,14 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `MotorControlPage.qml`, `MainControlViewModel.*`, `DemoProvider`, testler.
   - **Bitti:** Demo'da bir değer değişince sayaç artıyor, Write sonrası sıfırlanıyor.
 
-- [ ] **T9 — Heater bağlantıları**
+- [x] **T9 — Heater bağlantıları**
   - **Amaç:** Heater'ı modele ve komutlara bağlamak.
     - Enable ve G1/G2/G3/TV/IR doluluk değerleri (okuma ve düzenleme).
     - Read ve Set heater settings komutları.
   - **Dosyalar:** `HeaterPage.qml`, model, `DemoProvider`, testler.
   - **Bitti:** Demo'da tasarımdaki yüzdeler görünüyor; Set komutu gidiyor.
 
-- [ ] **T10 — Gimbal settings değerleri ve komutları**
+- [x] **T10 — Gimbal settings değerleri ve komutları**
   - **Amaç:** Gimbal settings'in değer ve komutlarını bağlamak.
     - Akış durumu ve hızı (sabit "1 kHz" değil, cihazdan), paket sayısı.
     - Start/Stop stream.
@@ -168,7 +168,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `GimbalSettingsPage.qml`, `DeviceTypes.h`, model, `DemoProvider`, testler.
   - **Bitti:** Testler şunları doğruluyor: `Esc` bu sayfada Safe stop gönderiyor, başka sayfada göndermiyor; demo değerleri görünüyor.
 
-- [ ] **T11 — Elle CSV kaydı**
+- [x] **T11 — Elle CSV kaydı**
   - **Amaç:** Kullanıcının istediği an kayıt alabilmesi (18 Kasım).
     - Record CSV: akış örneklerini seçilen dosyaya tamponlu yazar.
     - Save CSV: kaydı kapatır.
@@ -177,7 +177,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `features/telemetry/CsvRecorder.{h,cpp}` (yeni), sayfa, testler.
   - **Bitti:** Test, yazılan satır sayısını gönderilen örnek sayısıyla karşılaştırıyor; yazma hatası görünür.
 
-- [ ] **T12 — Scope grafiği**
+- [x] **T12 — Scope grafiği**
   - **Amaç:** Scope grafiğini mevcut Qt Quick Shapes ile çizmek; yeni modül eklenmez.
     - Sınırlı geçmiş tamponu (C++, ekrana inceltme) ve `LineChart` bileşeni.
     - Seriler: panRate, panRateRef, tiltRate, tiltRateRef.
@@ -194,7 +194,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
     - Gizli sayfada güncelleme olmuyor.
     - Demo'da çizgiler görünüyor.
 
-- [ ] **T13 — Script paneli ve CSV yükleme**
+- [x] **T13 — Script paneli ve CSV yükleme**
   - **Amaç:** Script penceresi ve dışarıdan CSV yükleme. Tasarımda Details ile açılan **ortada bir pencere**dir.
     - **Sol taraf:**
       - FILE: yol, Open CSV, Save CSV; Total rows, Sample time, Duration.
@@ -211,7 +211,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
 
 ## D. Çerçeve
 
-- [ ] **T14 — Durum çubuğu**
+- [x] **T14 — Durum çubuğu**
   - **Amaç:** Durum çubuğunu tasarımdaki gibi tamamlamak.
     - TX/RX ışıkları (`Led`, taslaktan) ve veri hızı. Bayt sayımı taşıma katmanında yapılır; protokol gerekmez.
     - Heartbeat ve ON TIME (protokol alanı; gerçek hedefte "—").
@@ -222,7 +222,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `app/Main.qml`, `shared/ui/Led.qml`, `ServiceConnection.*`, `TransportProvider.*` (yalnız sayaç), `DemoProvider`, testler.
   - **Bitti:** Demo'da bütün alanlar dolu; gerçek hedefte protokol alanları "—".
 
-- [ ] **T14b — Üst çubuk**
+- [x] **T14b — Üst çubuk**
   - **Amaç:** Üst çubuğu tasarımdaki gibi tamamlamak.
     - **Tema seçici** (`ThemeSwitcher`, taslaktan): `AppSettings`'e yazar, `Theme.mode`'a yazmaz (§9). Tercihler sayfası da kalır.
     - **"Realtime graph and logger":** Ayrı pencere açar.
@@ -232,14 +232,14 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `app/Main.qml`, `shared/ui/ThemeSwitcher.qml`, `features/telemetry/RealtimeWindow.qml`, testler.
   - **Bitti:** Tema seçici ayarı değiştiriyor ve yeniden açılışta korunuyor (test).
 
-- [ ] **T15 — Açılışta son sayfa (§12 kural 2)**
+- [x] **T15 — Açılışta son sayfa (§12 kural 2)**
   - **Amaç:** Uygulamanın son açık sayfayla açılması.
   - **Dosyalar:** `AppSettings.*` (`lastPage`), `Main.qml`, testler.
   - **Bitti:** Test, yeniden açılışta son sayfanın geldiğini ve geçersiz kimliğin ilk sayfaya döndüğünü doğruluyor.
 
 ## E. IDS Image hizmeti
 
-- [ ] **T16 — İkinci hizmet ve bağlantı**
+- [x] **T16 — İkinci hizmet ve bağlantı**
   - **Amaç:** IDS Image hizmetini ve bağlantısını kurmak.
     - `idsImage` hizmeti; oturumu, bağlantı kaydı, durum çubuğunda ikinci bağlantı düğmesi.
     - Sol menüde IDS Image'ın kendi logosu ve bağlantı noktası.
@@ -248,7 +248,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `app/*`, `device/presentation/ImageViewModel.*`, `test/doubles/ImageDemoProvider.*`, testler.
   - **Bitti:** İki bağlantı aynı anda açık; biri kesilince diğeri sürüyor (test).
 
-- [ ] **T17 — IDS Image şablonu ve View & control sayfası**
+- [x] **T17 — IDS Image şablonu ve View & control sayfası**
   - **Amaç:** IDS Image sayfa şablonunu ve ilk sayfasını kurmak.
     - **`ImagePageFrame`** (§11):
       - Üstte video kaynağı satırı: RTSP seçimi, URL, Open. URL ayarlarda saklanır. Video çözme yok (ertelendi), Open durumu "video not available" olarak bildirir.
@@ -261,26 +261,26 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `features/idsimage/ImagePageFrame.qml`, `ViewControlPage.qml`, model, `ImageDemoProvider`, testler, sayfa kaydı.
   - **Bitti:** Sığma testi sayfayı kapsıyor; demo değerleri görünüyor.
 
-- [ ] **T18 — Alignment sayfası**
+- [x] **T18 — Alignment sayfası**
   - **Amaç:** Kamera, odak, ofset ve CMOS ayarları; Write offset komutu.
   - **Dosyalar:** `features/idsimage/AlignmentPage.qml`, model, testler.
   - **Bitti:** Ortak ölçütler.
 
-- [ ] **T19 — Errors sayfası**
+- [x] **T19 — Errors sayfası**
   - **Amaç:** Hata listesi ve IP ayarları.
     - Gruplu liste (PMCB, TMCB, BMACB, MACB, MINIPC) ve "N OK" özeti.
     - IP ayarları (DHCP, adres, Set).
   - **Dosyalar:** `features/idsimage/ErrorsPage.qml`, liste modeli, testler.
   - **Bitti:** Hatalı kalem demoda vurgulanıyor.
 
-- [ ] **T20 — Gimbal state sayfası**
+- [x] **T20 — Gimbal state sayfası**
   - **Amaç:** FLAGS ve VALUES listeleri; hız seçimi (1 / 5 / 10 Hz) ve Start.
   - **Dosyalar:** `features/idsimage/GimbalStatePage.qml`, model, testler.
   - **Bitti:** Ortak ölçütler.
 
 ## F. Tasarımda olmayan ama gerekli
 
-- [ ] **T22 — Onay pencereleri**
+- [x] **T22 — Onay pencereleri**
   - **Amaç:** Geri dönüşü zor işlemlerden önce kullanıcıdan onay almak.
     - Kapsam: firmware güncelleme, bootloader'a girme, boot bridge, kalibrasyonlar (motor döner), Save to flash, Defaults, IP ayarını değiştirme.
     - Ortak `ConfirmDialog` kullanılır. Pencerede ne olacağı ve geri alınamayacağı yazar.
@@ -288,7 +288,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
   - **Dosyalar:** `shared/ui/ConfirmDialog.qml`, ilgili sayfalar, testler.
   - **Bitti:** Test, Vazgeç'in komut göndermediğini, Onayla'nın gönderdiğini doğruluyor.
 
-- [ ] **T23 — Çıkış ve kopma korumaları**
+- [x] **T23 — Çıkış ve kopma korumaları**
   - **Amaç:** Veri ve işlem kaybını önlemek.
     - **Uygulama kapanırken uyarı.** Şu durumlarda kullanıcıya sorulur:
       - Kaydedilmemiş parametre değişikliği var.
@@ -301,7 +301,7 @@ Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs
 
 ## G. Bitiş
 
-- [ ] **T21 — Teslim belgesi ve temizlik**
+- [x] **T21 — Teslim belgesi ve temizlik**
   - **Amaç:** Teslimi ve son temizliği yapmak.
     - `docs/protokol-siniri.md`: devralan kişi için sözleşme, her komut ve alan, mock noktaları, beklenen testler.
     - Kullanılmayan ikon ve bileşenler silinir.
