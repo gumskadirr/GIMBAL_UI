@@ -22,7 +22,7 @@ ApplicationWindow {
     readonly property var pages: [
         // service: key of `services`; pages without one (preferences, developer) belong to no connection.
         // designHeight: natural height of the page's (reference) layout, measured; tst_shell fails if the content
-        // outgrows it. Used by the page host below to scale the page to fit.
+        // outgrows it. The tallest one sets the common scale of all pages (page host below).
         { id: "gimbalInfo", service: "mainControl", group: qsTr("Board"), title: qsTr("Gimbal info"),
           icon: Icons.info, component: gimbalInfoPage, designHeight: 890 },
         { id: "motorControl", service: "mainControl", group: qsTr("Control"), title: qsTr("Motor control"),
@@ -42,6 +42,7 @@ ApplicationWindow {
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
+    readonly property real designHeight: Math.max(...pages.map(page => page.designHeight ?? 0))
     // Starts on the page open at last exit; an unknown (e.g. removed) id falls back to the first page via currentIndex.
     property string currentPageId: settings.lastPage
     onCurrentPageIdChanged: settings.lastPage = currentPageId
@@ -306,14 +307,14 @@ ApplicationWindow {
             currentIndex: window.currentIndex
             Repeater {
                 model: window.pages.length
-                // A page with designHeight keeps the reference layout: it is laid out at least that tall and,
-                // when the area is shorter, shrunk uniformly (never enlarged). The scale depends only on the
-                // height, so the wider layout it causes cannot feed back into it.
+                // Every page keeps the reference layout and has the same scale, so a card or button does not
+                // change size between pages: laid out at least as tall as the tallest page and, when the area
+                // is shorter, shrunk uniformly (never enlarged). The scale depends only on the height, so the
+                // wider layout it causes cannot feed back into it.
                 Item {
                     id: pageSlot
                     required property int index
-                    readonly property real designHeight: window.pages[index].designHeight ?? 0
-                    readonly property real fit: designHeight > 0 && height > 0 ? Math.min(1, height / designHeight) : 1
+                    readonly property real fit: height > 0 ? Math.min(1, height / window.designHeight) : 1
 
                     // Only the visible page is active (architecture §11): pages with `pageActive` stop their
                     // heavy work when hidden; data reception and connections are not affected.

@@ -39,8 +39,8 @@ TestCase {
         compare(testSettings.lastPage, "")
     }
 
-    // Option 2 (plan adim-08): Gimbal info keeps the reference layout and shrinks uniformly to fit a maximized
-    // window; small pages are not scaled.
+    // Every page keeps the reference layout and shrinks uniformly to fit a maximized window, all by the same
+    // scale (19 Nov: a card must not change size between pages).
     function test_referencePageScalesToFit_data() {
         return [
             { tag: "1080p@125% en", w: 1536, h: 786, lang: "en" },
@@ -64,10 +64,14 @@ TestCase {
         main.width = data.w
         main.height = data.h
         let framePages = 0
+        waitForRendering(main.contentItem) // the scale follows the new window height on the next frame
+        const scale = findChild(main.contentItem, "page-" + main.pages[0].id).scale
+        verify(scale <= 1)
         for (const page of main.pages) {
             main.currentPageId = page.id
             const loader = findChild(main.contentItem, "page-" + page.id)
             tryVerify(() => loader.item !== null)
+            compare(loader.scale, scale, page.id + ": all pages share one scale")
             const scroller = findChild(loader.item, "pageScroller")
             if (!scroller)
                 continue // not a ControlPageFrame page
@@ -78,14 +82,12 @@ TestCase {
             const area = slot.mapToItem(main.contentItem, 0, 0)
             verify(slot.width > main.width / 2 && area.y + slot.height < main.height,
                    page.id + ": slot " + slot.width + "x" + slot.height + " not laid out for window " + main.width + "x" + main.height)
-            verify(loader.scale <= 1, page.id)
             // The whole page is visible without the frame's own scroller (contentHeight is
             // max(height, natural height), so this fails exactly when the content does not fit).
             verify(scroller.contentHeight <= scroller.height + 0.5,
                    page.id + " needs " + scroller.contentHeight + ", has " + scroller.height)
         }
         verify(framePages >= 5) // includes View & control
-        compare(findChild(main.contentItem, "page-preferences").scale, 1)
     }
 
     // Esc is Safe stop of the Gimbal settings page only: another visible page must not send it (18 Nov decision).

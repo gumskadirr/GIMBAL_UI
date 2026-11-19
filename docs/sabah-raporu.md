@@ -9,8 +9,8 @@
 Son durum: `main` bu raporun commit'i (T21: b7d1613). Derleme hatasız, lint 0, CTest 19/19 (QML testleri, birim testleri, çeviri bütünlüğü ve yeni belge–kod denetimi).
 
 ## Senin karar vermen gerekenler
-1. **Gimbal info sayfası küçük görünüyor.** Sayfa içeriği 890 px yüksekliğe çıktı. 1536×786 ekranda ~0,76 ölçekle küçülüyor, yazılar küçük. Yerleşimi sıkıştırmak kart yerleşimini değiştireceği için onayın olmadan dokunmadım. Seçenekler: (a) böyle kalsın, (b) kart içi boşluklar sıkışsın, (c) bir kart kaydırmalı olsun.
-2. **Gimbal settings** 720 px (~0,94 ölçek). Kabul ettim; itirazın varsa söyle.
+1. **Sayfa ölçeği (19 Kasım, senin isteğinle düzeltildi):** Artık bütün sayfalar aynı ölçekte; bir kart sayfa değişince boyut değiştirmiyor. Ölçeği en uzun sayfa (View & control, 914 px) belirliyor: 1536×786 ekranda her sayfa ~0,70, 1366×768 ekranda ~0,61 ölçekle küçülüyor, yazılar küçük. Büyütmek için en uzun sayfaların (View & control 914, Motor control 900, Gimbal info 890) sıkışması gerekir; kart yerleşimini değiştireceği için onayını bekliyorum.
+2. **Gimbal settings** 720 px; ortak ölçekte artık ayrı bir sorun değil.
 3. **Tasarımdan sapmalar:**
    - Durum çubuğuna zil simgeli bildirim düğmesi eklendi; tasarımda yok, ama hataların görünür kalması gerekiyordu.
    - Durum çubuğunda tek bağlantı düğmesi var ve görünen sayfanın hizmetine bağlanıyor. IDS Image'a bağlanmak için bir IDS Image sayfası açılmalı.

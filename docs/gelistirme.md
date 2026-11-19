@@ -46,7 +46,7 @@ QT_QPA_PLATFORM=offscreen ./build/cli-debug/tst_qml.exe -o build/q.txt,txt   # Q
 
 ## Çalışma kuralları (kullanıcı kararları)
 
-- **Tasarım yerleşimi kesindir.** Kartların yeri ve sırası onaysız değiştirilmez. Sığmayan sayfa `designHeight` ile oranlı küçültülür, hiç büyütülmez.
+- **Tasarım yerleşimi kesindir.** Kartların yeri ve sırası onaysız değiştirilmez. Bütün sayfalar en uzun sayfanın `designHeight` değerine göre aynı oranla küçültülür, hiç büyütülmez.
 - **Protokolsüz ilerleme:** Değerler `valid` bayrağı taşır; veri yoksa "—" gösterilir. Uydurma veri yalnız demo ve test sağlayıcısında bulunur.
 - **İki hizmet:** Main control (UART ya da UDP) ve IDS Image (UDP) aynı anda bağlı olabilir. Yalnız görünen sayfa ekranı günceller. Model seçimi ve TCP yok.
 - **Git akışı:** Her iş kendi dalında yapılır, `main`'e fast-forward birleştirilir. Kayıt mesajları Türkçedir.
