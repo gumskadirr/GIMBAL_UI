@@ -14,7 +14,7 @@ ImagePageFrame {
     readonly property ServiceConnection connection: viewModel.connection
     readonly property bool settingPending: connection.pendingCommands.includes(Command.ImageSetStreamSetting)
     // Range of the position fields in degrees (the design gives none, docs/kararlar.md T17).
-    readonly property real rollLimit: 180
+    readonly property real panLimit: 180
     readonly property real tiltLimit: 90
 
     function pending(kind: int): bool {
@@ -27,11 +27,11 @@ ImagePageFrame {
         return !isNaN(value) && Math.abs(value) <= limit
     }
     function sendPosition(): bool {
-        const roll = NumberFormat.parse(rollField.text)
+        const pan = NumberFormat.parse(panField.text)
         const tilt = NumberFormat.parse(tiltField.text)
-        rollField.error = !inRange(roll, rollLimit)
+        panField.error = !inRange(pan, panLimit)
         tiltField.error = !inRange(tilt, tiltLimit)
-        return !rollField.error && !tiltField.error && connection.send(Command.ImageSetPosition, {roll: roll, tilt: tilt})
+        return !panField.error && !tiltField.error && connection.send(Command.ImageSetPosition, {pan: pan, tilt: tilt})
     }
 
     component CardLabel: Text {
@@ -263,9 +263,9 @@ ImagePageFrame {
         RowLayout {
             Layout.fillWidth: true
             spacing: 8
-            MotorTile { objectName: "tile-roll"; label: qsTr("Roll, deg"); value: page.number(page.sample.rollDeg, 1) }
+            MotorTile { objectName: "tile-pan"; label: qsTr("Pan, deg"); value: page.number(page.sample.panDeg, 1) }
             MotorTile { objectName: "tile-tilt"; label: qsTr("Tilt, deg"); value: page.number(page.sample.tiltDeg, 1) }
-            MotorTile { objectName: "tile-rollRate"; label: qsTr("Roll, deg/s"); value: page.number(page.sample.rollRateDps, 0) }
+            MotorTile { objectName: "tile-panRate"; label: qsTr("Pan, deg/s"); value: page.number(page.sample.panRateDps, 0) }
             MotorTile { objectName: "tile-tiltRate"; label: qsTr("Tilt, deg/s"); value: page.number(page.sample.tiltRateDps, 0) }
         }
         SectionLabel { text: qsTr("Position control") }
@@ -273,14 +273,14 @@ ImagePageFrame {
             Layout.fillWidth: true
             spacing: 8
             IdsTextField {
-                id: rollField
-                objectName: "input-roll"
+                id: panField
+                objectName: "input-pan"
                 Layout.fillWidth: true
                 implicitWidth: 40
                 compact: true
-                placeholderText: qsTr("Roll, deg")
+                placeholderText: qsTr("Pan, deg")
                 enabled: page.connection.commandsAvailable
-                Accessible.name: qsTr("Roll, deg (%1 to %2)").arg(-page.rollLimit).arg(page.rollLimit)
+                Accessible.name: qsTr("Pan, deg (%1 to %2)").arg(-page.panLimit).arg(page.panLimit)
                 onTextEdited: error = false
                 onAccepted: page.sendPosition()
             }

@@ -252,7 +252,7 @@ Her komut `DeviceCommand { kind, args }`. Aksi yazılmadıkça yanıt tek `comma
 
 ### `ImageSetPosition`
 - Ne yapar: gimbal konumunu ayarlar.
-- Argüman: `roll`: double, `tilt`: double (deg; geçici aralık roll ±180, tilt ±90).
+- Argüman: `pan`: double, `tilt`: double (deg; geçici aralık pan ±180, tilt ±90).
 - Yanıt: sonuç.
 - Gönderen: View & control konum kutuları (Enter / Set). Onay: hayır.
 
@@ -397,9 +397,9 @@ IDS Image telemetrisi (`imageSampleReceived`). Ayarlar, cihazın şu an tuttuğu
 
 | Alan | Tür | Birim / not |
 |---|---|---|
-| `rollDeg` | Measurement | deg |
+| `panDeg` | Measurement | deg |
 | `tiltDeg` | Measurement | deg |
-| `rollRateDps` | Measurement | deg/s |
+| `panRateDps` | Measurement | deg/s |
 | `tiltRateDps` | Measurement | deg/s |
 | `fps` | Measurement | kare/s |
 | `zoom` | Measurement | x (1-10) |
@@ -572,7 +572,7 @@ Aşağıdakiler tasarımdan ya da makul tahminden gelir; protokol belgesi gelinc
 - **Parametre aralıkları:** kazançlar 0-10000, ofset ve sınırlar ±180 deg, faz sırası 0-5 (6 sıra), seri no ≤ 32 karakter, süzgeç Kp/Ki 0-10000. Heater doluluk 0-100 tasarımdandır.
 - **Referans aralıkları:** Position ±180 deg (tasarım), Speed ±360 deg/s, Torque ±100 %.
 - **Grafik Y ekseni:** Speed ±10 deg/s (tasarım), Position ±180 deg, Torque ±10 A (geçici).
-- **IDS Image aralıkları:** zoom 1-10; blend/brightness/contrast 0-255; konum roll ±180, tilt ±90 deg; ofset ±100 piksel; image scale 0,5-2,5; odak/FOV gain mesafesi 0 < m <= 100000 ya da sonsuz.
+- **IDS Image aralıkları:** zoom 1-10; blend/brightness/contrast 0-255; konum pan ±180, tilt ±90 deg; ofset ±100 piksel; image scale 0,5-2,5; odak/FOV gain mesafesi 0 < m <= 100000 ya da sonsuz.
 - **Sabit listeler:** kontrol modu (Torque/Speed/Position, cihazdan okunmaz), motor (Pan/Tilt), boot bridge hedefleri ("pan", "tilt"), faz sırası adları, stream mode (Visible, Thermal, Blend), polarity (White hot, Black hot), FFC (manual, auto), kamera ("CMOS sensor"; "Thermal sensor" tahmin).
 - **Kesik hata adları:** Errors tasarımında kesilmiş dört ad tahminle tamamlandı: `external_pressure`, `temperature_sensor`, `core_temperature`, `humidity_sensor` (BMACB_ ön ekli). Gerçek adlar cihaz metni olarak gelmelidir.
 - **Bootloader uyarı metinleri:** "Normal operation is interrupted until you exit the bootloader" ve "...while the bridge is open" tasarımda yoktur, arayüzce yazıldı; cihaz davranışıyla doğrulanmalıdır. Diğer onay penceresi metinleri de T22'de arayüzce yazıldı.

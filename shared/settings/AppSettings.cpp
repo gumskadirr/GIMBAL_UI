@@ -7,6 +7,9 @@ const QString kThemeKey = QStringLiteral("ui/theme");
 const QString kLanguageKey = QStringLiteral("ui/language");
 const QString kLastPageKey = QStringLiteral("ui/lastPage");
 const QString kRtspUrlKey = QStringLiteral("image/rtspUrl");
+const QString kGimbalKey = QStringLiteral("gimbal/id");
+const QString kGimbalVersionKey = QStringLiteral("gimbal/version");
+const QString kGimbalOnStartKey = QStringLiteral("gimbal/onStart");
 const QString kDefaultRtspUrl = QStringLiteral("rtsp://192.168.1.160:8554/operator/h264");
 
 QString validOr(const QString &value, const QStringList &allowed)
@@ -39,6 +42,9 @@ void AppSettings::load()
     m_language = validOr(settings->value(kLanguageKey).toString(), kLanguages);
     m_lastPage = settings->value(kLastPageKey).toString();
     m_rtspUrl = settings->value(kRtspUrlKey, kDefaultRtspUrl).toString();
+    m_gimbal = settings->value(kGimbalKey).toString();
+    m_gimbalVersion = settings->value(kGimbalVersionKey).toString();
+    m_gimbalOnStart = settings->value(kGimbalOnStartKey, true).toBool();
 }
 
 void AppSettings::setTheme(const QString &theme)
@@ -75,6 +81,33 @@ void AppSettings::setRtspUrl(const QString &url)
     m_rtspUrl = url;
     emit rtspUrlChanged();
     write(kRtspUrlKey, url);
+}
+
+void AppSettings::setGimbal(const QString &id)
+{
+    if (id == m_gimbal)
+        return;
+    m_gimbal = id;
+    emit gimbalChanged();
+    write(kGimbalKey, id);
+}
+
+void AppSettings::setGimbalVersion(const QString &version)
+{
+    if (version == m_gimbalVersion)
+        return;
+    m_gimbalVersion = version;
+    emit gimbalVersionChanged();
+    write(kGimbalVersionKey, version);
+}
+
+void AppSettings::setGimbalOnStart(bool on)
+{
+    if (on == m_gimbalOnStart)
+        return;
+    m_gimbalOnStart = on;
+    emit gimbalOnStartChanged();
+    write(kGimbalOnStartKey, on ? QStringLiteral("true") : QStringLiteral("false"));
 }
 
 void AppSettings::write(const QString &key, const QString &value)

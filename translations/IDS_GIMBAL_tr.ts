@@ -792,6 +792,59 @@
     </message>
 </context>
 <context>
+    <name>GimbalSelectDialog</name>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="47"/>
+        <source>Select a gimbal</source>
+        <translation>Gimbal seçin</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="58"/>
+        <source>Choose the pan-tilt gimbal you are working with. The 3D view shows the selected model; pages and settings do not change.</source>
+        <translation>Çalıştığınız pan-tilt gimbali seçin. 3B görünüm seçilen modeli gösterir; sayfalar ve ayarlar değişmez.</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="119"/>
+        <source>Current</source>
+        <translation>Kullanılan</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="159"/>
+        <source>No 3D model yet</source>
+        <translation>Henüz 3B model yok</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="168"/>
+        <source>Version</source>
+        <translation>Sürüm</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="214"/>
+        <source>Open this gimbal on start</source>
+        <translation>Açılışta bu gimballe başla</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="219"/>
+        <source>Selected &lt;b&gt;%1 · %2&lt;/b&gt;</source>
+        <translation>Seçilen &lt;b&gt;%1 · %2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="220"/>
+        <source>No gimbal selected</source>
+        <translation>Gimbal seçilmedi</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="230"/>
+        <source>Cancel</source>
+        <translation>Vazgeç</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="237"/>
+        <source>Continue</source>
+        <translation>Devam</translation>
+    </message>
+</context>
+<context>
     <name>GimbalSettingsPage</name>
     <message>
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="170"/>
@@ -1265,8 +1318,8 @@
     </message>
     <message>
         <location filename="../features/idsimage/ImagePageFrame.qml" line="92"/>
-        <source>ROLL %1  TILT %2</source>
-        <translation>ROLL %1  TILT %2</translation>
+        <source>PAN %1  TILT %2</source>
+        <translation>PAN %1  TILT %2</translation>
     </message>
     <message>
         <location filename="../features/idsimage/ImagePageFrame.qml" line="100"/>
@@ -1353,58 +1406,73 @@
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="61"/>
+        <location filename="../app/Main.qml" line="73"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="160"/>
+        <location filename="../app/Main.qml" line="184"/>
         <source>%1 unsaved parameter change(s) will be lost.</source>
         <translation>%1 kaydedilmemiş parametre değişikliği kaybolacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="162"/>
+        <location filename="../app/Main.qml" line="186"/>
         <source>The firmware update in progress will be interrupted.</source>
         <translation>Süren firmware güncellemesi yarıda kalacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="164"/>
+        <location filename="../app/Main.qml" line="188"/>
         <source>The script that is playing will stop.</source>
         <translation>Oynatılan script duracak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="166"/>
+        <location filename="../app/Main.qml" line="190"/>
         <source>The CSV recording in progress will be closed.</source>
         <translation>Süren CSV kaydı kapatılacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="181"/>
+        <location filename="../app/Main.qml" line="205"/>
         <source>Exit the application?</source>
         <translation>Uygulamadan çıkılsın mı?</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="182"/>
+        <location filename="../app/Main.qml" line="206"/>
         <source>If you exit now:</source>
         <translation>Şimdi çıkarsanız:</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="183"/>
+        <location filename="../app/Main.qml" line="207"/>
         <source>Stay</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="184"/>
+        <location filename="../app/Main.qml" line="208"/>
         <source>Exit</source>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="275"/>
+        <location filename="../app/Main.qml" line="317"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
+        <location filename="../app/Main.qml" line="337"/>
+        <source>Select gimbal</source>
+        <translation>Gimbal seçin</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="338"/>
+        <source>Gimbal: %1</source>
+        <translation>Gimbal: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="350"/>
+        <source>Gimbal</source>
+        <translation>Gimbal</translation>
+    </message>
+    <message>
         <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="223"/>
+        <location filename="../app/Main.qml" line="265"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1414,7 +1482,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="270"/>
+        <location filename="../app/Main.qml" line="312"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
@@ -2551,19 +2619,24 @@
     <message>
         <location filename="../features/idsimage/ViewControlPage.qml" line="266"/>
         <location filename="../features/idsimage/ViewControlPage.qml" line="281"/>
-        <source>Roll, deg</source>
-        <translation>Roll, der</translation>
+        <source>Pan, deg</source>
+        <translation>Pan, der</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="268"/>
+        <source>Pan, deg/s</source>
+        <translation>Pan, der/sn</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ViewControlPage.qml" line="283"/>
+        <source>Pan, deg (%1 to %2)</source>
+        <translation>Pan, der (%1 ile %2 arası)</translation>
     </message>
     <message>
         <location filename="../features/idsimage/ViewControlPage.qml" line="267"/>
         <location filename="../features/idsimage/ViewControlPage.qml" line="293"/>
         <source>Tilt, deg</source>
         <translation>Tilt, der</translation>
-    </message>
-    <message>
-        <location filename="../features/idsimage/ViewControlPage.qml" line="268"/>
-        <source>Roll, deg/s</source>
-        <translation>Roll, der/sn</translation>
     </message>
     <message>
         <location filename="../features/idsimage/ViewControlPage.qml" line="269"/>
@@ -2574,11 +2647,6 @@
         <location filename="../features/idsimage/ViewControlPage.qml" line="271"/>
         <source>Position control</source>
         <translation>Konum kontrolü</translation>
-    </message>
-    <message>
-        <location filename="../features/idsimage/ViewControlPage.qml" line="283"/>
-        <source>Roll, deg (%1 to %2)</source>
-        <translation>Roll, der (%1 ile %2 arası)</translation>
     </message>
     <message>
         <location filename="../features/idsimage/ViewControlPage.qml" line="295"/>

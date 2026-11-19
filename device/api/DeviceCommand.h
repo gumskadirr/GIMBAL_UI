@@ -52,7 +52,7 @@ enum Kind {
     ImageAttitudeEnable,   // enabled: bool
     ImageSetControlDevice, // device: QString ("keyboard" | "joystick")
     ImagePark,             // "P": move the gimbal to its park position (reading of the design, see docs/kararlar.md)
-    ImageSetPosition,      // roll: double, tilt: double (deg)
+    ImageSetPosition,      // pan: double, tilt: double (deg)
     ImageResetPosition,
     ImageLrfPointer,       // enabled: bool
     ImageLrfMeasure,       // mode: QString ("single" | "continuous")

@@ -4,7 +4,7 @@ import IDS_GIMBAL
 // Video / 3D model area: dark dotted background + optional crosshair.
 // For real content put a VideoOutput or View3D inside (anchors.fill: parent).
 //   VideoViewport { showCrosshair: true
-//       OverlayTag { x: 12; y: 12; mono: true; text: "ROLL 0.0  TILT 0.0" } }
+//       OverlayTag { x: 12; y: 12; mono: true; text: "PAN 0.0  TILT 0.0" } }
 Item {
     id: root
 

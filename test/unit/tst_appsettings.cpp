@@ -59,6 +59,25 @@ private slots:
         QCOMPARE(s2.rtspUrl(), QStringLiteral("rtsp://10.0.0.5/cam"));
     }
 
+    void gimbalPersists()
+    {
+        {
+            AppSettings s(path());
+            QCOMPARE(s.gimbal(), QString());
+            QCOMPARE(s.gimbalVersion(), QString());
+            QVERIFY(s.gimbalOnStart());
+            QSignalSpy spy(&s, &AppSettings::gimbalChanged);
+            s.setGimbal(QStringLiteral("g180"));
+            s.setGimbalVersion(QStringLiteral("v2.0"));
+            s.setGimbalOnStart(false);
+            QCOMPARE(spy.count(), 1);
+        }
+        AppSettings s2(path());
+        QCOMPARE(s2.gimbal(), QStringLiteral("g180"));
+        QCOMPARE(s2.gimbalVersion(), QStringLiteral("v2.0"));
+        QVERIFY(!s2.gimbalOnStart());
+    }
+
     void invalidStoredValuesFallBack()
     {
         {

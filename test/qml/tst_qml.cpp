@@ -200,6 +200,9 @@ public slots:
         QQuickStyle::setStyle(QStringLiteral("Basic"));
         loadAppFonts();
         m_settings = std::make_unique<AppSettings>(m_dir.filePath(QStringLiteral("settings.ini")));
+        // A chosen gimbal, so the gimbal selection does not open over every Main window under test.
+        m_settings->setGimbal(QStringLiteral("g180"));
+        m_settings->setGimbalVersion(QStringLiteral("v2.0"));
         m_notifications = std::make_unique<NotificationModel>();
         m_localization = std::make_unique<Localization>();
         auto fake = std::make_unique<FakeProvider>();

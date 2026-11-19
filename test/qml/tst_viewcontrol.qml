@@ -50,7 +50,7 @@ TestCase {
     // Values of the design.
     function test_designValuesShown() {
         const page = openWithDevice()
-        compare(findChild(page, "tagAttitude").text, "ROLL 0.0  TILT 0.0")
+        compare(findChild(page, "tagAttitude").text, "PAN 0.0  TILT 0.0")
         compare(findChild(page, "tagStream").text, "30 FPS · x1.0")
         compare(findChild(page, "statusValue").text, "OK")
         compare(findChild(page, "modeValue").text, "Locked")
@@ -61,7 +61,7 @@ TestCase {
         compare(findChild(page, "combo-polarity").displayText, "Select...")
         compare(findChild(page, "combo-ffcMode").currentText, "FFC manual")
         compare(findChild(page, "lrfDistance").text, "—") // no reading: never shown as 0
-        compare(findChild(page, "tile-roll").value, "0.0")
+        compare(findChild(page, "tile-pan").value, "0.0")
         compare(findChild(page, "command-attitudeEnable").text, "Enable")
     }
 
@@ -70,7 +70,7 @@ TestCase {
         verify(testLocalization.setLanguage("tr"))
         NumberFormat.language = "tr"
         compare(findChild(page, "tagStream").text, "30 FPS · x1,0")
-        compare(findChild(page, "tagAttitude").text, "ROLL 0,0  TILT 0,0")
+        compare(findChild(page, "tagAttitude").text, "PAN 0,0  TILT 0,0")
     }
 
     function test_noDataShowsDashes() {
@@ -181,27 +181,27 @@ TestCase {
 
     function test_positionNeedsValidNumbers() {
         const page = openWithDevice()
-        const roll = findChild(page, "input-roll")
+        const pan = findChild(page, "input-pan")
         const tilt = findChild(page, "input-tilt")
         const sent = testHelper.imageSentCount()
-        roll.text = "200" // out of range
+        pan.text = "200" // out of range
         tilt.text = "5"
         findChild(page, "command-setPosition").clicked()
-        verify(roll.error)
+        verify(pan.error)
         verify(!tilt.error)
         compare(testHelper.imageSentCount(), sent)
-        roll.text = "10.5"
+        pan.text = "10.5"
         tilt.text = "-3"
         findChild(page, "command-setPosition").clicked()
         compare(testHelper.lastImageCommandKind(), Command.ImageSetPosition)
-        compare(testHelper.lastImageCommandArgs().roll, 10.5)
+        compare(testHelper.lastImageCommandArgs().pan, 10.5)
         compare(testHelper.lastImageCommandArgs().tilt, -3)
         answer()
         verify(testLocalization.setLanguage("tr"))
         NumberFormat.language = "tr"
-        roll.text = "10.5" // the dot is not a Turkish decimal
+        pan.text = "10.5" // the dot is not a Turkish decimal
         findChild(page, "command-setPosition").clicked()
-        verify(roll.error)
+        verify(pan.error)
     }
 
     // Open does not decode video yet: it says so and keeps the address.

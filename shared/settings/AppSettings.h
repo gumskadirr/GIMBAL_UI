@@ -15,6 +15,9 @@ class AppSettings : public QObject
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(QString lastPage READ lastPage WRITE setLastPage NOTIFY lastPageChanged)
     Q_PROPERTY(QString rtspUrl READ rtspUrl WRITE setRtspUrl NOTIFY rtspUrlChanged)
+    Q_PROPERTY(QString gimbal READ gimbal WRITE setGimbal NOTIFY gimbalChanged)
+    Q_PROPERTY(QString gimbalVersion READ gimbalVersion WRITE setGimbalVersion NOTIFY gimbalVersionChanged)
+    Q_PROPERTY(bool gimbalOnStart READ gimbalOnStart WRITE setGimbalOnStart NOTIFY gimbalOnStartChanged)
 
 public:
     explicit AppSettings(QObject *parent = nullptr); // platform store, keyed by org/app name
@@ -28,12 +31,22 @@ public:
     void setLastPage(const QString &page);
     QString rtspUrl() const { return m_rtspUrl; } // IDS Image video source (the design's address until changed)
     void setRtspUrl(const QString &url);
+    // Gimbal the user works with (display only: top bar and 3D view). Unknown ids are resolved by the shell.
+    QString gimbal() const { return m_gimbal; }
+    void setGimbal(const QString &id);
+    QString gimbalVersion() const { return m_gimbalVersion; }
+    void setGimbalVersion(const QString &version);
+    bool gimbalOnStart() const { return m_gimbalOnStart; } // false: the selection opens at every start
+    void setGimbalOnStart(bool on);
 
 signals:
     void themeChanged();
     void languageChanged();
     void lastPageChanged();
     void rtspUrlChanged();
+    void gimbalChanged();
+    void gimbalVersionChanged();
+    void gimbalOnStartChanged();
     void writeFailed(const QString &key);
 
 private:
@@ -46,4 +59,7 @@ private:
     QString m_language;
     QString m_lastPage;
     QString m_rtspUrl;
+    QString m_gimbal;
+    QString m_gimbalVersion;
+    bool m_gimbalOnStart = true;
 };

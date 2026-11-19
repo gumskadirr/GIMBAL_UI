@@ -19,7 +19,7 @@ ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
         emit imageSampleReceived(m_sessionId, m_state);
     });
     // Values of the View & control design; no LRF reading and no polarity yet.
-    m_state.rollDeg = m_state.tiltDeg = m_state.rollRateDps = m_state.tiltRateDps = {0.0, true};
+    m_state.panDeg = m_state.tiltDeg = m_state.panRateDps = m_state.tiltRateDps = {0.0, true};
     m_state.fps = {30.0, true};
     m_state.zoom = {1.0, true};
     m_state.blend = {0.0, true};
@@ -98,11 +98,11 @@ void ImageDemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceC
         m_state.controlDevice = {a.value(QStringLiteral("device")).toString() == QLatin1String("joystick") ? 1.0 : 0.0, true};
         break;
     case Command::ImageSetPosition:
-        m_state.rollDeg = {a.value(QStringLiteral("roll")).toDouble(), true};
+        m_state.panDeg = {a.value(QStringLiteral("pan")).toDouble(), true};
         m_state.tiltDeg = {a.value(QStringLiteral("tilt")).toDouble(), true};
         break;
     case Command::ImagePark:
-    case Command::ImageResetPosition: m_state.rollDeg = m_state.tiltDeg = {0.0, true}; break;
+    case Command::ImageResetPosition: m_state.panDeg = m_state.tiltDeg = {0.0, true}; break;
     case Command::ImageLrfPointer: m_state.lrfPointer = {a.value(QStringLiteral("enabled")).toBool(), true}; break;
     case Command::ImageLrfMeasure: m_state.lrfDistanceM = {1250.5, true}; break;
     case Command::ImageSetFocus: m_state.focusDistanceM = {a.value(QStringLiteral("distance")).toDouble(), true}; break;

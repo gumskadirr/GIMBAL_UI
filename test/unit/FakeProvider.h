@@ -105,9 +105,9 @@ inline DeviceSample makeFullSample()
 inline ImageSample makeImageSample()
 {
     ImageSample s;
-    s.rollDeg = {0.0, true};
+    s.panDeg = {0.0, true};
     s.tiltDeg = {0.0, true};
-    s.rollRateDps = {0.0, true};
+    s.panRateDps = {0.0, true};
     s.tiltRateDps = {0.0, true};
     s.fps = {30.0, true};
     s.zoom = {1.0, true};

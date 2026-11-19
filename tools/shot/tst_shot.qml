@@ -82,6 +82,12 @@ TestCase {
             findChild(main.contentItem, "command-saveToFlash").clicked()
         if (dialog === "exit") // the exit guard (the edited parameters of the page are unsaved)
             main.close()
+        if (dialog === "gimbal") { // the gimbal selection: G180 v2.0 saved, G160 v2.0 being chosen
+            const gimbalDialog = findChild(main, "gimbalDialog")
+            findChild(main.contentItem, "gimbalButton").clicked()
+            tryCompare(gimbalDialog, "opened", true)
+            findChild(gimbalDialog.contentItem, "version-g160-v2.0").clicked()
+        }
         mouseMove(main.contentItem, main.width / 2, main.height / 2) // off the nav rail: hover expands it
         wait(100)
         waitForRendering(main.contentItem)
@@ -99,6 +105,16 @@ TestCase {
             win.close()
             testNotifications.clear()
         }
+    }
+
+    function test_gimbalShots() {
+        shot(1536, 786, "gimbal-1536-dark-en.png", "dark", "en", "gimbalInfo", "gimbal")
+        shot(1536, 786, "gimbal-1536-light-tr.png", "light", "tr", "gimbalInfo", "gimbal")
+        shot(1536, 786, "viewControl-1536-dark-en.png", "dark", "en", "viewControl")
+        testLocalization.setLanguage("en")
+        testSettings.theme = "dark"
+        testHelper.setCommandsSupported(false)
+        testHelper.setImageCommandsSupported(false)
     }
 
     function test_shots() {

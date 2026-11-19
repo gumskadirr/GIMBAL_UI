@@ -89,7 +89,7 @@ Item {
                         objectName: "tagAttitude"
                         x: 12; y: 12
                         mono: true
-                        text: qsTr("ROLL %1  TILT %2").arg(page.number(page.sample.rollDeg, 1)).arg(page.number(page.sample.tiltDeg, 1))
+                        text: qsTr("PAN %1  TILT %2").arg(page.number(page.sample.panDeg, 1)).arg(page.number(page.sample.tiltDeg, 1))
                     }
                     OverlayTag {
                         objectName: "tagStream"

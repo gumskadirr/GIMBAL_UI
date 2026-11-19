@@ -45,6 +45,7 @@ qt_add_qml_module(ids_gimbal
         app/Main.qml
         app/PreferencesPage.qml
         app/MainStatusBar.qml
+        app/GimbalSelectDialog.qml
         shared/ui/Theme.qml
         shared/ui/Icons.qml
         shared/ui/NumberFormat.qml

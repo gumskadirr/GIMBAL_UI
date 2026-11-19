@@ -119,9 +119,9 @@ public:
 struct ImageSample
 {
     Q_GADGET
-    Q_PROPERTY(Measurement rollDeg MEMBER rollDeg)
+    Q_PROPERTY(Measurement panDeg MEMBER panDeg)
     Q_PROPERTY(Measurement tiltDeg MEMBER tiltDeg)
-    Q_PROPERTY(Measurement rollRateDps MEMBER rollRateDps)
+    Q_PROPERTY(Measurement panRateDps MEMBER panRateDps)
     Q_PROPERTY(Measurement tiltRateDps MEMBER tiltRateDps)
     Q_PROPERTY(Measurement fps MEMBER fps)
     Q_PROPERTY(Measurement zoom MEMBER zoom)
@@ -162,9 +162,9 @@ struct ImageSample
     Q_PROPERTY(Flag stateStreaming MEMBER stateStreaming)
 
 public:
-    Measurement rollDeg;
+    Measurement panDeg;
     Measurement tiltDeg;
-    Measurement rollRateDps;
+    Measurement panRateDps;
     Measurement tiltRateDps;
     Measurement fps;
     Measurement zoom;       // x1.0 ...

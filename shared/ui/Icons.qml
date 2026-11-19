@@ -22,6 +22,8 @@ QtObject {
     readonly property string file: "M6 3h8l4 4v14H6zM14 3v4h4"
     readonly property string bug: "M8 9a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0zM12 9v9M4 13h4M16 13h4M5 7l3 2M19 7l-3 2M5 19l3-2M19 19l-3-2"
     readonly property string bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"
+    readonly property string gimbal: "M8 3h8a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1zM12 8v3M7 16a5 5 0 1 0 10 0a5 5 0 1 0 -10 0M10 16a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"
+    readonly property string arrowRight: "M5 12h14M13 6l6 6-6 6"
     readonly property string close: "M6 6l12 12M18 6L6 18"
     readonly property string play: "M8 5l11 7-11 7z"
     readonly property string pause: "M8 5v14M16 5v14"

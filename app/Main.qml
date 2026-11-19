@@ -42,6 +42,18 @@ ApplicationWindow {
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
+    // Gimbals the user works with (design page 6). The choice changes the display only: top bar and 3D view
+    // (`model`: a 3D component, null until one exists); pages, settings and connections stay the same.
+    readonly property var gimbals: [
+        { id: "g160", name: "G160", versions: ["v1.0", "v2.0"], model: null },
+        { id: "g180", name: "G180", versions: ["v1.0", "v2.0", "v3.0"], model: null },
+        { id: "kashif700", name: "Kashif700", versions: ["v1.0"], model: null }
+    ]
+    // Saved gimbal, or null when the saved id or version is no longer in the list.
+    readonly property var currentGimbal: {
+        const g = gimbals.find(g => g.id === settings.gimbal)
+        return g && g.versions.includes(settings.gimbalVersion) ? g : null
+    }
     readonly property real designHeight: Math.max(...pages.map(page => page.designHeight ?? 0))
     // Starts on the page open at last exit; an unknown (e.g. removed) id falls back to the first page via currentIndex.
     property string currentPageId: settings.lastPage
@@ -69,11 +81,23 @@ ApplicationWindow {
     // Architecture §12, rule 1: without saved settings the connection settings open at startup (real target)
     // and whenever a page of such a service becomes visible. The popup belongs to the visible page's service,
     // so a popup left open for the previous service is closed.
+    // The gimbal selection comes first at startup; the connection settings wait until it is closed.
+    // askingGimbal: the popup is not visible yet while the window is being completed. The check runs deferred,
+    // so a call made while the window is created sees askingGimbal set in Component.onCompleted.
+    property bool askingGimbal: false
     function openSettingsIfNotConfigured() {
-        if (!window.demoMode && !window.activeConnection.configured)
-            Qt.callLater(window.openConnectionSettings)
+        Qt.callLater(() => {
+            if (!window.demoMode && !window.activeConnection.configured && !window.askingGimbal && !gimbalDialog.visible)
+                window.openConnectionSettings()
+        })
     }
-    Component.onCompleted: openSettingsIfNotConfigured()
+    Component.onCompleted: {
+        if (!currentGimbal || !settings.gimbalOnStart) {
+            askingGimbal = true
+            gimbalDialog.open()
+        }
+        openSettingsIfNotConfigured()
+    }
     onActiveConnectionChanged: {
         statusBar.connectionPopup.close()
         openSettingsIfNotConfigured()
@@ -186,6 +210,24 @@ ApplicationWindow {
         onConfirmed: { window.exitConfirmed = true; window.close() }
     }
 
+    GimbalSelectDialog {
+        id: gimbalDialog
+        objectName: "gimbalDialog"
+        gimbals: window.gimbals
+        currentId: window.currentGimbal ? window.currentGimbal.id : ""
+        currentVersion: window.currentGimbal ? window.settings.gimbalVersion : ""
+        onStart: window.settings.gimbalOnStart
+        onAccepted: (id, version, onStart) => {
+            window.settings.gimbal = id
+            window.settings.gimbalVersion = version
+            window.settings.gimbalOnStart = onStart
+        }
+        onClosed: {
+            window.askingGimbal = false
+            window.openSettingsIfNotConfigured()
+        }
+    }
+
     RealtimeWindow {
         id: realtimeWindow
         objectName: "realtimeWindow"
@@ -287,6 +329,46 @@ ApplicationWindow {
                       : window.activeConnection.busy ? "warn"
                       : "idle"
                 text: window.activeConnection.statusText
+            }
+            IdsButton {
+                id: gimbalButton
+                objectName: "gimbalButton"
+                text: window.currentGimbal ? window.currentGimbal.name + " · " + window.settings.gimbalVersion
+                                           : qsTr("Select gimbal")
+                Accessible.name: qsTr("Gimbal: %1").arg(text)
+                onClicked: gimbalDialog.open()
+                contentItem: Row { // design: gimbal icon, small "GIMBAL" label, name · version, arrow
+                    spacing: 8
+                    Icon {
+                        width: 15; height: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        path: Icons.gimbal
+                        color: Theme.muted
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("Gimbal")
+                        font.family: Theme.fontSans
+                        font.pixelSize: Theme.fsOverline
+                        font.weight: Font.DemiBold
+                        font.letterSpacing: Theme.overlineSpacing
+                        font.capitalization: Font.AllUppercase
+                        color: Theme.label
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: gimbalButton.text
+                        font: gimbalButton.font
+                        color: Theme.text
+                    }
+                    Icon {
+                        width: 15; height: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        path: Icons.chevronDown
+                        color: Theme.muted
+                        strokeWidth: 2.2
+                    }
+                }
             }
         }
 
