@@ -326,12 +326,12 @@ TestCase {
         const navItem = findChild(main.contentItem, "nav-preferences")
         const connection = findChild(main.contentItem, "connectionStatus")
         compare(navItem.text, "Preferences")
-        compare(connection.text, "Disconnected")
+        compare(connection.text, "Not connected")
 
         verify(testLocalization.setLanguage("tr"))
         compare(NumberFormat.language, "tr") // numbers follow the language too
         compare(navItem.text, "Tercihler")
-        compare(connection.text, "Bağlantı yok") // live C++ state, not only qsTr bindings
+        compare(connection.text, "Bağlı değil")
         compare(main.pages[main.currentIndex].title, "Tercihler")
         compare(pageItem(main, "preferences"), preferences)
         compare(findChild(main.contentItem, "nav-preferences"), navItem)

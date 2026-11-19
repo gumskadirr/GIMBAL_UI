@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
+import QtQuick.Templates as T
 import IDS_GIMBAL
 
 ApplicationWindow {
@@ -321,14 +322,45 @@ ApplicationWindow {
                 objectName: "themeSwitcher"
                 settings: window.settings
             }
-            StatusLabel {
+            // Both services at a glance: green when all are connected, amber when some are or one is connecting,
+            // red when none is or one has an error. Opens the panel of both connections.
+            T.AbstractButton {
+                id: connectionChip
+                readonly property var links: Object.values(window.connections)
+                readonly property int connectedCount: links.filter(link => link.connected).length
+                readonly property bool anyBusy: links.some(link => link.busy)
                 objectName: "connectionStatus"
-                framed: true
-                status: window.activeConnection.hasError ? "crit"
-                      : window.activeConnection.connected ? "ok"
-                      : window.activeConnection.busy ? "warn"
-                      : "idle"
-                text: window.activeConnection.statusText
+                text: connectedCount === links.length ? qsTr("Connected")
+                    : connectedCount > 0 ? qsTr("%1/%2 connected").arg(connectedCount).arg(links.length)
+                    : anyBusy ? qsTr("Connecting")
+                    : qsTr("Not connected")
+                implicitWidth: chipLabel.implicitWidth
+                implicitHeight: chipLabel.implicitHeight
+                focusPolicy: Qt.StrongFocus
+                hoverEnabled: true
+                Accessible.name: qsTr("Connections: %1").arg(text)
+                onClicked: connectionsPanel.opened ? connectionsPanel.close() : connectionsPanel.open()
+                background: StatusLabel {
+                    id: chipLabel
+                    framed: true
+                    status: connectionChip.links.some(link => link.hasError) || connectionChip.connectedCount === 0 && !connectionChip.anyBusy ? "crit"
+                          : connectionChip.connectedCount === connectionChip.links.length ? "ok"
+                          : "warn"
+                    text: connectionChip.text
+                    opacity: connectionChip.down ? 0.85 : 1
+                    FocusRing { visible: connectionChip.visualFocus }
+                }
+
+                ConnectionsPanel {
+                    id: connectionsPanel
+                    objectName: "connectionsPanel"
+                    x: connectionChip.width - width
+                    y: connectionChip.height + 8
+                    services: window.services
+                    connections: window.connections
+                    order: ["mainControl", "idsImage"]
+                    udpOnlyServices: ["idsImage"] // 17 Nov: IDS Image is UDP only
+                }
             }
             IdsButton {
                 id: gimbalButton

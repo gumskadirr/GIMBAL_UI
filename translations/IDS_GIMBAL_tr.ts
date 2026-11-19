@@ -268,6 +268,29 @@
     </message>
 </context>
 <context>
+    <name>ConnectionsPanel</name>
+    <message>
+        <location filename="../app/ConnectionsPanel.qml" line="27"/>
+        <source>Connections</source>
+        <translation>Bağlantılar</translation>
+    </message>
+    <message>
+        <location filename="../app/ConnectionsPanel.qml" line="82"/>
+        <source>Disconnect</source>
+        <translation>Bağlantıyı kes</translation>
+    </message>
+    <message>
+        <location filename="../app/ConnectionsPanel.qml" line="82"/>
+        <source>Connect</source>
+        <translation>Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../app/ConnectionsPanel.qml" line="91"/>
+        <source>%1 connection settings</source>
+        <translation>%1 bağlantı ayarları</translation>
+    </message>
+</context>
+<context>
     <name>ControlPageFrame</name>
     <message>
         <location filename="../features/maincontrol/ControlPageFrame.qml" line="26"/>
@@ -1340,149 +1363,174 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/Main.qml" line="26"/>
+        <location filename="../app/Main.qml" line="27"/>
         <source>Board</source>
         <translation>Kart</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="26"/>
+        <location filename="../app/Main.qml" line="27"/>
         <source>Gimbal info</source>
         <translation>Gimbal bilgisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="28"/>
-        <location filename="../app/Main.qml" line="30"/>
+        <location filename="../app/Main.qml" line="29"/>
+        <location filename="../app/Main.qml" line="31"/>
         <source>Control</source>
         <translation>Kontrol</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="28"/>
+        <location filename="../app/Main.qml" line="29"/>
         <source>Motor control</source>
         <translation>Motor kontrolü</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="30"/>
+        <location filename="../app/Main.qml" line="31"/>
         <source>Gimbal settings</source>
         <translation>Gimbal ayarları</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="32"/>
+        <location filename="../app/Main.qml" line="33"/>
         <source>Hardware</source>
         <translation>Donanım</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="32"/>
+        <location filename="../app/Main.qml" line="33"/>
         <source>Heater</source>
         <translation>Isıtıcı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="34"/>
+        <location filename="../app/Main.qml" line="35"/>
         <source>View &amp; control</source>
         <translation>Görüntü ve kontrol</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="36"/>
+        <location filename="../app/Main.qml" line="37"/>
         <source>Alignment</source>
         <translation>Hizalama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="38"/>
+        <location filename="../app/Main.qml" line="39"/>
         <source>Errors</source>
         <translation>Hatalar</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="40"/>
+        <location filename="../app/Main.qml" line="41"/>
         <source>Gimbal state</source>
         <translation>Gimbal durumu</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="42"/>
+        <location filename="../app/Main.qml" line="43"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="42"/>
+        <location filename="../app/Main.qml" line="43"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="73"/>
+        <location filename="../app/Main.qml" line="74"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="184"/>
+        <location filename="../app/Main.qml" line="185"/>
         <source>%1 unsaved parameter change(s) will be lost.</source>
         <translation>%1 kaydedilmemiş parametre değişikliği kaybolacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="186"/>
+        <location filename="../app/Main.qml" line="187"/>
         <source>The firmware update in progress will be interrupted.</source>
         <translation>Süren firmware güncellemesi yarıda kalacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="188"/>
+        <location filename="../app/Main.qml" line="189"/>
         <source>The script that is playing will stop.</source>
         <translation>Oynatılan script duracak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="190"/>
+        <location filename="../app/Main.qml" line="191"/>
         <source>The CSV recording in progress will be closed.</source>
         <translation>Süren CSV kaydı kapatılacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="205"/>
+        <location filename="../app/Main.qml" line="206"/>
         <source>Exit the application?</source>
         <translation>Uygulamadan çıkılsın mı?</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="206"/>
+        <location filename="../app/Main.qml" line="207"/>
         <source>If you exit now:</source>
         <translation>Şimdi çıkarsanız:</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="207"/>
+        <location filename="../app/Main.qml" line="208"/>
         <source>Stay</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="208"/>
+        <location filename="../app/Main.qml" line="209"/>
         <source>Exit</source>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="317"/>
+        <location filename="../app/Main.qml" line="318"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="337"/>
+        <location filename="../app/Main.qml" line="333"/>
+        <source>Connected</source>
+        <translation>Bağlı</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="334"/>
+        <source>%1/%2 connected</source>
+        <translation>%1/%2 bağlı</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="335"/>
+        <source>Connecting</source>
+        <translation>Bağlanıyor</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="336"/>
+        <source>Not connected</source>
+        <translation>Bağlı değil</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="341"/>
+        <source>Connections: %1</source>
+        <translation>Bağlantılar: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="369"/>
         <source>Select gimbal</source>
         <translation>Gimbal seçin</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="338"/>
+        <location filename="../app/Main.qml" line="370"/>
         <source>Gimbal: %1</source>
         <translation>Gimbal: %1</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="350"/>
+        <location filename="../app/Main.qml" line="382"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="265"/>
+        <location filename="../app/Main.qml" line="21"/>
+        <location filename="../app/Main.qml" line="266"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="20"/>
+        <location filename="../app/Main.qml" line="21"/>
         <source>IDS Image service</source>
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="312"/>
+        <location filename="../app/Main.qml" line="313"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>

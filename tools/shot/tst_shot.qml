@@ -88,6 +88,15 @@ TestCase {
             tryCompare(gimbalDialog, "opened", true)
             findChild(gimbalDialog.contentItem, "version-g160-v2.0").clicked()
         }
+        if (dialog === "connections" || dialog === "offline") // IDS Image down: the chip says 1/2 and the panel lists both
+            testImageViewModel.connection.disconnectDevice()
+        if (dialog === "offline") // nothing connected: the red chip
+            testMainControl.connection.disconnectDevice()
+        if (dialog === "connections") {
+            const panel = findChild(main, "connectionsPanel")
+            findChild(main.contentItem, "connectionStatus").clicked()
+            tryCompare(panel, "opened", true)
+        }
         mouseMove(main.contentItem, main.width / 2, main.height / 2) // off the nav rail: hover expands it
         wait(100)
         waitForRendering(main.contentItem)
@@ -111,6 +120,9 @@ TestCase {
         shot(1536, 786, "gimbal-1536-dark-en.png", "dark", "en", "gimbalInfo", "gimbal")
         shot(1536, 786, "gimbal-1536-light-tr.png", "light", "tr", "gimbalInfo", "gimbal")
         shot(1536, 786, "viewControl-1536-dark-en.png", "dark", "en", "viewControl")
+        shot(1536, 786, "connections-1536-dark-en.png", "dark", "en", "gimbalInfo", "connections")
+        shot(1536, 786, "connections-1536-light-tr.png", "light", "tr", "gimbalInfo", "connections")
+        shot(1536, 786, "offline-1536-dark-tr.png", "dark", "tr", "gimbalInfo", "offline")
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)
