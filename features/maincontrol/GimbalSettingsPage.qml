@@ -324,6 +324,8 @@ ControlPageFrame {
                     kind: Command.StartElectricalAngleCalibration
                     Layout.fillWidth: true
                     text: qsTr("Start electrical angle calibration")
+                    confirmTitle: qsTr("Start electrical angle calibration"); confirmText: qsTr("The motors will turn during this procedure.")
+                    confirmWarning: qsTr("Keep the gimbal clear of people and objects.")
                 }
                 CalibrationProgress { kind: Command.StartElectricalAngleCalibration }
                 Hint {
@@ -346,6 +348,8 @@ ControlPageFrame {
                     kind: Command.StartCrosstalkCheck
                     Layout.fillWidth: true
                     text: qsTr("Check optical crosstalk")
+                    confirmTitle: qsTr("Check optical crosstalk"); confirmText: qsTr("The motors will turn during this procedure.")
+                    confirmWarning: qsTr("Keep the gimbal clear of people and objects.")
                 }
                 CalibrationProgress { kind: Command.StartCrosstalkCheck }
                 StatusLabel {
@@ -389,6 +393,8 @@ ControlPageFrame {
                     kind: Command.StartImuBiasCalibration
                     Layout.fillWidth: true
                     text: qsTr("Start bias calibration")
+                    confirmTitle: qsTr("Start bias calibration"); confirmText: qsTr("The motors will turn during this procedure.")
+                    confirmWarning: qsTr("Keep the gimbal clear of people and objects.")
                 }
                 CalibrationProgress { kind: Command.StartImuBiasCalibration }
                 Hint { Layout.fillWidth: true; text: qsTr("Keep the gimbal still for about 10 seconds.") }

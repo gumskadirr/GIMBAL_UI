@@ -161,7 +161,7 @@ TestCase {
         compare(findChild(page, "firmware-name").text, "mcb_firmware_v2.5.0.bin")
         verify(findChild(page, "firmware-detail").text.startsWith("1.2 MB · "))
         verify(update.enabled)
-        update.clicked()
+        TestUtils.confirm(testCase, update)
         compare(testHelper.lastCommandKind(), Command.UpdateFirmware)
         verify(String(testHelper.lastCommandArgs().file).endsWith("mcb_firmware_v2.5.0.bin"))
         testHelper.reportProgress(40, "Writing")

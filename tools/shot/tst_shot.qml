@@ -78,6 +78,8 @@ TestCase {
         testHelper.sendImageErrors(page === "errors" && dialog ? "MACB_LRF" : "")
         if (page === "gimbalState") // stream started, values on screen
             testHelper.sendImageGimbalState(true, 0)
+        if (dialog === "confirm") // the confirmation of Save to flash
+            findChild(main.contentItem, "command-saveToFlash").clicked()
         mouseMove(main.contentItem, main.width / 2, main.height / 2) // off the nav rail: hover expands it
         wait(100)
         waitForRendering(main.contentItem)
@@ -103,6 +105,8 @@ TestCase {
         shot(1536, 786, "gimbalInfo-1536-light-tr.png", "light", "tr", "gimbalInfo", undefined, true)
         shot(1536, 786, "motorControl-1536-dark-en.png", "dark", "en", "motorControl")
         shot(1536, 786, "motorControl-1536-light-tr.png", "light", "tr", "motorControl")
+        shot(1536, 786, "confirm-1536-dark-en.png", "dark", "en", "motorControl", "confirm")
+        shot(1536, 786, "confirm-1536-light-tr.png", "light", "tr", "motorControl", "confirm")
         shot(1536, 786, "heater-1536-dark-en.png", "dark", "en", "heater")
         shot(1536, 786, "heater-1536-light-tr.png", "light", "tr", "heater")
         shot(1536, 786, "gimbalSettings-1536-dark-en.png", "dark", "en", "gimbalSettings")

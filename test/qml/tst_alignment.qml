@@ -86,7 +86,7 @@ TestCase {
         compare(testHelper.imageSentCount(), sent) // nothing went out
         testHelper.sendImageSample() // telemetry does not undo the edit
         compare(findChild(page, "offsetValue-offsetX").text, "11")
-        findChild(page, "command-writeOffset").clicked()
+        TestUtils.confirm(testCase, findChild(page, "command-writeOffset"))
         compare(testHelper.imageSentCount(), sent + 1)
         compare(testHelper.lastImageCommandKind(), Command.ImageWriteOffset)
         compare(testHelper.lastImageCommandArgs().x, 11)

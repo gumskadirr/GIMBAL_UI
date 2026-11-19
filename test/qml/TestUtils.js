@@ -13,3 +13,11 @@ function interactiveControls(item, found) {
     }
     return found
 }
+
+// Confirmation of a CommandButton with confirmText: the click opens the dialog, this presses its Confirm.
+function confirm(testCase, button) {
+    testCase.verify(button.enabled, button.objectName)
+    button.clicked()
+    const dialog = testCase.findChild(button, "confirmDialog")
+    testCase.findChild(dialog, "confirm-accept").clicked()
+}

@@ -155,7 +155,8 @@ ControlPageFrame {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 8
-                CommandButton { objectName: "command-askBootloader"; Layout.fillWidth: true; connection: page.connection; kind: Command.AskBootloader; text: qsTr("Ask bootloader") }
+                CommandButton { objectName: "command-askBootloader"; Layout.fillWidth: true; connection: page.connection; kind: Command.AskBootloader; text: qsTr("Ask bootloader")
+                    confirmTitle: qsTr("Ask bootloader"); confirmText: qsTr("The board will be asked to enter its bootloader."); confirmWarning: qsTr("Normal operation is interrupted until you exit the bootloader.") }
                 CommandButton { objectName: "command-exitBootloader"; Layout.fillWidth: true; connection: page.connection; kind: Command.ExitBootloader; variant: "quiet"; text: qsTr("Exit bootloader") }
             }
             Hint {
@@ -182,7 +183,8 @@ ControlPageFrame {
                     onActivated: page.bridgeBoard = currentValue
                 }
             }
-            CommandButton { objectName: "command-startBootBridge"; Layout.fillWidth: true; connection: page.connection; kind: Command.StartBootBridge; args: ({ board: page.bridgeBoard }); text: qsTr("Start boot bridge") }
+            CommandButton { objectName: "command-startBootBridge"; Layout.fillWidth: true; connection: page.connection; kind: Command.StartBootBridge; args: ({ board: page.bridgeBoard }); text: qsTr("Start boot bridge")
+                confirmTitle: qsTr("Start boot bridge"); confirmText: qsTr("A boot bridge will be started for the selected board."); confirmWarning: qsTr("Normal operation is interrupted while the bridge is open.") }
             Hint {
                 Layout.fillWidth: true
                 text: qsTr("Forwards the bootloader link to the selected sub-board.")
@@ -300,6 +302,9 @@ ControlPageFrame {
                 ready: firmwareFile.exists
                 variant: "primary"
                 text: qsTr("Update firmware")
+                confirmTitle: qsTr("Update firmware"); confirmDanger: true
+                confirmText: qsTr("The firmware file will be written to the board.")
+                confirmWarning: qsTr("This cannot be undone. Do not power off during the update.")
             }
         }
     }

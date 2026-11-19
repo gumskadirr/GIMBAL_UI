@@ -52,6 +52,7 @@ qt_add_qml_module(ids_gimbal
         shared/ui/FocusRing.qml
         shared/ui/IdsButton.qml
         shared/ui/CommandButton.qml
+        shared/ui/ConfirmDialog.qml
         shared/ui/IdsComboBox.qml
         shared/ui/AppShell.qml
         shared/ui/BrandStripe.qml

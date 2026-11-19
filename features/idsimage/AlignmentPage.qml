@@ -371,6 +371,8 @@ ImagePageFrame {
             kind: Command.ImageWriteOffset
             variant: "primary"
             text: qsTr("Write offset")
+            confirmTitle: qsTr("Write offset"); confirmText: qsTr("The image offset and scale will be saved on the device.")
+            confirmWarning: qsTr("This replaces the stored offset and cannot be undone.")
             perform: () => page.writeOffset()
         }
     }

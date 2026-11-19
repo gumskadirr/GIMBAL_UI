@@ -1,6 +1,7 @@
 import QtQuick
 import QtTest
 import IDS_GIMBAL
+import "TestUtils.js" as TestUtils
 
 // Errors page against the real ImageViewModel (data from tst_qml.cpp's image fake provider).
 TestCase {
@@ -102,7 +103,7 @@ TestCase {
         field.textEdited()
         verify(set.enabled)
         verify(!field.error)
-        set.clicked()
+        TestUtils.confirm(testCase, set)
         compare(testHelper.lastImageCommandKind(), Command.ImageSetIp)
         compare(testHelper.lastImageCommandArgs().dhcp, false)
         compare(testHelper.lastImageCommandArgs().address, "10.0.0.7")
@@ -123,7 +124,7 @@ TestCase {
         verify(!field.enabled)
         verify(!field.error)
         verify(set.enabled) // the address does not matter with DHCP
-        set.clicked()
+        TestUtils.confirm(testCase, set)
         compare(testHelper.lastImageCommandArgs().dhcp, true)
         compare(testHelper.lastImageCommandArgs().address, "")
     }
@@ -135,5 +136,20 @@ TestCase {
         field.textEdited()
         testHelper.sendImageSample()
         compare(field.text, "10.0.0.7")
+    }
+
+    // Enter goes through the same confirmation as the Set button.
+    function test_enterAsksForConfirmation() {
+        const page = openWithDevice()
+        const field = findChild(page, "input-ipAddress")
+        field.text = "10.0.0.8"
+        field.textEdited()
+        const sent = testHelper.imageSentCount()
+        field.accepted()
+        compare(testHelper.imageSentCount(), sent)
+        const dialog = findChild(findChild(page, "command-setIp"), "confirmDialog")
+        tryVerify(() => dialog.opened)
+        findChild(dialog, "confirm-accept").clicked()
+        compare(testHelper.imageSentCount(), sent + 1)
     }
 }

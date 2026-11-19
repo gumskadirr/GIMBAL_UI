@@ -130,33 +130,57 @@
     </message>
     <message>
         <location filename="../features/idsimage/AlignmentPage.qml" line="373"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="374"/>
         <source>Write offset</source>
         <translation>Ofseti yaz</translation>
     </message>
     <message>
-        <location filename="../features/idsimage/AlignmentPage.qml" line="381"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="374"/>
+        <source>The image offset and scale will be saved on the device.</source>
+        <translation>Görüntü kaydırma ve ölçek cihaza kaydedilecek.</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="375"/>
+        <source>This replaces the stored offset and cannot be undone.</source>
+        <translation>Kayıtlı kaydırmanın yerine geçer, geri alınamaz.</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="383"/>
         <source>CMOS camera</source>
         <translation>CMOS kamera</translation>
     </message>
     <message>
-        <location filename="../features/idsimage/AlignmentPage.qml" line="385"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="387"/>
         <source>Sony camera stabilization</source>
         <translation>Sony kamera stabilizasyonu</translation>
     </message>
     <message>
-        <location filename="../features/idsimage/AlignmentPage.qml" line="389"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="391"/>
         <source>Gain</source>
         <translation>Kazanç</translation>
     </message>
     <message>
-        <location filename="../features/idsimage/AlignmentPage.qml" line="390"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="392"/>
         <source>Iris</source>
         <translation>Diyafram</translation>
     </message>
     <message>
-        <location filename="../features/idsimage/AlignmentPage.qml" line="391"/>
+        <location filename="../features/idsimage/AlignmentPage.qml" line="393"/>
         <source>Shutter</source>
         <translation>Perde hızı</translation>
+    </message>
+</context>
+<context>
+    <name>ConfirmDialog</name>
+    <message>
+        <location filename="../shared/ui/ConfirmDialog.qml" line="45"/>
+        <source>Cancel</source>
+        <translation>Vazgeç</translation>
+    </message>
+    <message>
+        <location filename="../shared/ui/ConfirmDialog.qml" line="51"/>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
     </message>
 </context>
 <context>
@@ -413,6 +437,21 @@
         <source>Set</source>
         <translation>Ayarla</translation>
     </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="177"/>
+        <source>Change IP settings</source>
+        <translation>IP ayarını değiştir</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="177"/>
+        <source>The IP settings of the device will be changed.</source>
+        <translation>Cihazın IP ayarı değiştirilecek.</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="178"/>
+        <source>The connection may drop. Reconnect with the new address.</source>
+        <translation>Bağlantı kopabilir. Yeni adresle yeniden bağlanın.</translation>
+    </message>
 </context>
 <context>
     <name>GimbalInfoPage</name>
@@ -525,66 +564,88 @@
     </message>
     <message>
         <location filename="../features/maincontrol/GimbalInfoPage.qml" line="158"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="159"/>
         <source>Ask bootloader</source>
         <translation>Önyükleyiciyi iste</translation>
     </message>
     <message>
         <location filename="../features/maincontrol/GimbalInfoPage.qml" line="159"/>
+        <source>The board will be asked to enter its bootloader.</source>
+        <translation>Karttan bootloader&apos;a girmesi istenecek.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="159"/>
+        <source>Normal operation is interrupted until you exit the bootloader.</source>
+        <translation>Bootloader&apos;dan çıkana kadar normal çalışma kesilir.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="160"/>
         <source>Exit bootloader</source>
         <translation>Önyükleyiciden çık</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="163"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="164"/>
         <source>The board restarts into the bootloader. Motors are disabled until you exit it.</source>
         <translation>Kart önyükleyicide yeniden başlar. Çıkana kadar motorlar devre dışıdır.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="171"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="172"/>
         <source>Boot bridge</source>
         <translation>Önyükleme köprüsü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="172"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="173"/>
         <source>Program a sub-board through this board</source>
         <translation>Bu kart üzerinden bir alt kartı programla</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="175"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="176"/>
         <source>Target</source>
         <translation>Hedef</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="180"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="181"/>
         <source>Pan motor driver</source>
         <translation>Pan motor sürücüsü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="180"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="181"/>
         <source>Tilt motor driver</source>
         <translation>Tilt motor sürücüsü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="185"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="186"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="187"/>
         <source>Start boot bridge</source>
         <translation>Önyükleme köprüsünü başlat</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="188"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="187"/>
+        <source>A boot bridge will be started for the selected board.</source>
+        <translation>Seçilen kart için boot bridge başlatılacak.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="187"/>
+        <source>Normal operation is interrupted while the bridge is open.</source>
+        <translation>Köprü açıkken normal çalışma kesilir.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="190"/>
         <source>Forwards the bootloader link to the selected sub-board.</source>
         <translation>Önyükleyici bağlantısını seçilen alt karta iletir.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="195"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="197"/>
         <source>Firmware update</source>
         <translation>Yazılım güncelleme</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="247"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="249"/>
         <source>Open file</source>
         <translation>Dosya aç</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="225"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="227"/>
         <source>No file selected</source>
         <translation>Dosya seçilmedi</translation>
     </message>
@@ -634,87 +695,98 @@
         <translation>Tüm dosyalar (*)</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="196"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="198"/>
         <source>Current %1 · GUI version %2</source>
         <translation>Mevcut %1 · Arayüz sürümü %2</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="258"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="260"/>
         <source>Update complete</source>
         <translation>Güncelleme tamamlandı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="259"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="261"/>
         <source>Cancelled</source>
         <translation>İptal edildi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="260"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="262"/>
         <source>Failed</source>
         <translation>Başarısız</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="260"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="262"/>
         <source>Ready</source>
         <translation>Hazır</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="272"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="274"/>
         <source>Firmware update progress</source>
         <translation>Yazılım güncelleme ilerlemesi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="286"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="288"/>
         <source>Keep the board powered and connected until the update finishes.</source>
         <translation>Güncelleme bitene kadar kartın enerjisini ve bağlantısını kesmeyin.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="293"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="295"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="302"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="304"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="305"/>
         <source>Update firmware</source>
         <translation>Yazılımı güncelle</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="310"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="306"/>
+        <source>The firmware file will be written to the board.</source>
+        <translation>Yazılım dosyası karta yazılacak.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="307"/>
+        <source>This cannot be undone. Do not power off during the update.</source>
+        <translation>Geri alınamaz. Güncelleme sırasında gücü kesmeyin.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="315"/>
         <source>Built-in test</source>
         <translation>Yerleşik test</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="311"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="316"/>
         <source>Last run %1</source>
         <translation>Son çalışma %1</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="312"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="317"/>
         <source>Results come from the BIT report of the board</source>
         <translation>Sonuçlar kartın BIT raporundan gelir</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="314"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="319"/>
         <source>%1 passed</source>
         <translation>%1 geçti</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="315"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="320"/>
         <source>%1 warning</source>
         <translation>%1 uyarı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="316"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="321"/>
         <source>%1 failed</source>
         <translation>%1 kaldı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="322"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="327"/>
         <source>Run BIT</source>
         <translation>BIT çalıştır</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="329"/>
+        <location filename="../features/maincontrol/GimbalInfoPage.qml" line="334"/>
         <source>No result</source>
         <translation>Sonuç yok</translation>
     </message>
@@ -829,219 +901,236 @@
     </message>
     <message>
         <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="326"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="327"/>
         <source>Start electrical angle calibration</source>
         <translation>Kalibrasyonu başlat</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="332"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="327"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="351"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="396"/>
+        <source>The motors will turn during this procedure.</source>
+        <translation>Bu işlem sırasında motorlar dönecek.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="328"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="352"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="397"/>
+        <source>Keep the gimbal clear of people and objects.</source>
+        <translation>Gimbal çevresinde kişi ve nesne bulunmasın.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="334"/>
         <source>The motor turns slowly during calibration. Clear the gimbal first.</source>
         <translation>Kalibrasyon sırasında motor yavaşça döner. Önce gimbalın çevresini boşaltın.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="340"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="342"/>
         <source>LRF</source>
         <translation>LRF</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="341"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="343"/>
         <source>Laser range finder checks</source>
         <translation>Lazer mesafe ölçer denetimleri</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="342"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="344"/>
         <source>Laser pointer</source>
         <translation>Lazer işaretçi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="348"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="350"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="351"/>
         <source>Check optical crosstalk</source>
         <translation>Optik karışmayı denetle</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="355"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="359"/>
         <source>Not checked</source>
         <translation>Denetlenmedi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="356"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="360"/>
         <source>Passed, %1%</source>
         <translation>Geçti, %1%</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="356"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="360"/>
         <source>Failed, %1%</source>
         <translation>Kaldı, %1%</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="364"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="368"/>
         <source>IMU bias</source>
         <translation>IMU sapması</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="365"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="369"/>
         <source>Gyro offsets, deg/s</source>
         <translation>Jiroskop ofsetleri, derece/s</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="372"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="376"/>
         <source>Gyro X</source>
         <translation>Jiro X</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="373"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="377"/>
         <source>Gyro X bias</source>
         <translation>Jiro X ofseti</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="377"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="381"/>
         <source>Gyro Y</source>
         <translation>Jiro Y</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="378"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="382"/>
         <source>Gyro Y bias</source>
         <translation>Jiro Y ofseti</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="382"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="386"/>
         <source>Gyro Z</source>
         <translation>Jiro Z</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="383"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="387"/>
         <source>Gyro Z bias</source>
         <translation>Jiro Z ofseti</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="391"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="395"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="396"/>
         <source>Start bias calibration</source>
         <translation>Sapma kalibrasyonunu başlat</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="394"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="400"/>
         <source>Keep the gimbal still for about 10 seconds.</source>
         <translation>Gimbalı yaklaşık 10 saniye hareketsiz tutun.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="401"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="407"/>
         <source>Complementary filter</source>
         <translation>Tamamlayıcı filtre</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="402"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="408"/>
         <source>Attitude estimator gains</source>
         <translation>Yönelim kestirici kazançları</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="407"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="413"/>
         <source>Filter Kp</source>
         <translation>Filtre Kp</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="408"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="414"/>
         <source>Filter Ki</source>
         <translation>Filtre Ki</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="423"/>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="494"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="429"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="500"/>
         <source>Scope</source>
         <translation>Osiloskop</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="424"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="430"/>
         <source>Board mode %1</source>
         <translation>Kart modu %1</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="429"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="435"/>
         <source>Scope, 2 s</source>
         <translation>Osiloskop, 2 s</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="429"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="435"/>
         <source>FFT</source>
         <translation>FFT</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="429"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="435"/>
         <source>Bode sweep</source>
         <translation>Bode taraması</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="437"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="443"/>
         <source>Speed loop: rate and rate ref</source>
         <translation>Hız döngüsü: hız ve hız referansı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="437"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="443"/>
         <source>Position loop</source>
         <translation>Konum döngüsü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="437"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="443"/>
         <source>Torque loop: Iq</source>
         <translation>Tork döngüsü: Iq</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="438"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="444"/>
         <source>Scope view</source>
         <translation>Scope görünümü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="446"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="452"/>
         <source>Pop out</source>
         <translation>Ayrı pencerede aç</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="462"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="468"/>
         <source>Rise</source>
         <translation>Yükselme</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="463"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="469"/>
         <source>Overshoot</source>
         <translation>Aşım</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="464"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="470"/>
         <source>Settling</source>
         <translation>Oturma</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="465"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="471"/>
         <source>SS error</source>
         <translation>Kalıcı hata</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="466"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="472"/>
         <source>Latency</source>
         <translation>Gecikme</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="468"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="474"/>
         <source>Press</source>
         <translation>Basın:</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="471"/>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="473"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="477"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="479"/>
         <source>Step +</source>
         <translation>Adım +</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="476"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="482"/>
         <source>or</source>
         <translation>ya da</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="479"/>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="481"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="485"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="487"/>
         <source>Step -</source>
         <translation>Adım -</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="484"/>
+        <location filename="../features/maincontrol/GimbalSettingsPage.qml" line="490"/>
         <source>to measure</source>
         <translation>ölçmek için</translation>
     </message>
@@ -1433,13 +1522,13 @@
     </message>
     <message>
         <location filename="../features/maincontrol/MotorControlPage.qml" line="185"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="354"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="359"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
         <location filename="../features/maincontrol/MotorControlPage.qml" line="185"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="354"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="359"/>
         <source>Tilt</source>
         <translation>Tilt</translation>
     </message>
@@ -1455,254 +1544,280 @@
     </message>
     <message>
         <location filename="../features/maincontrol/MotorControlPage.qml" line="209"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="210"/>
         <source>Save to flash</source>
         <translation>Flash&apos;a kaydet</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="217"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="210"/>
+        <source>The current parameters will be written to the flash memory of the board.</source>
+        <translation>Geçerli parametreler kartın flash belleğine yazılacak.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="211"/>
+        <source>This replaces the saved parameters and cannot be undone.</source>
+        <translation>Kayıtlı parametrelerin yerine geçer, geri alınamaz.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="219"/>
         <source>Defaults</source>
         <translation>Varsayılanlar</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="219"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="220"/>
+        <source>Restore defaults</source>
+        <translation>Varsayılanlara dön</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="221"/>
+        <source>The parameters on the board will be replaced with the factory defaults.</source>
+        <translation>Karttaki parametreler fabrika varsayılanlarıyla değiştirilecek.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="222"/>
+        <source>This overwrites the parameters on the device and cannot be undone.</source>
+        <translation>Cihazdaki parametrelerin üzerine yazar, geri alınamaz.</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="224"/>
         <source>Save profile…</source>
         <translation>Profili kaydet…</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="220"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="225"/>
         <source>Load profile…</source>
         <translation>Profil yükle…</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="225"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="230"/>
         <source>Read loads from the board · Write applies until restart · Save to flash keeps after restart</source>
         <translation>Oku karttan yükler · Yaz yeniden başlatmaya kadar uygular · Flash&apos;a kaydet yeniden başlatmadan sonra da korur</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="234"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="239"/>
         <source>PID controllers</source>
         <translation>PID denetleyicileri</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="235"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="240"/>
         <source>Gains for each control loop</source>
         <translation>Her kontrol döngüsünün kazançları</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="245"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="345"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="413"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="250"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="350"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="418"/>
         <source>Torque</source>
         <translation>Tork</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="246"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="251"/>
         <source>Torque Kp</source>
         <translation>Tork Kp</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="247"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="252"/>
         <source>Torque Ki</source>
         <translation>Tork Ki</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="248"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="253"/>
         <source>Torque Kd</source>
         <translation>Tork Kd</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="249"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="345"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="413"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="254"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="350"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="418"/>
         <source>Speed</source>
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="250"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="255"/>
         <source>Speed Kp</source>
         <translation>Hız Kp</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="251"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="256"/>
         <source>Speed Ki</source>
         <translation>Hız Ki</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="252"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="257"/>
         <source>Speed Kd</source>
         <translation>Hız Kd</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="253"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="274"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="345"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="413"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="258"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="279"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="350"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="418"/>
         <source>Position</source>
         <translation>Konum</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="254"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="259"/>
         <source>Position Kp</source>
         <translation>Konum Kp</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="255"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="260"/>
         <source>Position Ki</source>
         <translation>Konum Ki</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="256"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="261"/>
         <source>Position Kd</source>
         <translation>Konum Kd</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="257"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="262"/>
         <source>Tracker</source>
         <translation>İzleyici</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="258"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="263"/>
         <source>Tracker Kp</source>
         <translation>İzleyici Kp</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="259"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="264"/>
         <source>Tracker Ki</source>
         <translation>İzleyici Ki</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="260"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="265"/>
         <source>Tracker Kd</source>
         <translation>İzleyici Kd</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="265"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="270"/>
         <source>Model serial number</source>
         <translation>Model seri numarası</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="275"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="280"/>
         <source>Limits, offsets and motor wiring</source>
         <translation>Sınırlar, ofsetler ve motor bağlantısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="281"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="286"/>
         <source>Position offset, deg</source>
         <translation>Konum ofseti, derece</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="282"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="287"/>
         <source>Electrical offset, deg</source>
         <translation>Elektriksel ofset, derece</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="283"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="288"/>
         <source>Forward border, deg</source>
         <translation>İleri sınır, derece</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="284"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="289"/>
         <source>Backward border, deg</source>
         <translation>Geri sınır, derece</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="287"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="292"/>
         <source>Encoder rotation</source>
         <translation>Enkoder dönüş yönü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="290"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="295"/>
         <source>Forward</source>
         <translation>İleri</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="290"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="295"/>
         <source>Reverse</source>
         <translation>Geri</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="297"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="302"/>
         <source>Phase rotation</source>
         <translation>Faz sırası</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="311"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="316"/>
         <source>Slip ring</source>
         <translation>Kayar halka</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="326"/>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="333"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="331"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="338"/>
         <source>Control</source>
         <translation>Kontrol</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="327"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="332"/>
         <source>Drive the active motor</source>
         <translation>Etkin motoru sür</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="334"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="339"/>
         <source>Mode, active motor and keyboard input</source>
         <translation>Mod, etkin motor ve klavye girişi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="341"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="346"/>
         <source>Control mode</source>
         <translation>Kontrol modu</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="351"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="356"/>
         <source>Current motor</source>
         <translation>Geçerli motor</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="368"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="373"/>
         <source>State unknown</source>
         <translation>Durum bilinmiyor</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="369"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="374"/>
         <source>Locked · toggle latch to send</source>
         <translation>Kilitli · göndermek için mandalı değiştirin</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="370"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="375"/>
         <source>Unlocked</source>
         <translation>Kilitli değil</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="373"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="378"/>
         <source>Toggle latch</source>
         <translation>Mandalı değiştir</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="376"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="381"/>
         <source>Keyboard control</source>
         <translation>Klavye kontrolü</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="389"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="394"/>
         <source>Start control</source>
         <translation>Kontrolü başlat</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="398"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="403"/>
         <source>Stop control</source>
         <translation>Kontrolü durdur</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="406"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="411"/>
         <source>Command</source>
         <translation>Komut</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="407"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="412"/>
         <source>Send a reference to the active motor</source>
         <translation>Etkin motora referans gönder</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="449"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="454"/>
         <source>%1 Enter sends the value.</source>
         <translation>%1 Enter değeri gönderir.</translation>
     </message>
@@ -1748,12 +1863,12 @@
         <translation>Tüm dosyalar (*)</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="436"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="441"/>
         <source>Set</source>
         <translation>Ayarla</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/MotorControlPage.qml" line="444"/>
+        <location filename="../features/maincontrol/MotorControlPage.qml" line="449"/>
         <source>Reset</source>
         <translation>Sıfırla</translation>
     </message>

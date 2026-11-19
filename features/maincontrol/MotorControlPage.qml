@@ -207,6 +207,8 @@ ControlPageFrame {
                     perform: () => page.parameters.saveToFlash()
                     variant: "primary"
                     text: qsTr("Save to flash")
+                    confirmTitle: qsTr("Save to flash"); confirmText: qsTr("The current parameters will be written to the flash memory of the board.")
+                    confirmWarning: qsTr("This replaces the saved parameters and cannot be undone.")
                 }
                 CommandButton {
                     objectName: "command-defaults"
@@ -215,6 +217,9 @@ ControlPageFrame {
                     perform: () => page.parameters.restoreDefaults()
                     variant: "quiet"
                     text: qsTr("Defaults")
+                    confirmTitle: qsTr("Restore defaults"); confirmDanger: true
+                    confirmText: qsTr("The parameters on the board will be replaced with the factory defaults.")
+                    confirmWarning: qsTr("This overwrites the parameters on the device and cannot be undone.")
                 }
                 IdsButton { objectName: "command-saveProfile"; variant: "quiet"; text: qsTr("Save profile…"); onClicked: saveDialog.open() }
                 IdsButton { objectName: "command-loadProfile"; variant: "quiet"; text: qsTr("Load profile…"); onClicked: loadDialog.open() }

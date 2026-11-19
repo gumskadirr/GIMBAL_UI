@@ -174,6 +174,8 @@ ImagePageFrame {
                     kind: Command.ImageSetIp
                     variant: "primary"
                     text: qsTr("Set")
+                    confirmTitle: qsTr("Change IP settings"); confirmText: qsTr("The IP settings of the device will be changed.")
+                    confirmWarning: qsTr("The connection may drop. Reconnect with the new address.")
                     ready: page.dhcp || page.addressValid
                     perform: () => page.setIp()
                 }
