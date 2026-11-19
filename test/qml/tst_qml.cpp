@@ -184,6 +184,12 @@ public:
     // brings back the "never configured" state for the test of rule 1.
     Q_INVOKABLE void forgetConnection() { m_session->setTarget({}); }
     Q_INVOKABLE void restoreConnection() { m_session->setTarget(loopbackTarget()); }
+    // Back to the default gimbal list (the library lives next to the test settings file).
+    Q_INVOKABLE void resetGimbalLibrary()
+    {
+        QDir(m_dir.filePath(QStringLiteral("gimbals"))).removeRecursively();
+        m_settings->gimbalLibrary()->reload();
+    }
     static ConnectionTarget loopbackTarget()
     {
         ConnectionTarget t;

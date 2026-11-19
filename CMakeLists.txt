@@ -24,6 +24,7 @@ qt_add_qml_module(ids_gimbal
     SOURCES
         app/AppRunner.h app/AppRunner.cpp
         shared/settings/AppSettings.h shared/settings/AppSettings.cpp
+        shared/settings/GimbalLibrary.h shared/settings/GimbalLibrary.cpp
         shared/localization/Localization.h shared/localization/Localization.cpp
         shared/notifications/NotificationModel.h shared/notifications/NotificationModel.cpp
         device/api/DeviceTypes.h device/api/DeviceCommand.h device/api/IDeviceProvider.h device/api/ParameterKeys.h
@@ -46,6 +47,7 @@ qt_add_qml_module(ids_gimbal
         app/PreferencesPage.qml
         app/MainStatusBar.qml
         app/GimbalSelectDialog.qml
+        app/GimbalEditDialog.qml
         app/ConnectionsPanel.qml
         shared/ui/Theme.qml
         shared/ui/Icons.qml
@@ -110,13 +112,13 @@ qt_add_qml_module(ids_gimbal
         features/idsimage/ErrorsPage.qml
         features/idsimage/GimbalStatePage.qml
         features/gimbal3d/GimbalModel.qml
-        features/gimbal3d/GimbalZR10.qml
         features/gimbal3d/GimbalView.qml
+        features/gimbal3d/framing.js
     RESOURCES
         assets/icons/ids_logo.png
-        features/gimbal3d/meshes/zr10_base.mesh
-        features/gimbal3d/meshes/zr10_yaw.mesh
-        features/gimbal3d/meshes/zr10_pitch.mesh
+        features/gimbal3d/zr10/base.glb
+        features/gimbal3d/zr10/pan.glb
+        features/gimbal3d/zr10/tilt.glb
 )
 
 target_include_directories(ids_gimbal

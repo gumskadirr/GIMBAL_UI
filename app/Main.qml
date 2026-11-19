@@ -44,14 +44,9 @@ ApplicationWindow {
           component: preferencesPage }
     ]
     // Gimbals the user works with (design page 6). The choice changes the display only: top bar and 3D view
-    // (`model`: a 3D component, null until one exists); pages, settings and connections stay the same.
-    readonly property var gimbals: [
-        { id: "g160", name: "G160", versions: ["v1.0", "v2.0"], model: null },
-        { id: "g180", name: "G180", versions: ["v1.0", "v2.0", "v3.0"], model: null },
-        { id: "kashif700", name: "Kashif700", versions: ["v1.0"], model: null },
-        { id: "zr10", name: "ZR10", versions: ["v1.0"], model: zr10Model }
-    ]
-    Component { id: zr10Model; GimbalZR10 {} }
+    // (`model`: the 3D files and axes, or null); pages, settings and connections stay the same. The list and the
+    // model files are kept by GimbalLibrary; the selection window adds, edits and deletes them.
+    readonly property var gimbals: settings.gimbalLibrary.gimbals
     // Saved gimbal, or null when the saved id or version is no longer in the list.
     readonly property var currentGimbal: {
         const g = gimbals.find(g => g.id === settings.gimbal)
@@ -216,6 +211,7 @@ ApplicationWindow {
     GimbalSelectDialog {
         id: gimbalDialog
         objectName: "gimbalDialog"
+        library: window.settings.gimbalLibrary
         gimbals: window.gimbals
         currentId: window.currentGimbal ? window.currentGimbal.id : ""
         currentVersion: window.currentGimbal ? window.settings.gimbalVersion : ""

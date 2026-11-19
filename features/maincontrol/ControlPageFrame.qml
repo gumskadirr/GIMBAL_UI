@@ -14,7 +14,7 @@ Item {
     // Set by Main.qml: true only while the page is visible. Rule for every page: timers, charts, video and other
     // heavy redraws stop while it is false; data reception and connections continue (architecture §11).
     property bool pageActive: false
-    property Component gimbalModel: null // 3D model of the selected gimbal (Main.qml), null when it has none
+    property var gimbalModel: null // 3D model of the selected gimbal (GimbalLibrary, set by Main.qml) or null
     default property alias content: pageContent.data
 
     function degrees(m: measurement): string {
@@ -118,7 +118,7 @@ Item {
                         bottomRadius: Theme.rCard - 1
                         placeholderIcon: gimbalView.shown ? "" : Icons.cube
                         placeholderTitle: gimbalView.shown ? "" : qsTr("3D gimbal model")
-                        placeholderText: page.gimbalModel === null ? qsTr("No 3D model for this gimbal yet")
+                        placeholderText: !page.gimbalModel ? qsTr("No 3D model for this gimbal yet")
                                                                    : qsTr("The 3D view needs a 3D graphics driver")
 
                         GimbalView {

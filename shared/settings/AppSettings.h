@@ -5,6 +5,8 @@
 #include <QtQml/qqmlregistration.h>
 #include <memory>
 
+#include "GimbalLibrary.h"
+
 // Typed application preferences (not gimbal parameters). Invalid stored values fall back to defaults.
 class AppSettings : public QObject
 {
@@ -18,6 +20,7 @@ class AppSettings : public QObject
     Q_PROPERTY(QString gimbal READ gimbal WRITE setGimbal NOTIFY gimbalChanged)
     Q_PROPERTY(QString gimbalVersion READ gimbalVersion WRITE setGimbalVersion NOTIFY gimbalVersionChanged)
     Q_PROPERTY(bool gimbalOnStart READ gimbalOnStart WRITE setGimbalOnStart NOTIFY gimbalOnStartChanged)
+    Q_PROPERTY(GimbalLibrary *gimbalLibrary READ gimbalLibrary CONSTANT)
 
 public:
     explicit AppSettings(QObject *parent = nullptr); // platform store, keyed by org/app name
@@ -38,6 +41,8 @@ public:
     void setGimbalVersion(const QString &version);
     bool gimbalOnStart() const { return m_gimbalOnStart; } // false: the selection opens at every start
     void setGimbalOnStart(bool on);
+    // The gimbal list and 3D models, next to the settings file (or in the platform app data folder).
+    GimbalLibrary *gimbalLibrary() const { return m_gimbalLibrary.get(); }
 
 signals:
     void themeChanged();
@@ -62,4 +67,5 @@ private:
     QString m_gimbal;
     QString m_gimbalVersion;
     bool m_gimbalOnStart = true;
+    std::unique_ptr<GimbalLibrary> m_gimbalLibrary;
 };

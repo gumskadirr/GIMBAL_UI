@@ -8,6 +8,7 @@ add_subdirectory(doubles)
 add_subdirectory(app)
 
 ids_add_test(tst_appsettings)
+ids_add_test(tst_gimballibrary)
 ids_add_test(tst_notificationmodel)
 ids_add_test(tst_localization)
 ids_add_test(tst_devicesession unit/FakeProvider.h)

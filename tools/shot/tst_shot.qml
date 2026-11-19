@@ -88,6 +88,15 @@ TestCase {
             tryCompare(gimbalDialog, "opened", true)
             findChild(gimbalDialog.contentItem, "version-g160-v2.0").clicked()
         }
+        if (dialog === "gimbalEdit") { // the editor of ZR10 over the selection window
+            const gimbalDialog = findChild(main, "gimbalDialog")
+            findChild(main.contentItem, "gimbalButton").clicked()
+            tryCompare(gimbalDialog, "opened", true)
+            findChild(gimbalDialog.contentItem, "gimbalEdit-zr10").clicked()
+            const edit = findChild(gimbalDialog.contentItem, "gimbalEditDialog")
+            tryCompare(edit, "opened", true)
+            wait(500) // the preview loads its files
+        }
         if (dialog === "connections" || dialog === "offline") // IDS Image down: the chip says 1/2 and the panel lists both
             testImageViewModel.connection.disconnectDevice()
         if (dialog === "offline") // nothing connected: the red chip
@@ -123,6 +132,8 @@ TestCase {
         shot(1536, 786, "gimbal3d-1536-dark-en.png", "dark", "en", "gimbalInfo")
         shot(1536, 786, "gimbal3d-1536-light-tr.png", "light", "tr", "motorControl")
         shot(1536, 786, "gimbal3d-select-1536-dark-en.png", "dark", "en", "gimbalInfo", "gimbal")
+        shot(1536, 786, "gimbal3d-edit-1536-dark-en.png", "dark", "en", "gimbalInfo", "gimbalEdit")
+        shot(1536, 786, "gimbal3d-edit-1536-light-tr.png", "light", "tr", "gimbalInfo", "gimbalEdit")
         testSettings.gimbal = "g180"
         testSettings.gimbalVersion = "v2.0"
         testLocalization.setLanguage("en")

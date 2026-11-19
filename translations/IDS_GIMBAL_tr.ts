@@ -482,6 +482,190 @@
     </message>
 </context>
 <context>
+    <name>GimbalEditDialog</name>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="18"/>
+        <source>Base</source>
+        <translation>Taban</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="18"/>
+        <source>Pan part</source>
+        <translation>Pan parçası</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="19"/>
+        <source>Tilt part</source>
+        <translation>Tilt parçası</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="67"/>
+        <source>Enter the axis positions as numbers.</source>
+        <translation>Eksen konumlarını sayı olarak girin.</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="110"/>
+        <source>Choose a 3D model file</source>
+        <translation>3B model dosyası seçin</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="111"/>
+        <source>3D models (*.glb)</source>
+        <translation>3B modeller (*.glb)</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="121"/>
+        <source>Edit %1</source>
+        <translation>%1 düzenle</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="121"/>
+        <source>New gimbal</source>
+        <translation>Yeni gimbal</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="145"/>
+        <location filename="../app/GimbalEditDialog.qml" line="146"/>
+        <source>Name</source>
+        <translation>Ad</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="150"/>
+        <source>Versions, comma separated</source>
+        <translation>Sürümler, virgülle ayrılmış</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="155"/>
+        <source>Versions</source>
+        <translation>Sürümler</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="160"/>
+        <source>3D model</source>
+        <translation>3B model</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="187"/>
+        <source>Current file</source>
+        <translation>Mevcut dosya</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="188"/>
+        <source>No file</source>
+        <translation>Dosya yok</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="196"/>
+        <source>Choose…</source>
+        <translation>Seç…</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="197"/>
+        <source>Choose %1 file</source>
+        <translation>%1 dosyasını seç</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="212"/>
+        <source>Pan axis</source>
+        <translation>Pan ekseni</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="216"/>
+        <source>Pan direction</source>
+        <translation>Pan yönü</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="221"/>
+        <source>Tilt axis</source>
+        <translation>Tilt ekseni</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="225"/>
+        <source>Tilt direction</source>
+        <translation>Tilt yönü</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="230"/>
+        <source>Pan centre</source>
+        <translation>Pan merkezi</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="231"/>
+        <source>Tilt centre</source>
+        <translation>Tilt merkezi</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="236"/>
+        <source>Parts exported in their assembly position</source>
+        <translation>Parçalar montaj konumunda dışa aktarıldı</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="242"/>
+        <source>Centres are points of the assembly, in the unit of the files.</source>
+        <translation>Merkezler montajdaki noktalardır, dosyaların biriminde.</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="243"/>
+        <source>Each file is centred on its axis: the pan centre is relative to the base, the tilt centre to the pan part.</source>
+        <translation>Her dosya kendi ekseninde ortalanmış: pan merkezi tabana, tilt merkezi pan parçasına göredir.</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="260"/>
+        <source>Preview</source>
+        <translation>Önizleme</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="261"/>
+        <source>No 3D model</source>
+        <translation>3B model yok</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="262"/>
+        <source>Choose the three files to see the model</source>
+        <translation>Modeli görmek için üç dosyayı seçin</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="263"/>
+        <source>The 3D view needs a 3D graphics driver</source>
+        <translation>3B görünüm için 3B grafik sürücüsü gerekir</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="276"/>
+        <source>Pan</source>
+        <translation>Pan</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="277"/>
+        <source>Preview pan</source>
+        <translation>Önizleme pan</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="283"/>
+        <source>Tilt</source>
+        <translation>Tilt</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="284"/>
+        <source>Preview tilt</source>
+        <translation>Önizleme tilt</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="291"/>
+        <source>The sliders turn the preview only.</source>
+        <translation>Kaydırıcılar yalnız önizlemeyi döndürür.</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="319"/>
+        <source>Cancel</source>
+        <translation>Vazgeç</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalEditDialog.qml" line="325"/>
+        <source>Save</source>
+        <translation>Kaydet</translation>
+    </message>
+</context>
+<context>
     <name>GimbalInfoPage</name>
     <message>
         <location filename="../features/maincontrol/GimbalInfoPage.qml" line="73"/>
@@ -820,59 +1004,132 @@
     </message>
 </context>
 <context>
+    <name>GimbalLibrary</name>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="181"/>
+        <source>Enter a name.</source>
+        <translation>Bir ad girin.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="188"/>
+        <source>Version %1 is listed twice.</source>
+        <translation>%1 sürümü iki kez yazılmış.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="192"/>
+        <source>Enter at least one version.</source>
+        <translation>En az bir sürüm girin.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="201"/>
+        <source>A gimbal named %1 already exists.</source>
+        <translation>%1 adında bir gimbal zaten var.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="223"/>
+        <source>Choose the base, pan and tilt files.</source>
+        <translation>Taban, pan ve tilt dosyalarını seçin.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="230"/>
+        <source>%1 is not a .glb file.</source>
+        <translation>%1 bir .glb dosyası değil.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="237"/>
+        <source>%1 could not be copied.</source>
+        <translation>%1 kopyalanamadı.</translation>
+    </message>
+    <message>
+        <location filename="../shared/settings/GimbalLibrary.cpp" line="272"/>
+        <source>Unknown gimbal: %1</source>
+        <translation>Bilinmeyen gimbal: %1</translation>
+    </message>
+</context>
+<context>
     <name>GimbalSelectDialog</name>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="47"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="57"/>
         <source>Select a gimbal</source>
         <translation>Gimbal seçin</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="58"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="68"/>
         <source>Choose the pan-tilt gimbal you are working with. The 3D view shows the selected model; pages and settings do not change.</source>
         <translation>Çalıştığınız pan-tilt gimbali seçin. 3B görünüm seçilen modeli gösterir; sayfalar ve ayarlar değişmez.</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="119"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="85"/>
+        <source>Delete gimbal</source>
+        <translation>Gimbali sil</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="86"/>
+        <source>Delete %1? Its 3D model files are deleted too.</source>
+        <translation>%1 silinsin mi? 3B model dosyaları da silinir.</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="88"/>
+        <source>Delete</source>
+        <translation>Sil</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="162"/>
         <source>Current</source>
         <translation>Kullanılan</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="161"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="204"/>
         <source>No 3D model yet</source>
         <translation>Henüz 3B model yok</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="161"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="204"/>
         <source>No 3D view</source>
         <translation>3B görünüm yok</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="170"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="213"/>
         <source>Version</source>
         <translation>Sürüm</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="216"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="251"/>
+        <source>Edit %1</source>
+        <translation>%1 düzenle</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="261"/>
+        <source>Delete %1</source>
+        <translation>%1 sil</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="286"/>
+        <source>New gimbal</source>
+        <translation>Yeni gimbal</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="306"/>
         <source>Open this gimbal on start</source>
         <translation>Açılışta bu gimballe başla</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="221"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="311"/>
         <source>Selected &lt;b&gt;%1 · %2&lt;/b&gt;</source>
         <translation>Seçilen &lt;b&gt;%1 · %2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="222"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="312"/>
         <source>No gimbal selected</source>
         <translation>Gimbal seçilmedi</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="232"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="322"/>
         <source>Cancel</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="239"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="329"/>
         <source>Continue</source>
         <translation>Devam</translation>
     </message>
@@ -1272,12 +1529,17 @@
 <context>
     <name>GimbalView</name>
     <message>
-        <location filename="../features/gimbal3d/GimbalView.qml" line="86"/>
+        <location filename="../features/gimbal3d/GimbalView.qml" line="123"/>
+        <source>The 3D model could not be loaded.</source>
+        <translation>3B model yüklenemedi.</translation>
+    </message>
+    <message>
+        <location filename="../features/gimbal3d/GimbalView.qml" line="134"/>
         <source>No telemetry</source>
         <translation>Veri yok</translation>
     </message>
     <message>
-        <location filename="../features/gimbal3d/GimbalView.qml" line="97"/>
+        <location filename="../features/gimbal3d/GimbalView.qml" line="145"/>
         <source>Reset view</source>
         <translation>Görünümü sıfırla</translation>
     </message>
@@ -1452,98 +1714,98 @@
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="76"/>
+        <location filename="../app/Main.qml" line="71"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="187"/>
+        <location filename="../app/Main.qml" line="182"/>
         <source>%1 unsaved parameter change(s) will be lost.</source>
         <translation>%1 kaydedilmemiş parametre değişikliği kaybolacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="189"/>
+        <location filename="../app/Main.qml" line="184"/>
         <source>The firmware update in progress will be interrupted.</source>
         <translation>Süren firmware güncellemesi yarıda kalacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="191"/>
+        <location filename="../app/Main.qml" line="186"/>
         <source>The script that is playing will stop.</source>
         <translation>Oynatılan script duracak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="193"/>
+        <location filename="../app/Main.qml" line="188"/>
         <source>The CSV recording in progress will be closed.</source>
         <translation>Süren CSV kaydı kapatılacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="208"/>
+        <location filename="../app/Main.qml" line="203"/>
         <source>Exit the application?</source>
         <translation>Uygulamadan çıkılsın mı?</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="209"/>
+        <location filename="../app/Main.qml" line="204"/>
         <source>If you exit now:</source>
         <translation>Şimdi çıkarsanız:</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="210"/>
+        <location filename="../app/Main.qml" line="205"/>
         <source>Stay</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="211"/>
+        <location filename="../app/Main.qml" line="206"/>
         <source>Exit</source>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="320"/>
+        <location filename="../app/Main.qml" line="316"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="335"/>
+        <location filename="../app/Main.qml" line="331"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="336"/>
+        <location filename="../app/Main.qml" line="332"/>
         <source>%1/%2 connected</source>
         <translation>%1/%2 bağlı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="337"/>
+        <location filename="../app/Main.qml" line="333"/>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="338"/>
+        <location filename="../app/Main.qml" line="334"/>
         <source>Not connected</source>
         <translation>Bağlı değil</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="343"/>
+        <location filename="../app/Main.qml" line="339"/>
         <source>Connections: %1</source>
         <translation>Bağlantılar: %1</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="371"/>
+        <location filename="../app/Main.qml" line="367"/>
         <source>Select gimbal</source>
         <translation>Gimbal seçin</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="372"/>
+        <location filename="../app/Main.qml" line="368"/>
         <source>Gimbal: %1</source>
         <translation>Gimbal: %1</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="384"/>
+        <location filename="../app/Main.qml" line="380"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="21"/>
-        <location filename="../app/Main.qml" line="268"/>
+        <location filename="../app/Main.qml" line="264"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1553,7 +1815,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="315"/>
+        <location filename="../app/Main.qml" line="311"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
@@ -2096,42 +2358,52 @@
         <translation>Tercihler kaydedilemedi</translation>
     </message>
     <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="15"/>
+        <source>Gimbal list could not be read; the defaults are used and the file is kept</source>
+        <translation>Gimbal listesi okunamadı; varsayılanlar kullanılıyor, dosya saklandı</translation>
+    </message>
+    <message>
         <location filename="../shared/notifications/NotificationModel.cpp" line="16"/>
+        <source>Gimbal list could not be saved</source>
+        <translation>Gimbal listesi kaydedilemedi</translation>
+    </message>
+    <message>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="19"/>
         <source>Command failed: %1</source>
         <translation>Komut başarısız: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="18"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="21"/>
         <source>Command cancelled (connection closed): %1</source>
         <translation>Komut iptal edildi (bağlantı kapandı): %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="20"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="23"/>
         <source>Parameter file could not be used: %1</source>
         <translation>Parametre dosyası kullanılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="22"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="25"/>
         <source>CSV recording stopped: %1</source>
         <translation>CSV kaydı durdu: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="23"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="26"/>
         <source>Script file could not be used: %1</source>
         <translation>Script dosyası kullanılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="25"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="28"/>
         <source>Script stopped (connection lost)</source>
         <translation>Script durdu (bağlantı koptu)</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="27"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="30"/>
         <source>Fonts could not be loaded: %1</source>
         <translation>Yazı tipleri yüklenemedi: %1</translation>
     </message>
     <message>
-        <location filename="../shared/notifications/NotificationModel.cpp" line="15"/>
+        <location filename="../shared/notifications/NotificationModel.cpp" line="18"/>
         <source>Language could not be loaded: %1</source>
         <translation>Dil yüklenemedi: %1</translation>
     </message>

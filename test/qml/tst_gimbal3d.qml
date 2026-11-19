@@ -35,18 +35,41 @@ TestCase {
     function cleanup() {
         testSettings.gimbal = "g180"
         testSettings.gimbalVersion = "v2.0"
+        testHelper.resetGimbalLibrary()
         testHelper.disconnectDevice()
         testHelper.restoreConnection()
     }
 
-    function test_axesFollowAngles() {
-        const component = Qt.createComponent("IDS_GIMBAL", "GimbalZR10")
+    function createModel(spec) {
+        const component = Qt.createComponent("IDS_GIMBAL", "GimbalModel")
         verify(component.status === Component.Ready, component.errorString())
-        const gimbal = createTemporaryObject(component, null, { pan: 30, tilt: 20 }) // no scene: only the node rotations
+        return createTemporaryObject(component, null, { spec: spec }) // no scene: only the node transforms
+    }
+    function zr10() { return testSettings.gimbalLibrary.gimbals.find(g => g.id === "zr10").model }
+
+    function test_axesFollowAngles() {
+        const gimbal = createModel(zr10())
+        gimbal.pan = 30
+        gimbal.tilt = 20
         fuzzyCompare(gimbal.panPart.eulerRotation.y, 30, 0.01)
         fuzzyCompare(gimbal.tiltPart.eulerRotation.x, -20, 0.01) // ZR10: tilt down is negative
         gimbal.pan = -45
         fuzzyCompare(gimbal.panPart.eulerRotation.y, -45, 0.01)
+        compare(gimbal.tiltPart.position, Qt.vector3d(-4.1, -53.1, 13.94)) // ZR10 parts are centred on their axes
+        compare(gimbal.tiltLoader.position, Qt.vector3d(0, 0, 0))
+        verify(String(gimbal.spec.tilt).startsWith("file:"))
+    }
+
+    function test_inPlaceOffsetsParts() {
+        const spec = Object.assign({}, zr10(), { inPlace: true, panPivot: [1, 2, 3], tiltPivot: [4, 5, 6],
+                                                 tiltAxis: "z", tiltSign: 1 })
+        const gimbal = createModel(spec)
+        compare(gimbal.panPart.position, Qt.vector3d(1, 2, 3))
+        compare(gimbal.panLoader.position, Qt.vector3d(-1, -2, -3))
+        compare(gimbal.tiltPart.position, Qt.vector3d(3, 3, 3)) // relative to the pan part
+        compare(gimbal.tiltLoader.position, Qt.vector3d(-4, -5, -6))
+        gimbal.tilt = 15
+        fuzzyCompare(gimbal.tiltPart.eulerRotation.z, 15, 0.01)
     }
 
     function test_followsSelectedGimbal() {

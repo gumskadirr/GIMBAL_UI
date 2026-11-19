@@ -1,5 +1,8 @@
 #include "AppSettings.h"
 
+#include <QFileInfo>
+#include <QStandardPaths>
+
 namespace {
 const QStringList kThemes{QStringLiteral("dark"), QStringLiteral("light"), QStringLiteral("blue")};
 const QStringList kLanguages{QStringLiteral("tr"), QStringLiteral("en")};
@@ -18,13 +21,17 @@ QString validOr(const QString &value, const QStringList &allowed)
 }
 } // namespace
 
-AppSettings::AppSettings(QObject *parent) : QObject(parent)
+AppSettings::AppSettings(QObject *parent)
+    : QObject(parent),
+      m_gimbalLibrary(std::make_unique<GimbalLibrary>(
+          QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/gimbals")))
 {
     load();
 }
 
 AppSettings::AppSettings(const QString &iniFilePath, QObject *parent)
-    : QObject(parent), m_iniFilePath(iniFilePath)
+    : QObject(parent), m_iniFilePath(iniFilePath),
+      m_gimbalLibrary(std::make_unique<GimbalLibrary>(QFileInfo(iniFilePath).absolutePath() + QStringLiteral("/gimbals")))
 {
     load();
 }

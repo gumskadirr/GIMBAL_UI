@@ -21,6 +21,13 @@ void connectServices(AppSettings &settings, NotificationModel &notifications, Lo
     QObject::connect(&settings, &AppSettings::writeFailed, &notifications, [&](const QString &key) {
         notifications.add(QStringLiteral("settings.writeFailed"), {}, NotificationModel::Error, key);
     });
+    QObject::connect(settings.gimbalLibrary(), &GimbalLibrary::problem, &notifications,
+                     [&](const QString &code, const QString &detail) {
+                         notifications.add(code, {}, NotificationModel::Error, detail);
+                     });
+    if (!settings.gimbalLibrary()->keptBadFile().isEmpty()) // read before this connection existed
+        notifications.add(QStringLiteral("gimbals.readFailed"), {}, NotificationModel::Error,
+                          settings.gimbalLibrary()->keptBadFile());
     QObject::connect(&localization, &Localization::languageLoadFailed, &notifications,
                      [&](const QString &code) {
                          notifications.add(QStringLiteral("language.loadFailed"), {code},
