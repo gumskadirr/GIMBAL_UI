@@ -76,6 +76,7 @@ TestCase {
         waitForRendering(main.contentItem)
         // The first frame can take over a second (telemetry stale): send again; Errors with `dialog` shows a failed item.
         testHelper.sendImageErrors(page === "errors" && dialog ? "MACB_LRF" : "")
+        mouseMove(main.contentItem, main.width / 2, main.height / 2) // off the nav rail: hover expands it
         wait(100)
         waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
