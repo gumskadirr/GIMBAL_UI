@@ -116,6 +116,19 @@ TestCase {
         }
     }
 
+    // Run with QT_QPA_PLATFORM=windows: the offscreen platform renders in software, without Qt Quick 3D.
+    function test_gimbal3dShots() {
+        testSettings.gimbal = "zr10"
+        testSettings.gimbalVersion = "v1.0"
+        shot(1536, 786, "gimbal3d-1536-dark-en.png", "dark", "en", "gimbalInfo")
+        shot(1536, 786, "gimbal3d-1536-light-tr.png", "light", "tr", "motorControl")
+        shot(1536, 786, "gimbal3d-select-1536-dark-en.png", "dark", "en", "gimbalInfo", "gimbal")
+        testSettings.gimbal = "g180"
+        testSettings.gimbalVersion = "v2.0"
+        testLocalization.setLanguage("en")
+        testSettings.theme = "dark"
+    }
+
     function test_gimbalShots() {
         shot(1536, 786, "gimbal-1536-dark-en.png", "dark", "en", "gimbalInfo", "gimbal")
         shot(1536, 786, "gimbal-1536-light-tr.png", "light", "tr", "gimbalInfo", "gimbal")

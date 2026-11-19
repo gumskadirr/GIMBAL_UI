@@ -12,7 +12,7 @@ import IDS_GIMBAL
 IdsPopup {
     id: dialog
 
-    // [{ id, name, versions: ["v1.0", ...], model: Component or null (3D view) }]
+    // [{ id, name, versions: ["v1.0", ...], model: GimbalModel component or null }]
     property var gimbals: []
     property string currentId: ""      // saved choice; "CURRENT" badge
     property string currentVersion: ""
@@ -62,11 +62,11 @@ IdsPopup {
         color: Theme.muted
     }
 
-    // shortcut: 3 cards per row and no scrolling, enough for the 3 known gimbals; scroll when the list grows.
+    // shortcut: 4 cards per row and no scrolling, enough for the 4 known gimbals; scroll when the list grows.
     GridLayout {
         Layout.fillWidth: true
         Layout.topMargin: 6
-        columns: Math.min(3, Math.max(1, dialog.gimbals.length))
+        columns: Math.min(4, Math.max(1, dialog.gimbals.length))
         columnSpacing: 16
         rowSpacing: 16
 
@@ -139,14 +139,15 @@ IdsPopup {
                         color: Theme.bg
                         border.width: 1
                         border.color: Theme.line2
-                        Loader {
+                        GimbalView {
+                            id: preview
                             anchors.fill: parent
-                            active: card.modelData.model !== null
-                            sourceComponent: card.modelData.model
+                            model: card.modelData.model
+                            interactive: false
                         }
                         Column {
                             anchors.centerIn: parent
-                            visible: card.modelData.model === null
+                            visible: !preview.shown
                             spacing: 8
                             Icon {
                                 anchors.horizontalCenter: parent.horizontalCenter
@@ -156,7 +157,8 @@ IdsPopup {
                                 strokeWidth: 1.5
                             }
                             Text {
-                                text: qsTr("No 3D model yet")
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: card.modelData.model === null ? qsTr("No 3D model yet") : qsTr("No 3D view")
                                 font.family: Theme.fontSans
                                 font.pixelSize: Theme.fsSmall
                                 color: Theme.muted

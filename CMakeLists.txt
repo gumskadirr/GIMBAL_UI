@@ -5,7 +5,7 @@ project(IDS_GIMBAL VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.12 REQUIRED COMPONENTS Quick QuickControls2 QuickDialogs2 SerialPort Network Test QuickTest LinguistTools)
+find_package(Qt6 6.12 REQUIRED COMPONENTS Quick Quick3D QuickControls2 QuickDialogs2 SerialPort Network Test QuickTest LinguistTools)
 
 qt_standard_project_setup(REQUIRES 6.12)
 
@@ -109,8 +109,14 @@ qt_add_qml_module(ids_gimbal
         features/idsimage/AlignmentPage.qml
         features/idsimage/ErrorsPage.qml
         features/idsimage/GimbalStatePage.qml
+        features/gimbal3d/GimbalModel.qml
+        features/gimbal3d/GimbalZR10.qml
+        features/gimbal3d/GimbalView.qml
     RESOURCES
         assets/icons/ids_logo.png
+        features/gimbal3d/meshes/zr10_base.mesh
+        features/gimbal3d/meshes/zr10_yaw.mesh
+        features/gimbal3d/meshes/zr10_pitch.mesh
 )
 
 target_include_directories(ids_gimbal
@@ -119,7 +125,7 @@ target_include_directories(ids_gimbal
     PRIVATE shared/ui shared/settings shared/localization shared/notifications device/presentation device/api features/telemetry
 )
 
-target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::SerialPort Qt6::Network)
+target_link_libraries(ids_gimbal PUBLIC Qt6::Quick Qt6::Quick3D Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::SerialPort Qt6::Network)
 target_compile_definitions(ids_gimbal PRIVATE IDS_GIMBAL_VERSION="${PROJECT_VERSION}")
 
 # Inter and JetBrains Mono (SIL OFL 1.1, license texts next to the files), loaded by loadAppFonts().

@@ -48,8 +48,10 @@ ApplicationWindow {
     readonly property var gimbals: [
         { id: "g160", name: "G160", versions: ["v1.0", "v2.0"], model: null },
         { id: "g180", name: "G180", versions: ["v1.0", "v2.0", "v3.0"], model: null },
-        { id: "kashif700", name: "Kashif700", versions: ["v1.0"], model: null }
+        { id: "kashif700", name: "Kashif700", versions: ["v1.0"], model: null },
+        { id: "zr10", name: "ZR10", versions: ["v1.0"], model: zr10Model }
     ]
+    Component { id: zr10Model; GimbalZR10 {} }
     // Saved gimbal, or null when the saved id or version is no longer in the list.
     readonly property var currentGimbal: {
         const g = gimbals.find(g => g.id === settings.gimbal)
@@ -437,6 +439,12 @@ ApplicationWindow {
                         property: "pageActive"
                         value: window.activePageId === window.pages[pageSlot.index].id
                         when: pageLoader.item !== null && "pageActive" in pageLoader.item
+                    }
+                    Binding {
+                        target: pageLoader.item
+                        property: "gimbalModel"
+                        value: window.currentGimbal ? window.currentGimbal.model : null
+                        when: pageLoader.item !== null && "gimbalModel" in pageLoader.item
                     }
 
                     Loader {

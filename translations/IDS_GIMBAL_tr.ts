@@ -293,69 +293,74 @@
 <context>
     <name>ControlPageFrame</name>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="26"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="27"/>
         <source>REF %1 · %2</source>
         <translation>REF %1 · %2</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="54"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="55"/>
         <source>Safe control</source>
         <translation>Güvenli kontrol</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="56"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="57"/>
         <source>Locked</source>
         <translation>Kilitli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="56"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="57"/>
         <source>Unlocked</source>
         <translation>Kilitli değil</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="62"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="63"/>
         <source>Gimbal / IMU temp.</source>
         <translation>Gimbal / IMU sıc.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="64"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="65"/>
         <source>IMU %1</source>
         <translation>IMU %1</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="68"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="69"/>
         <source>Supply voltage</source>
         <translation>Besleme gerilimi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="73"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="74"/>
         <source>Pan angle</source>
         <translation>Pan açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="87"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="88"/>
         <source>Tilt angle</source>
         <translation>Tilt açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="110"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="111"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="111"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="112"/>
         <source>3D model, follows live pan and tilt</source>
         <translation>Canlı pan ve tilt açısını izleyen 3B model</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="119"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="120"/>
         <source>3D gimbal model</source>
         <translation>3B gimbal modeli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="120"/>
-        <source>Reserved area for the interactive 3D view</source>
-        <translation>Etkileşimli 3B görünüm için ayrılmış alan</translation>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="121"/>
+        <source>No 3D model for this gimbal yet</source>
+        <translation>Bu gimbalin henüz 3B modeli yok</translation>
+    </message>
+    <message>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="122"/>
+        <source>The 3D view needs a 3D graphics driver</source>
+        <translation>3B görünüm için 3B grafik sürücüsü gerekir</translation>
     </message>
 </context>
 <context>
@@ -832,37 +837,42 @@
         <translation>Kullanılan</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="159"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="161"/>
         <source>No 3D model yet</source>
         <translation>Henüz 3B model yok</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="168"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="161"/>
+        <source>No 3D view</source>
+        <translation>3B görünüm yok</translation>
+    </message>
+    <message>
+        <location filename="../app/GimbalSelectDialog.qml" line="170"/>
         <source>Version</source>
         <translation>Sürüm</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="214"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="216"/>
         <source>Open this gimbal on start</source>
         <translation>Açılışta bu gimballe başla</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="219"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="221"/>
         <source>Selected &lt;b&gt;%1 · %2&lt;/b&gt;</source>
         <translation>Seçilen &lt;b&gt;%1 · %2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="220"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="222"/>
         <source>No gimbal selected</source>
         <translation>Gimbal seçilmedi</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="230"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="232"/>
         <source>Cancel</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/GimbalSelectDialog.qml" line="237"/>
+        <location filename="../app/GimbalSelectDialog.qml" line="239"/>
         <source>Continue</source>
         <translation>Devam</translation>
     </message>
@@ -1260,6 +1270,19 @@
     </message>
 </context>
 <context>
+    <name>GimbalView</name>
+    <message>
+        <location filename="../features/gimbal3d/GimbalView.qml" line="86"/>
+        <source>No telemetry</source>
+        <translation>Veri yok</translation>
+    </message>
+    <message>
+        <location filename="../features/gimbal3d/GimbalView.qml" line="97"/>
+        <source>Reset view</source>
+        <translation>Görünümü sıfırla</translation>
+    </message>
+</context>
+<context>
     <name>HeaterPage</name>
     <message>
         <location filename="../features/maincontrol/HeaterPage.qml" line="45"/>
@@ -1429,98 +1452,98 @@
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="74"/>
+        <location filename="../app/Main.qml" line="76"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="185"/>
+        <location filename="../app/Main.qml" line="187"/>
         <source>%1 unsaved parameter change(s) will be lost.</source>
         <translation>%1 kaydedilmemiş parametre değişikliği kaybolacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="187"/>
+        <location filename="../app/Main.qml" line="189"/>
         <source>The firmware update in progress will be interrupted.</source>
         <translation>Süren firmware güncellemesi yarıda kalacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="189"/>
+        <location filename="../app/Main.qml" line="191"/>
         <source>The script that is playing will stop.</source>
         <translation>Oynatılan script duracak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="191"/>
+        <location filename="../app/Main.qml" line="193"/>
         <source>The CSV recording in progress will be closed.</source>
         <translation>Süren CSV kaydı kapatılacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="206"/>
+        <location filename="../app/Main.qml" line="208"/>
         <source>Exit the application?</source>
         <translation>Uygulamadan çıkılsın mı?</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="207"/>
+        <location filename="../app/Main.qml" line="209"/>
         <source>If you exit now:</source>
         <translation>Şimdi çıkarsanız:</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="208"/>
+        <location filename="../app/Main.qml" line="210"/>
         <source>Stay</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="209"/>
+        <location filename="../app/Main.qml" line="211"/>
         <source>Exit</source>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="318"/>
+        <location filename="../app/Main.qml" line="320"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="333"/>
+        <location filename="../app/Main.qml" line="335"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="334"/>
+        <location filename="../app/Main.qml" line="336"/>
         <source>%1/%2 connected</source>
         <translation>%1/%2 bağlı</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="335"/>
+        <location filename="../app/Main.qml" line="337"/>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="336"/>
+        <location filename="../app/Main.qml" line="338"/>
         <source>Not connected</source>
         <translation>Bağlı değil</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="341"/>
+        <location filename="../app/Main.qml" line="343"/>
         <source>Connections: %1</source>
         <translation>Bağlantılar: %1</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="369"/>
+        <location filename="../app/Main.qml" line="371"/>
         <source>Select gimbal</source>
         <translation>Gimbal seçin</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="370"/>
+        <location filename="../app/Main.qml" line="372"/>
         <source>Gimbal: %1</source>
         <translation>Gimbal: %1</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="382"/>
+        <location filename="../app/Main.qml" line="384"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="21"/>
-        <location filename="../app/Main.qml" line="266"/>
+        <location filename="../app/Main.qml" line="268"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1530,7 +1553,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="313"/>
+        <location filename="../app/Main.qml" line="315"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
