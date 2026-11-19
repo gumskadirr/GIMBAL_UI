@@ -65,6 +65,8 @@ enum Kind {
     ImageSetFocus,         // distance: double (m; +inf = INF button)
     ImageWriteOffset,      // x: int, y: int (pixels), scale: double
     ImageCameraStep,       // param: QString ("gain"|"iris"|"shutter"), delta: int (+1, -1)
+    // IDS Image (Errors).
+    ImageSetIp,            // dhcp: bool, address: QString (IPv4; empty when dhcp)
 };
 Q_ENUM_NS(Kind)
 

@@ -74,6 +74,10 @@ TestCase {
         testHelper.sendTraffic(250, 11000) // ~0.09 Mbps over the 1 s window, as in the design
         wait(dialog ? 300 : 50) // telemetry turns stale after 1 s; the window fades in
         waitForRendering(main.contentItem)
+        // The first frame can take over a second (telemetry stale): send again; Errors with `dialog` shows a failed item.
+        testHelper.sendImageErrors(page === "errors" && dialog ? "MACB_LRF" : "")
+        wait(100)
+        waitForRendering(main.contentItem)
         verify(testHelper.saveWindowImage(main, "build/shots/" + file))
         if (realtime) { // the Realtime graph and logger window, with scope history and a notification
             testHelper.addNotification("device.error.mainControl", "link lost")
@@ -110,6 +114,9 @@ TestCase {
         shot(1536, 786, "viewControl-1536-light-tr.png", "light", "tr", "viewControl")
         shot(1536, 786, "alignment-1536-dark-en.png", "dark", "en", "alignment")
         shot(1536, 786, "alignment-1536-light-tr.png", "light", "tr", "alignment")
+        shot(1536, 786, "errors-1536-dark-en.png", "dark", "en", "errors")
+        shot(1536, 786, "errors-1536-light-tr.png", "light", "tr", "errors")
+        shot(1536, 786, "errorsFail-1536-dark-en.png", "dark", "en", "errors", true)
         testLocalization.setLanguage("en")
         testSettings.theme = "dark"
         testHelper.setCommandsSupported(false)

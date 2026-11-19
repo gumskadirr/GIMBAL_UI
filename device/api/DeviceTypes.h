@@ -2,6 +2,7 @@
 
 #include <QMetaType>
 #include <QObject>
+#include <QVariant>
 #include <optional>
 
 enum class ConnectionState { Disconnected, Connecting, Connected, Error };
@@ -150,6 +151,10 @@ struct ImageSample
     Q_PROPERTY(Measurement gainMode MEMBER gainMode)
     Q_PROPERTY(Measurement irisMode MEMBER irisMode)
     Q_PROPERTY(Measurement shutterMode MEMBER shutterMode)
+    Q_PROPERTY(QVariantList errors MEMBER errors)
+    Q_PROPERTY(bool errorsValid MEMBER errorsValid)
+    Q_PROPERTY(Flag dhcp MEMBER dhcp)
+    Q_PROPERTY(TextValue ipAddress MEMBER ipAddress)
 
 public:
     Measurement rollDeg;
@@ -185,6 +190,12 @@ public:
     Measurement gainMode;       // index: 0 Manual, 1 Auto
     Measurement irisMode;
     Measurement shutterMode;
+    // Errors page. One map per item: group, name (device text, never translated) and state ("ok" | "fail" |
+    // "unknown"); errorsValid false means no list was read.
+    QVariantList errors;
+    bool errorsValid = false;
+    Flag dhcp;           // IP settings: the device gets its address by DHCP
+    TextValue ipAddress; // the address it holds now
 };
 
 // One built-in test item; name and description are raw device text.

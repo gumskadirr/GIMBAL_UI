@@ -49,6 +49,9 @@ private slots:
         QCOMPARE(s.zoom.value, 1.0);
         QCOMPARE(s.brightness.value, 200.0);
         QVERIFY(!s.lrfDistanceM.valid);
+        QVERIFY(s.errorsValid);
+        QCOMPARE(s.errors.size(), 21);
+        QCOMPARE(s.ipAddress.value, QStringLiteral("192.168.1.50"));
 
         p.send(1, 1, {Command::ImageSetStreamSetting, {{"setting", "brightness"}, {"value", 90.0}}});
         const int seen = samples.count();

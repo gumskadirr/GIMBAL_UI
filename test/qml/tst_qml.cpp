@@ -145,6 +145,12 @@ public:
         s.brightness = {brightness, true};
         emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
     }
+    Q_INVOKABLE void sendImageErrors(const QString &failing)
+    {
+        ImageSample s = makeImageSample();
+        s.errors = designErrorItems(failing);
+        emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
+    }
     Q_INVOKABLE int imageSentCount() const { return int(m_imageFake->sent.size()); }
     Q_INVOKABLE int lastImageCommandKind() const { return m_imageFake->sent.isEmpty() ? -1 : int(m_imageFake->sent.last().kind); }
     Q_INVOKABLE QVariantMap lastImageCommandArgs() const

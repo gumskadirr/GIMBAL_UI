@@ -1,5 +1,6 @@
 #include "ImageDemoProvider.h"
 #include <limits>
+#include "DesignErrorItems.h"
 
 ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
 {
@@ -8,6 +9,9 @@ ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
         m_tx += kTxPerTick;
         m_rx += kRxPerTick;
         emit trafficCounted(m_sessionId, m_tx, m_rx);
+        // One item fails for kFailTicks of every kCycleTicks, so the highlight can be seen.
+        const int phase = int(m_tx / kTxPerTick) % kCycleTicks;
+        m_state.errors = designErrorItems(phase >= kCycleTicks - kFailTicks ? QStringLiteral("MACB_LRF") : QString());
         emit imageSampleReceived(m_sessionId, m_state);
     });
     // Values of the View & control design; no LRF reading and no polarity yet.
@@ -32,6 +36,9 @@ ImageDemoProvider::ImageDemoProvider(QObject *parent) : IDeviceProvider(parent)
     m_state.offsetY = {11.0, true};
     m_state.imageScale = {1.0, true};
     m_state.stabilization = {false, true};
+    m_state.errorsValid = true;
+    m_state.dhcp = {false, true};
+    m_state.ipAddress = {QStringLiteral("192.168.1.50"), true};
     m_state.gainMode = m_state.irisMode = m_state.shutterMode = {1.0, true}; // Auto
 }
 
@@ -98,6 +105,11 @@ void ImageDemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceC
         m_state.offsetX = {a.value(QStringLiteral("x")).toDouble(), true};
         m_state.offsetY = {a.value(QStringLiteral("y")).toDouble(), true};
         m_state.imageScale = {a.value(QStringLiteral("scale")).toDouble(), true};
+        break;
+    case Command::ImageSetIp:
+        m_state.dhcp = {a.value(QStringLiteral("dhcp")).toBool(), true};
+        if (!m_state.dhcp.value)
+            m_state.ipAddress = {a.value(QStringLiteral("address")).toString(), true};
         break;
     case Command::ImageFollowTarget: m_state.followTarget = {a.value(QStringLiteral("enabled")).toBool(), true}; break;
     default: break;

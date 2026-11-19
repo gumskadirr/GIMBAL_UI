@@ -356,6 +356,65 @@
     </message>
 </context>
 <context>
+    <name>ErrorsPage</name>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="85"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="85"/>
+        <source>Fail</source>
+        <translation>Hata</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="85"/>
+        <source>Unknown</source>
+        <translation>Bilinmiyor</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="98"/>
+        <source>Errors</source>
+        <translation>Hatalar</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="104"/>
+        <source>%1 FAIL</source>
+        <translation>%1 HATA</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="105"/>
+        <source>%1 UNKNOWN</source>
+        <translation>%1 BİLİNMİYOR</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="106"/>
+        <source>%1 OK</source>
+        <translation>%1 OK</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="142"/>
+        <source>IP settings</source>
+        <translation>IP ayarları</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="148"/>
+        <source>Dynamic IP (DHCP)</source>
+        <translation>Dinamik IP (DHCP)</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="155"/>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="165"/>
+        <source>IP address</source>
+        <translation>IP adresi</translation>
+    </message>
+    <message>
+        <location filename="../features/idsimage/ErrorsPage.qml" line="176"/>
+        <source>Set</source>
+        <translation>Ayarla</translation>
+    </message>
+</context>
+<context>
     <name>GimbalInfoPage</name>
     <message>
         <location filename="../features/maincontrol/GimbalInfoPage.qml" line="73"/>
@@ -1143,27 +1202,32 @@
     </message>
     <message>
         <location filename="../app/Main.qml" line="38"/>
+        <source>Errors</source>
+        <translation>Hatalar</translation>
+    </message>
+    <message>
+        <location filename="../app/Main.qml" line="40"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="38"/>
+        <location filename="../app/Main.qml" line="40"/>
         <source>Application</source>
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="56"/>
+        <location filename="../app/Main.qml" line="58"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="219"/>
+        <location filename="../app/Main.qml" line="228"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="167"/>
+        <location filename="../app/Main.qml" line="176"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1173,7 +1237,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="214"/>
+        <location filename="../app/Main.qml" line="223"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>

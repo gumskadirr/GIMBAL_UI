@@ -2,6 +2,7 @@
 
 #include <limits>
 #include "device/api/IDeviceProvider.h"
+#include "../doubles/DesignErrorItems.h"
 
 // Records calls; tests emit results directly with `emit provider->stateChanged(...)`.
 class FakeProvider : public IDeviceProvider
@@ -131,5 +132,9 @@ inline ImageSample makeImageSample()
     s.fovGain = {std::numeric_limits<double>::infinity(), true};
     s.stabilization = {false, true};
     s.gainMode = s.irisMode = s.shutterMode = {1.0, true};
+    s.errors = designErrorItems();
+    s.errorsValid = true;
+    s.dhcp = {false, true};
+    s.ipAddress = {QStringLiteral("192.168.1.50"), true};
     return s;
 }

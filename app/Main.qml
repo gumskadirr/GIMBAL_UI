@@ -35,6 +35,8 @@ ApplicationWindow {
           icon: Icons.eye, component: viewControlPage, designHeight: 914 },
         { id: "alignment", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("Alignment"),
           icon: Icons.target, component: alignmentPage, designHeight: 819 },
+        { id: "errors", service: "idsImage", group: "IDS Image", crumb: "IDS Image", title: qsTr("Errors"),
+          icon: Icons.warning, component: errorsPage, designHeight: 743 },
         { id: "preferences", group: qsTr("Application"), title: qsTr("Preferences"), icon: Icons.gear,
           component: preferencesPage }
     ]
@@ -118,6 +120,13 @@ ApplicationWindow {
     Component {
         id: alignmentPage
         AlignmentPage {
+            viewModel: window.imageViewModel
+            settings: window.settings
+        }
+    }
+    Component {
+        id: errorsPage
+        ErrorsPage {
             viewModel: window.imageViewModel
             settings: window.settings
         }
