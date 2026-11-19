@@ -39,3 +39,10 @@ add_test(NAME translations_complete
         -DBUILD_DIR=${CMAKE_BINARY_DIR}
         -DTS_FILE=${PROJECT_SOURCE_DIR}/translations/IDS_GIMBAL_tr.ts
         -P ${CMAKE_CURRENT_SOURCE_DIR}/check_translations.cmake)
+
+# docs/protokol-siniri.md must name every command, field and key of the protocol boundary (and nothing else).
+find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME protocol_doc_matches
+        COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tools/check_protocol_doc.py ${PROJECT_SOURCE_DIR})
+endif()
