@@ -148,6 +148,43 @@ ApplicationWindow {
         }
     }
 
+    // Exit guard (T23): work that would be lost. Closing asks first; a confirmed exit sets exitConfirmed so the
+    // window is not asked twice.
+    property bool exitConfirmed: false
+    property var exitLosses: []
+    function currentLosses(): var {
+        const losses = []
+        const unsaved = mainControl.parameters.unsavedCount
+        if (unsaved > 0)
+            losses.push(qsTr("%1 unsaved parameter change(s) will be lost.").arg(unsaved))
+        if (mainControl.connection.pendingCommands.includes(Command.UpdateFirmware))
+            losses.push(qsTr("The firmware update in progress will be interrupted."))
+        if (mainControl.script.running)
+            losses.push(qsTr("The script that is playing will stop."))
+        if (mainControl.recorder.recording)
+            losses.push(qsTr("The CSV recording in progress will be closed."))
+        return losses
+    }
+    onClosing: close => {
+        if (exitConfirmed)
+            return
+        exitLosses = currentLosses()
+        if (exitLosses.length === 0)
+            return
+        close.accepted = false
+        exitDialog.open()
+    }
+    ConfirmDialog {
+        id: exitDialog
+        objectName: "exitDialog"
+        title: qsTr("Exit the application?")
+        text: qsTr("If you exit now:") + "\n" + window.exitLosses.map(loss => "• " + loss).join("\n")
+        cancelText: qsTr("Stay")
+        acceptText: qsTr("Exit")
+        danger: true
+        onConfirmed: { window.exitConfirmed = true; window.close() }
+    }
+
     RealtimeWindow {
         id: realtimeWindow
         objectName: "realtimeWindow"

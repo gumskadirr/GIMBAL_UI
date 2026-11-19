@@ -114,6 +114,20 @@ private slots:
         QCOMPARE(f.vm.progressPercent(), 0);
     }
 
+    void firmwareUpdateCancelledWhenTheLinkDrops()
+    {
+        Fixture f;
+        f.fake->commands = true;
+        f.connect();
+        QSignalSpy finished(&f.vm, &ServiceConnection::commandFinished);
+        QVERIFY(f.vm.send(Command::UpdateFirmware));
+        emit f.fake->stateChanged(1, ConnectionState::Disconnected, {}); // the link drops, no user action
+        QCOMPARE(finished.size(), 1);
+        QCOMPARE(finished.at(0).at(0).toInt(), int(Command::UpdateFirmware));
+        QCOMPARE(finished.at(0).at(1).toInt(), int(Command::Cancelled));
+        QVERIFY(f.vm.pendingCommands().isEmpty());
+    }
+
     void startsDisconnected()
     {
         Fixture f;

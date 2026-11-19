@@ -11,6 +11,8 @@ IdsPopup {
     property string text: ""
     property string warning: ""
     property bool danger: false
+    property string cancelText: qsTr("Cancel")
+    property string acceptText: qsTr("Confirm")
     signal confirmed()
 
     parent: T.Overlay.overlay
@@ -42,13 +44,13 @@ IdsPopup {
             id: cancelButton
             objectName: "confirm-cancel"
             variant: "quiet"
-            text: qsTr("Cancel")
+            text: dialog.cancelText
             onClicked: dialog.close()
         }
         IdsButton {
             objectName: "confirm-accept"
             variant: dialog.danger ? "danger" : "primary"
-            text: qsTr("Confirm")
+            text: dialog.acceptText
             onClicked: { dialog.close(); dialog.confirmed() }
         }
     }

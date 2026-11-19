@@ -80,6 +80,8 @@ TestCase {
             testHelper.sendImageGimbalState(true, 0)
         if (dialog === "confirm") // the confirmation of Save to flash
             findChild(main.contentItem, "command-saveToFlash").clicked()
+        if (dialog === "exit") // the exit guard (the edited parameters of the page are unsaved)
+            main.close()
         mouseMove(main.contentItem, main.width / 2, main.height / 2) // off the nav rail: hover expands it
         wait(100)
         waitForRendering(main.contentItem)
@@ -107,6 +109,8 @@ TestCase {
         shot(1536, 786, "motorControl-1536-light-tr.png", "light", "tr", "motorControl")
         shot(1536, 786, "confirm-1536-dark-en.png", "dark", "en", "motorControl", "confirm")
         shot(1536, 786, "confirm-1536-light-tr.png", "light", "tr", "motorControl", "confirm")
+        shot(1536, 786, "exit-1536-dark-en.png", "dark", "en", "motorControl", "exit")
+        shot(1536, 786, "exit-1536-light-tr.png", "light", "tr", "motorControl", "exit")
         shot(1536, 786, "heater-1536-dark-en.png", "dark", "en", "heater")
         shot(1536, 786, "heater-1536-light-tr.png", "light", "tr", "heater")
         shot(1536, 786, "gimbalSettings-1536-dark-en.png", "dark", "en", "gimbalSettings")

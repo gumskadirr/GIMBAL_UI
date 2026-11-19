@@ -88,6 +88,26 @@ private slots:
         QCOMPARE(lines(file).size(), 8);
     }
 
+    void disconnectKeepsEveryCompleteLineIncludingTheLastSample()
+    {
+        Fixture f;
+        const QString file = path("lastsample.csv");
+        QVERIFY(f.recorder.start(QUrl::fromLocalFile(file)));
+        for (int i = 0; i < 3; ++i)
+            f.send(makeSample(i, true, 30, true));
+        f.send(makeSample(99, true, 30, true)); // the last sample just before the link goes down
+        emit f.fake->stateChanged(1, ConnectionState::Disconnected, {});
+        QVERIFY(!f.recorder.recording());
+        QFile raw(file);
+        QVERIFY(raw.open(QIODevice::ReadOnly));
+        const QByteArray bytes = raw.readAll();
+        QVERIFY(bytes.endsWith("\r\n")); // no half row on disk
+        const QStringList l = lines(file);
+        QCOMPARE(l.size(), 5);
+        QCOMPARE(l.at(1).count(','), l.last().count(','));
+        QVERIFY(l.last().contains(QLatin1String(",99,1,")));
+    }
+
     void decimalPointIgnoresLocale()
     {
         QLocale::setDefault(QLocale(QLocale::Turkish, QLocale::Turkey));
