@@ -1353,58 +1353,58 @@
         <translation>Uygulama</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="60"/>
+        <location filename="../app/Main.qml" line="61"/>
         <source>IDS Gimbal</source>
         <translation>IDS Gimbal</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="159"/>
+        <location filename="../app/Main.qml" line="160"/>
         <source>%1 unsaved parameter change(s) will be lost.</source>
         <translation>%1 kaydedilmemiş parametre değişikliği kaybolacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="161"/>
+        <location filename="../app/Main.qml" line="162"/>
         <source>The firmware update in progress will be interrupted.</source>
         <translation>Süren firmware güncellemesi yarıda kalacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="163"/>
+        <location filename="../app/Main.qml" line="164"/>
         <source>The script that is playing will stop.</source>
         <translation>Oynatılan script duracak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="165"/>
+        <location filename="../app/Main.qml" line="166"/>
         <source>The CSV recording in progress will be closed.</source>
         <translation>Süren CSV kaydı kapatılacak.</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="180"/>
+        <location filename="../app/Main.qml" line="181"/>
         <source>Exit the application?</source>
         <translation>Uygulamadan çıkılsın mı?</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="181"/>
+        <location filename="../app/Main.qml" line="182"/>
         <source>If you exit now:</source>
         <translation>Şimdi çıkarsanız:</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="182"/>
+        <location filename="../app/Main.qml" line="183"/>
         <source>Stay</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="183"/>
+        <location filename="../app/Main.qml" line="184"/>
         <source>Exit</source>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="274"/>
+        <location filename="../app/Main.qml" line="275"/>
         <source>Realtime graph and logger</source>
         <translation>Gerçek zamanlı grafik ve kayıt</translation>
     </message>
     <message>
         <location filename="../app/Main.qml" line="20"/>
-        <location filename="../app/Main.qml" line="222"/>
+        <location filename="../app/Main.qml" line="223"/>
         <source>Main control service</source>
         <translation>Ana kontrol servisi</translation>
     </message>
@@ -1414,7 +1414,7 @@
         <translation>IDS Image hizmeti</translation>
     </message>
     <message>
-        <location filename="../app/Main.qml" line="269"/>
+        <location filename="../app/Main.qml" line="270"/>
         <source>Sample data</source>
         <translation>Örnek veri</translation>
     </message>
