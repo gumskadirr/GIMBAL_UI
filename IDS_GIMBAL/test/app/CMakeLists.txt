@@ -1,0 +1,3 @@
+qt_add_executable(appIDS_GIMBALDemo main.cpp)
+target_link_libraries(appIDS_GIMBALDemo PRIVATE ids_gimbal ids_gimbalplugin ids_gimbal_demo_provider)
+set_target_properties(appIDS_GIMBALDemo PROPERTIES WIN32_EXECUTABLE TRUE)

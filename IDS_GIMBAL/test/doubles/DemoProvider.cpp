@@ -1,0 +1,249 @@
+#include "DemoProvider.h"
+
+#include <QTime>
+#include <cmath>
+#include <utility>
+
+#include "device/api/ParameterKeys.h"
+
+DemoProvider::DemoProvider(int intervalMs, int linkLossAfter, int lateResultDelayMs, QObject *parent)
+    : IDeviceProvider(parent), m_linkLossAfter(linkLossAfter), m_lateResultDelayMs(lateResultDelayMs)
+{
+    m_timer.setInterval(intervalMs);
+    connect(&m_timer, &QTimer::timeout, this, &DemoProvider::tick);
+    m_firmwareTimer.setInterval(kFirmwareStepMs);
+    connect(&m_firmwareTimer, &QTimer::timeout, this, &DemoProvider::firmwareStep);
+}
+
+void DemoProvider::start(quint64 sessionId, const ConnectionTarget &)
+{
+    stop();
+    m_sessionId = sessionId;
+    m_n = 0;
+    m_tx = m_rx = 0;
+    m_streaming = true;
+    QTimer::singleShot(0, this, [this, sessionId] {
+        if (m_sessionId != sessionId)
+            return; // stopped before the connection "completed"
+        emit stateChanged(sessionId, ConnectionState::Connected, {});
+        emit boardInfoReceived(sessionId, sampleBoardInfo());
+        emit bitReportReceived(sessionId, sampleBitReport(QStringLiteral("14:20:05 at power-on")));
+        m_timer.start();
+    });
+}
+
+void DemoProvider::stop()
+{
+    if (m_sessionId == 0)
+        return;
+    m_timer.stop();
+    m_firmwareTimer.stop();
+    m_firmwareRequest = 0;
+    const quint64 old = m_sessionId;
+    const DeviceSample late = sampleAt(m_n);
+    m_sessionId = 0;
+    // Context object `this` cancels the delayed result if the provider is destroyed first.
+    QTimer::singleShot(m_lateResultDelayMs, this, [this, old, late] { emit sampleReceived(old, late); });
+}
+
+void DemoProvider::send(quint64 sessionId, quint64 requestId, const DeviceCommand &command)
+{
+    const bool calibration = command.kind == Command::StartElectricalAngleCalibration
+                             || command.kind == Command::StartCrosstalkCheck || command.kind == Command::StartImuBiasCalibration;
+    if ((command.kind == Command::UpdateFirmware || calibration) && m_firmwareRequest != 0) {
+        QTimer::singleShot(0, this, [this, sessionId, requestId] {
+            emit commandFinished(sessionId, requestId, {Command::Rejected, QStringLiteral("Another long command is running")});
+        });
+        return;
+    }
+    if (command.kind == Command::UpdateFirmware || calibration) { // no fixed delay: progress starts at once, the answer ends it
+        m_longKind = command.kind;
+        m_firmwareSession = sessionId;
+        m_firmwareRequest = requestId;
+        m_firmwarePercent = 0;
+        m_firmwareTimer.start();
+        QTimer::singleShot(0, this, [this, sessionId, requestId, calibration] { emit commandProgress(sessionId, requestId, 0, calibration ? QString() : QStringLiteral("Erasing")); });
+        return;
+    }
+    if (command.kind == Command::CancelFirmwareUpdate && m_firmwareRequest != 0 && m_longKind == Command::UpdateFirmware) {
+        m_firmwareTimer.stop();
+        const quint64 request = std::exchange(m_firmwareRequest, 0);
+        QTimer::singleShot(0, this, [this, request] { emit commandFinished(m_firmwareSession, request, {Command::Cancelled, {}}); });
+    }
+    // Script points come at the sample rate of the script: answered at once.
+    QTimer::singleShot(command.kind == Command::ScriptPoint ? 0 : kCommandDelayMs, this, [this, sessionId, requestId, command] {
+        switch (command.kind) {
+        case Command::WriteParameters:
+            m_parameters.insert(command.args.value(QStringLiteral("values")).toMap());
+            break;
+        case Command::RestoreDefaultParameters:
+            m_parameters = defaultParameters();
+            [[fallthrough]];
+        case Command::ReadParameters:
+        {
+            const QString prefix = command.args.value(QStringLiteral("prefix")).toString();
+            QVariantMap values;
+            for (auto it = m_parameters.cbegin(); it != m_parameters.cend(); ++it) {
+                if (it.key().startsWith(prefix))
+                    values.insert(it.key(), it.value());
+            }
+            emit parametersReceived(sessionId, values);
+            break;
+        }
+        case Command::StartStream:
+        case Command::StopStream:
+            m_streaming = command.kind == Command::StartStream;
+            break;
+        case Command::StepResponse:
+            emit stepMetricsReceived(sessionId, {18.0, 20.5, 92.0, 0.02, 3.0, true}); // values of the design
+            break;
+        case Command::RunBit:
+            emit bitReportReceived(sessionId, sampleBitReport(QTime::currentTime().toString(QStringLiteral("HH:mm:ss")) + QStringLiteral(" manual run")));
+            break;
+        default:
+            break;
+        }
+        emit commandFinished(sessionId, requestId, {Command::Accepted, {}});
+    });
+}
+
+void DemoProvider::firmwareStep()
+{
+    m_firmwarePercent += 1;
+    const QString stage = m_longKind != Command::UpdateFirmware ? QString()
+                        : m_firmwarePercent < 15 ? QStringLiteral("Erasing")
+                        : m_firmwarePercent < 90 ? QStringLiteral("Writing") : QStringLiteral("Verifying");
+    emit commandProgress(m_firmwareSession, m_firmwareRequest, m_firmwarePercent, stage);
+    if (m_firmwarePercent >= 100) {
+        m_firmwareTimer.stop();
+        if (m_longKind == Command::StartCrosstalkCheck)
+            emit crosstalkResultReceived(m_firmwareSession, {true, 0.4, true});
+        else if (m_longKind == Command::StartImuBiasCalibration)
+            emit imuBiasReceived(m_firmwareSession, {0.012, -0.004, 0.021, true});
+        emit commandFinished(m_firmwareSession, std::exchange(m_firmwareRequest, 0), {Command::Accepted, {}});
+    }
+}
+
+QVariantMap DemoProvider::defaultParameters()
+{
+    // Plausible values in every key's range; not taken from a real board.
+    QVariantMap values;
+    for (const ParameterSpec &spec : ParameterKeys::all()) {
+        const bool tilt = spec.key.startsWith(QLatin1String("tilt."));
+        if (spec.key.startsWith(QLatin1String("heater."))) { // values of the Heater design
+            const QString zone = spec.key.mid(7, 2);
+            values.insert(spec.key, spec.type == ParameterType::Bool ? QVariant(true)
+                          : QVariant(zone == QLatin1String("g1") || zone == QLatin1String("g2") ? 35.0
+                                   : zone == QLatin1String("g3") ? 20.0 : zone == QLatin1String("tv") ? 60.0 : 45.0));
+            continue;
+        }
+        if (spec.key.startsWith(QLatin1String("gimbal."))) { // values of the Gimbal settings design
+            values.insert(spec.key, spec.key.endsWith(QLatin1String("Kp")) ? 1.0 : 0.01);
+            continue;
+        }
+        switch (spec.type) {
+        case ParameterType::Number:
+            values.insert(spec.key, spec.key.endsWith(QLatin1String("Deg"))
+                                        ? (spec.key.contains(QLatin1String("forward")) ? 170.0 : spec.key.contains(QLatin1String("backward")) ? -170.0 : 0.0)
+                                        : (tilt ? 0.8 : 1.2));
+            break;
+        case ParameterType::Integer: values.insert(spec.key, 0); break;
+        case ParameterType::Bool: values.insert(spec.key, spec.key.endsWith(QLatin1String("slipRing")) && !tilt); break;
+        case ParameterType::Text: values.insert(spec.key, tilt ? QStringLiteral("TM-2207") : QStringLiteral("PM-3110")); break;
+        }
+    }
+    return values;
+}
+
+void DemoProvider::tick()
+{
+    if (m_n >= m_linkLossAfter) {
+        m_timer.stop();
+        emit stateChanged(m_sessionId, ConnectionState::Error, QStringLiteral("Simulated link loss"));
+        return;
+    }
+    DeviceSample sample = sampleAt(m_n++);
+    sample.streaming.value = m_streaming;
+    emit sampleReceived(m_sessionId, sample);
+    // ~0.09 Mbps at the default 100 ms interval (kRxPerTick + kTxPerTick bytes per tick).
+    m_tx += kTxPerTick;
+    m_rx += kRxPerTick;
+    emit trafficCounted(m_sessionId, m_tx, m_rx);
+}
+
+BoardInfo DemoProvider::sampleBoardInfo()
+{
+    // Values of the Gimbal info design.
+    const auto text = [](const char *value) { return TextValue{QString::fromLatin1(value), true}; };
+    BoardInfo info;
+    info.deviceId = text("0x1A42");
+    info.firmware = text("v2.4.1");
+    info.firmwareBuilt = text("2026-10-28");
+    info.model = text("MCB-2");
+    info.mcuDeviceId = text("0x0451");
+    info.uid = text("3A00 2F14 5133 3532");
+    info.flashSizeKb = text("1024");
+    info.bootloaderVersion = text("1.3.0");
+    info.boardId = text("0x07");
+    return info;
+}
+
+BitReport DemoProvider::sampleBitReport(const QString &lastRun)
+{
+    struct Row { const char *name; BitItem::Status status; const char *description; };
+    static const Row rows[] = {
+        {"Power supply", BitItem::Pass, "24.1 V, within limits"},
+        {"IMU", BitItem::Pass, "Gyro bias within limits"},
+        {"Pan motor", BitItem::Warning, "Position limit reached"},
+        {"Tilt motor", BitItem::Pass, "Driver and current OK"},
+        {"Encoders", BitItem::Pass, "Pan and tilt signals OK"},
+        {"Heater", BitItem::Pass, "All zones respond"},
+        {"LRF", BitItem::Pass, "Optical crosstalk 0.4%"},
+        {"Flash memory", BitItem::Pass, "Checksum OK"},
+    };
+    BitReport report;
+    for (const Row &r : rows)
+        report.items.append({QString::fromLatin1(r.name), r.status, QString::fromLatin1(r.description)});
+    report.lastRun = lastRun;
+    report.valid = true;
+    return report;
+}
+
+DeviceSample DemoProvider::sampleAt(int n)
+{
+    constexpr double kPi = 3.14159265358979323846;
+    const double phase = 2.0 * kPi * n / 50.0;
+    const bool tempValid = !(n % 100 >= 40 && n % 100 < 50); // repeatable sensor dropout
+    DeviceSample s;
+    s.panRefDeg = {150.0 * std::sin(phase), true};
+    s.panDeg = {0.999 * s.panRefDeg.value, true}; // small tracking error
+    s.tiltRefDeg = {-8.2 + 20.0 * std::sin(phase / 2.0), true};
+    s.tiltDeg = {s.tiltRefDeg.value - 0.004, true};
+    s.gimbalTempC = {41.0 + 0.01 * n, tempValid};
+    s.imuTempC = {38.6 + 0.01 * n, tempValid};
+    s.supplyVoltageV = {24.1 + 0.05 * std::sin(phase), true};
+    s.safeControlLocked = {(n / 100) % 2 == 0, true};
+    s.onTimeS = {11520.0 + n / 10, true}; // 3 h 12 min at the start (design), 10 samples per second
+    s.inBootloader = {false, true};
+    s.streaming = {true, true};
+    s.streamRateHz = {1000.0, true};
+    s.packetCount = {12480.0 + 100.0 * n, true}; // 1 kHz, 10 samples per second
+    s.rawPosition = {18432.0 + n, true};
+    s.boardMode = {QStringLiteral("Speed"), true};
+    // Scope: pan rate follows a step of the reference (second order, ~20 % overshoot) every 4 s; tilt follows a
+    // sine of the same period with a small lag. Sample period 100 ms.
+    const double t = (n % 40) * 0.1; // seconds into the 4 s cycle
+    const double stepAt = 1.0;
+    s.panRateRefDps = {t >= stepAt ? 8.0 : 0.0, true};
+    double y = 0.0;
+    if (t >= stepAt) {
+        const double u = t - stepAt, wn = 10.0, zeta = 0.45, wd = wn * std::sqrt(1.0 - zeta * zeta);
+        y = 8.0 * (1.0 - std::exp(-zeta * wn * u) * (std::cos(wd * u) + zeta * wn / wd * std::sin(wd * u)));
+    }
+    s.panRateDps = {y, true};
+    s.tiltRateRefDps = {5.0 * std::sin(2.0 * kPi * n / 40.0), true};
+    s.tiltRateDps = {5.0 * std::sin(2.0 * kPi * n / 40.0 - 0.3), true};
+    s.panTorqueA = {2.0 * std::sin(phase), true};
+    s.tiltTorqueA = {1.0 * std::sin(phase / 2.0), true};
+    return s;
+}

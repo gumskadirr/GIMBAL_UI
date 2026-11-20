@@ -1,0 +1,10 @@
+# Build output
+build/
+
+# Qt Creator per-user state
+.qtcreator/
+*.user
+*.user.*
+
+# Empty folder created by Qt Creator / Design Studio
+Generated/

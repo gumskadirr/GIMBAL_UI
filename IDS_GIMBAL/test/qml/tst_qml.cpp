@@ -1,0 +1,266 @@
+#include <QDir>
+#include <cmath>
+#include <QFile>
+#include <QFileInfo>
+#include <QUrl>
+#include <QQmlContext>
+#include <QQuickWindow>
+#include <QQmlEngine>
+#include <QQuickStyle>
+#include <QTemporaryDir>
+#include <QtQml/qqmlextensionplugin.h>
+#include <QtQuickTest>
+#include <memory>
+
+#include "../unit/FakeProvider.h"
+#include "app/AppRunner.h"
+#include "device/presentation/ImageViewModel.h"
+#include "device/presentation/MainControlViewModel.h"
+#include "device/session/DeviceSession.h"
+#include "shared/localization/Localization.h"
+#include "shared/notifications/NotificationModel.h"
+#include "shared/settings/AppSettings.h"
+#include "shared/ui/Fonts.h"
+
+Q_IMPORT_QML_PLUGIN(IDS_GIMBALPlugin)
+
+// Same base style and fonts as the application (AppRunner). Tests that create Main get real services
+// through the test* context properties (test only; the application passes them as required properties).
+class Setup : public QObject
+{
+    Q_OBJECT
+
+public:
+    Q_INVOKABLE void addNotification(const QString &code, const QString &detail)
+    {
+        m_notifications->add(code, {}, NotificationModel::Error, detail);
+    }
+
+    // Connects through the fake provider and delivers makeFullSample() to the real session/view model.
+    Q_INVOKABLE void connectWithFullSample()
+    {
+        m_session->connectDevice();
+        const quint64 id = m_session->activeSessionId();
+        emit m_fake->stateChanged(id, ConnectionState::Connected, {});
+        emit m_fake->sampleReceived(id, makeFullSample());
+        emit m_fake->boardInfoReceived(id, makeBoardInfo());
+        emit m_fake->bitReportReceived(id, makeBitReport());
+    }
+    // The link is open but the device says nothing (the real target without a protocol).
+    Q_INVOKABLE void connectBare()
+    {
+        m_session->connectDevice();
+        emit m_fake->stateChanged(m_session->activeSessionId(), ConnectionState::Connected, {});
+    }
+    Q_INVOKABLE void sendTraffic(double txBytes, double rxBytes)
+    {
+        emit m_fake->trafficCounted(m_session->activeSessionId(), quint64(txBytes), quint64(rxBytes));
+    }
+    Q_INVOKABLE void sendSample() { emit m_fake->sampleReceived(m_session->activeSessionId(), makeFullSample()); }
+    // Command tests: the fake provider supports commands (set before connecting), records what is sent and
+    // answers or reports progress on request.
+    Q_INVOKABLE void setCommandsSupported(bool supported) { m_fake->commands = supported; }
+    Q_INVOKABLE int sentCount() const { return int(m_fake->sent.size()); }
+    Q_INVOKABLE int lastCommandKind() const { return m_fake->sent.isEmpty() ? -1 : int(m_fake->sent.last().kind); }
+    Q_INVOKABLE QVariantMap lastCommandArgs() const { return m_fake->sent.isEmpty() ? QVariantMap{} : m_fake->sent.last().args; }
+    Q_INVOKABLE void answerLastCommand(int status)
+    {
+        emit m_fake->commandFinished(m_fake->lastCommandSessionId, m_fake->lastRequestId, {Command::Status(status), {}});
+    }
+    Q_INVOKABLE void reportProgress(int percent, const QString &stage)
+    {
+        emit m_fake->commandProgress(m_fake->lastCommandSessionId, m_fake->lastRequestId, percent, stage);
+    }
+    // The device reports parameters (answer to a read).
+    Q_INVOKABLE void sendParameters(const QVariantMap &values)
+    {
+        emit m_fake->parametersReceived(m_session->activeSessionId(), values);
+    }
+    // The device reports a calibration result (answer to StartCrosstalkCheck / StartImuBiasCalibration).
+    Q_INVOKABLE void sendCrosstalk(bool passed, double percent)
+    {
+        emit m_fake->crosstalkResultReceived(m_session->activeSessionId(), {passed, percent, true});
+    }
+    // A scope sample of the design: pan rate steps at n = 10 with an overshoot, tilt rate is a sine (n * 0.1 s).
+    Q_INVOKABLE void sendScopeSample(int n)
+    {
+        DeviceSample s = makeFullSample();
+        const double t = n * 0.1 - 1.0;
+        const double wd = 10.0 * std::sqrt(1.0 - 0.45 * 0.45);
+        s.panRateRefDps = {t >= 0 ? 8.0 : 0.0, true};
+        s.panRateDps = {t < 0 ? 0.0 : 8.0 * (1.0 - std::exp(-4.5 * t) * (std::cos(wd * t) + 4.5 / wd * std::sin(wd * t))), true};
+        s.tiltRateRefDps = {5.0 * std::sin(n * 0.157), true};
+        s.tiltRateDps = {5.0 * std::sin(n * 0.157 - 0.3), true};
+        emit m_fake->sampleReceived(m_session->activeSessionId(), s);
+    }
+    Q_INVOKABLE void sendStepMetrics()
+    {
+        emit m_fake->stepMetricsReceived(m_session->activeSessionId(), {18.0, 20.5, 92.0, 0.02, 3.0, true});
+    }
+    Q_INVOKABLE void sendImuBias(double x, double y, double z)
+    {
+        emit m_fake->imuBiasReceived(m_session->activeSessionId(), {x, y, z, true});
+    }
+    // A file of `bytes` bytes in the test directory (firmware file box).
+    Q_INVOKABLE QUrl makeFile(const QString &name, qint64 bytes)
+    {
+        QFile file(m_dir.filePath(name));
+        if (file.open(QIODevice::WriteOnly))
+            file.resize(bytes);
+        return QUrl::fromLocalFile(file.fileName());
+    }
+    Q_INVOKABLE QUrl makeText(const QString &name, const QString &text)
+    {
+        QFile file(m_dir.filePath(name));
+        if (file.open(QIODevice::WriteOnly))
+            file.write(text.toUtf8());
+        return QUrl::fromLocalFile(file.fileName());
+    }
+    Q_INVOKABLE void disconnectDevice() { m_session->disconnectDevice(); }
+    // The IDS Image service: its own fake provider, session and connection.
+    Q_INVOKABLE void connectImage()
+    {
+        m_imageSession->connectDevice();
+        emit m_imageFake->stateChanged(m_imageSession->activeSessionId(), ConnectionState::Connected, {});
+    }
+    Q_INVOKABLE QString lastNotificationCode() const
+    {
+        return m_notifications->data(m_notifications->index(0), NotificationModel::CodeRole).toString();
+    }
+    Q_INVOKABLE void failImage(const QString &detail)
+    {
+        m_imageSession->connectDevice();
+        emit m_imageFake->stateChanged(m_imageSession->activeSessionId(), ConnectionState::Error, detail);
+    }
+    // IDS Image page tests: the image fake records what is sent, like the Main control one.
+    Q_INVOKABLE void setImageCommandsSupported(bool supported) { m_imageFake->commands = supported; }
+    Q_INVOKABLE void connectImageWithSample()
+    {
+        connectImage();
+        sendImageSample();
+    }
+    Q_INVOKABLE void sendImageSample(double brightness = 200)
+    {
+        ImageSample s = makeImageSample();
+        s.brightness = {brightness, true};
+        emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
+    }
+    Q_INVOKABLE void sendImageErrors(const QString &failing)
+    {
+        ImageSample s = makeImageSample();
+        s.errors = designErrorItems(failing);
+        emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
+    }
+    Q_INVOKABLE void sendImageGimbalState(bool streaming, double yaw, bool flags = true)
+    {
+        ImageSample s = makeImageSample();
+        s.stateStreaming = {streaming, true};
+        s.stateValues = designStateValues(yaw);
+        s.stateFlags = designStateFlags(flags);
+        s.stateFlagsRaw = flags ? 0xfff : 0;
+        emit m_imageFake->imageSampleReceived(m_imageSession->activeSessionId(), s);
+    }
+    Q_INVOKABLE int imageSentCount() const { return int(m_imageFake->sent.size()); }
+    Q_INVOKABLE int lastImageCommandKind() const { return m_imageFake->sent.isEmpty() ? -1 : int(m_imageFake->sent.last().kind); }
+    Q_INVOKABLE QVariantMap lastImageCommandArgs() const
+    {
+        return m_imageFake->sent.isEmpty() ? QVariantMap{} : m_imageFake->sent.last().args;
+    }
+    Q_INVOKABLE void answerLastImageCommand(int status)
+    {
+        emit m_imageFake->commandFinished(m_imageFake->lastCommandSessionId, m_imageFake->lastRequestId,
+                                          {Command::Status(status), {}});
+    }
+    Q_INVOKABLE void forgetImageConnection() { m_imageSession->setTarget({}); }
+    Q_INVOKABLE void restoreImageConnection() { m_imageSession->setTarget(loopbackTarget()); }
+    Q_INVOKABLE void disconnectImage() { m_imageSession->disconnectDevice(); }
+    // Design comparison screenshots (tools/shot/tst_shot.qml, docs/gelistirme.md); not used by the tests.
+    Q_INVOKABLE bool saveWindowImage(QQuickWindow *window, const QString &path)
+    {
+        QDir().mkpath(QFileInfo(path).absolutePath());
+        return window && window->grabWindow().save(path);
+    }
+    // Tests start with saved settings (so Main does not open the connection settings by itself); this
+    // brings back the "never configured" state for the test of rule 1.
+    Q_INVOKABLE void forgetConnection() { m_session->setTarget({}); }
+    Q_INVOKABLE void restoreConnection() { m_session->setTarget(loopbackTarget()); }
+    // Back to the default gimbal list (the library lives next to the test settings file).
+    Q_INVOKABLE void resetGimbalLibrary()
+    {
+        QDir(m_dir.filePath(QStringLiteral("gimbals"))).removeRecursively();
+        m_settings->gimbalLibrary()->reload();
+    }
+    static ConnectionTarget loopbackTarget()
+    {
+        ConnectionTarget t;
+        t.transport = ConnectionTarget::Transport::Udp;
+        t.host = QStringLiteral("127.0.0.1");
+        t.port = 5000;
+        return t;
+    }
+
+public slots:
+    void applicationAvailable()
+    {
+        QCoreApplication::setApplicationVersion(QStringLiteral("2.1.3")); // AppRunner sets the real one
+        QQuickStyle::setStyle(QStringLiteral("Basic"));
+        loadAppFonts();
+        m_settings = std::make_unique<AppSettings>(m_dir.filePath(QStringLiteral("settings.ini")));
+        // A chosen gimbal, so the gimbal selection does not open over every Main window under test.
+        m_settings->setGimbal(QStringLiteral("g180"));
+        m_settings->setGimbalVersion(QStringLiteral("v2.0"));
+        m_notifications = std::make_unique<NotificationModel>();
+        m_localization = std::make_unique<Localization>();
+        auto fake = std::make_unique<FakeProvider>();
+        m_fake = fake.get();
+        m_session = std::make_unique<DeviceSession>(std::move(fake));
+        m_session->setTarget(loopbackTarget());
+        m_connection = std::make_unique<ServiceConnection>(m_session.get());
+        m_mainControl = std::make_unique<MainControlViewModel>(m_session.get(), m_connection.get());
+        auto imageFake = std::make_unique<FakeProvider>();
+        m_imageFake = imageFake.get();
+        m_imageSession = std::make_unique<DeviceSession>(std::move(imageFake));
+        m_imageSession->setTarget(loopbackTarget());
+        m_imageConnection = std::make_unique<ServiceConnection>(m_imageSession.get());
+        m_image = std::make_unique<ImageViewModel>(m_imageSession.get(), m_imageConnection.get());
+        // The application's own service wiring (AppRunner), not a copy of it.
+        connectServices(*m_settings, *m_notifications, *m_localization);
+        connectDeviceService(*m_notifications, *m_localization, *m_session, *m_connection,
+                             QString::fromLatin1(kMainControlService));
+        connectDeviceService(*m_notifications, *m_localization, *m_imageSession, *m_imageConnection,
+                             QString::fromLatin1(kIdsImageService));
+    }
+
+    void qmlEngineAvailable(QQmlEngine *engine)
+    {
+        for (QObject *o : std::initializer_list<QObject *>{m_settings.get(), m_notifications.get(),
+                                                           m_localization.get(), m_connection.get(),
+                                                           m_mainControl.get(), m_imageConnection.get(), m_image.get(), this})
+            QJSEngine::setObjectOwnership(o, QJSEngine::CppOwnership);
+        QQmlContext *context = engine->rootContext();
+        context->setContextProperty(QStringLiteral("testSettings"), m_settings.get());
+        context->setContextProperty(QStringLiteral("testNotifications"), m_notifications.get());
+        context->setContextProperty(QStringLiteral("testLocalization"), m_localization.get());
+        context->setContextProperty(QStringLiteral("testMainControl"), m_mainControl.get());
+        context->setContextProperty(QStringLiteral("testImageViewModel"), m_image.get());
+        context->setContextProperty(QStringLiteral("testHelper"), this);
+        QObject::connect(m_localization.get(), &Localization::languageChanged, engine, &QQmlEngine::retranslate);
+    }
+
+private:
+    QTemporaryDir m_dir;
+    std::unique_ptr<AppSettings> m_settings;
+    std::unique_ptr<NotificationModel> m_notifications;
+    std::unique_ptr<Localization> m_localization;
+    FakeProvider *m_fake = nullptr; // owned by m_session
+    std::unique_ptr<DeviceSession> m_session;
+    std::unique_ptr<ServiceConnection> m_connection;
+    std::unique_ptr<MainControlViewModel> m_mainControl;
+    FakeProvider *m_imageFake = nullptr; // owned by m_imageSession
+    std::unique_ptr<DeviceSession> m_imageSession;
+    std::unique_ptr<ServiceConnection> m_imageConnection;
+    std::unique_ptr<ImageViewModel> m_image;
+};
+
+QUICK_TEST_MAIN_WITH_SETUP(ids_gimbal_qml, Setup)
+#include "tst_qml.moc"
