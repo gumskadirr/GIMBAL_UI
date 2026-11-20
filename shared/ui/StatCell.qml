@@ -15,18 +15,29 @@ Item {
     property string note: ""
     property bool monoValue: false
     property bool showDivider: true
+    property int share: 1               // fixed share of the strip's width, so changing values never move cells
+    property string valueSample: ""     // the widest value expected: the value keeps this width (no jumping text)
     property alias leading: leadingRow.data
     property alias trailing: trailingRow.data
 
-    Layout.fillWidth: true
-    // Share the strip by content (the design's fixed 200 px overflowed the angle cells below 1920 px).
-    Layout.preferredWidth: implicitWidth
+    // Width = strip × share / Σ shares, never the text: a width that followed the content moved the cells with
+    // every sample (the layout's own sharing equalises cells instead of keeping proportions).
+    readonly property real _shareSum: parent ? Array.from(parent.children).reduce((sum, c) => sum + (c.share ?? 0), 0) : 0
+    Layout.preferredWidth: _shareSum > 0 ? parent.width * share / _shareSum : 0
+    Layout.minimumWidth: Layout.preferredWidth
+    Layout.maximumWidth: Layout.preferredWidth
     // shortcut: below ~1100 px the five-cell strip does not fit and cells are clipped; a wrapping
     // layout for narrow windows belongs to the later visual pass.
     clip: true
     Layout.fillHeight: true
     implicitWidth: row.implicitWidth + 32
     implicitHeight: Math.max(52, row.implicitHeight + 20)
+
+    TextMetrics {
+        id: sampleMetrics
+        text: root.valueSample
+        font: valueText.font
+    }
 
     RowLayout {
         id: row
@@ -60,6 +71,7 @@ Item {
                 }
                 Text {
                     id: valueText
+                    width: Math.max(implicitWidth, sampleMetrics.advanceWidth)
                     text: root.value
                     font.family: root.monoValue ? Theme.fontMono : Theme.fontSans
                     font.pixelSize: 14

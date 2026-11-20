@@ -70,6 +70,20 @@ TestCase {
         compare(cell(page, "tilt").note, "REF -8.200° · -0.1431 rad")
     }
 
+    // The strip's cells keep their place while values change (they followed their text and moved every sample).
+    function test_stripCellsDoNotMove() {
+        const page = createTemporaryObject(pageComponent, testCase)
+        const ids = ["safeControl", "temperature", "supply", "pan", "tilt"]
+        const geometry = () => ids.map(id => Math.round(cell(page, id).x) + ":" + Math.round(cell(page, id).width)).join(" ")
+        waitForRendering(page)
+        const empty = geometry()
+        testHelper.connectWithFullSample()
+        waitForRendering(page)
+        compare(geometry(), empty)
+        fuzzyCompare(cell(page, "pan").width / cell(page, "supply").width, 2, 0.02) // shares 4 : 2
+        fuzzyCompare(cell(page, "temperature").width / cell(page, "supply").width, 1.5, 0.02) // shares 3 : 2
+    }
+
     // No command may reach the device before the protocol is integrated (architecture §7).
     function test_commandsDisabledWithoutProtocol() {
         const page = createTemporaryObject(pageComponent, testCase)

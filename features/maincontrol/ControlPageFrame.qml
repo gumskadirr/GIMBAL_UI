@@ -52,6 +52,7 @@ Item {
 
                 StatCell {
                     objectName: "cell-safeControl"
+                    share: 2
                     label: qsTr("Safe control")
                     value: !page.viewModel.safeControl.valid ? "—"
                          : page.viewModel.safeControl.value ? qsTr("Locked") : qsTr("Unlocked")
@@ -60,17 +61,21 @@ Item {
                 }
                 StatCell {
                     objectName: "cell-temperature"
+                    share: 3
                     label: qsTr("Gimbal / IMU temp.")
                     value: page.celsius(page.viewModel.gimbalTemp)
                     secondary: page.viewModel.imuTemp.valid ? qsTr("IMU %1").arg(page.celsius(page.viewModel.imuTemp)) : ""
                 }
                 StatCell {
                     objectName: "cell-supply"
+                    share: 2
                     label: qsTr("Supply voltage")
                     value: page.viewModel.supplyVoltage.valid ? NumberFormat.fixed(page.viewModel.supplyVoltage.value, 1) + " V" : "—"
                 }
                 StatCell {
                     objectName: "cell-pan"
+                    share: 4
+                    valueSample: NumberFormat.fixed(-180, 3) + "°" // the widest angle
                     label: qsTr("Pan angle")
                     value: page.degrees(page.viewModel.pan)
                     monoValue: true
@@ -85,6 +90,8 @@ Item {
                 }
                 StatCell {
                     objectName: "cell-tilt"
+                    share: 4
+                    valueSample: NumberFormat.fixed(-180, 3) + "°" // the widest angle
                     label: qsTr("Tilt angle")
                     value: page.degrees(page.viewModel.tilt)
                     monoValue: true
