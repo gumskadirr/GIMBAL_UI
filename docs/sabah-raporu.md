@@ -1,3 +1,5 @@
+> **Tarihî kayıt (19 Kasım 2026).** Güncel durum ve kalan işler: [`devir.md`](devir.md). Doğrulama betiği artık `tools/verify.sh`.
+
 # Sabah raporu — plan.md yürütmesi (19 Kasım 2026)
 
 ## Özet

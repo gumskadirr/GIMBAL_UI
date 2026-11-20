@@ -1,3 +1,5 @@
+> **Tarihî kayıt (18 Kasım 2026).** Buradaki eksiklerin çoğu sonradan kapatıldı. Güncel durum: [`devir.md`](devir.md).
+
 # İnceleme — 18 Kasım 2026
 
 Kapsam: `main` (98b1ae3), Mimari v1.1, 11–18 Kasım kararları, `taslak/` tasarımı (10 ekran).

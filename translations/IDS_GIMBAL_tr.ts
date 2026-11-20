@@ -298,67 +298,67 @@
         <translation>REF %1 · %2</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="55"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="56"/>
         <source>Safe control</source>
         <translation>Güvenli kontrol</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="57"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="58"/>
         <source>Locked</source>
         <translation>Kilitli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="57"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="58"/>
         <source>Unlocked</source>
         <translation>Kilitli değil</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="63"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="65"/>
         <source>Gimbal / IMU temp.</source>
         <translation>Gimbal / IMU sıc.</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="65"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="67"/>
         <source>IMU %1</source>
         <translation>IMU %1</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="69"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="72"/>
         <source>Supply voltage</source>
         <translation>Besleme gerilimi</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="74"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="79"/>
         <source>Pan angle</source>
         <translation>Pan açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="88"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="95"/>
         <source>Tilt angle</source>
         <translation>Tilt açısı</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="111"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="118"/>
         <source>Gimbal</source>
         <translation>Gimbal</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="112"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="119"/>
         <source>3D model, follows live pan and tilt</source>
         <translation>Canlı pan ve tilt açısını izleyen 3B model</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="120"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="127"/>
         <source>3D gimbal model</source>
         <translation>3B gimbal modeli</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="121"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="128"/>
         <source>No 3D model for this gimbal yet</source>
         <translation>Bu gimbalin henüz 3B modeli yok</translation>
     </message>
     <message>
-        <location filename="../features/maincontrol/ControlPageFrame.qml" line="122"/>
+        <location filename="../features/maincontrol/ControlPageFrame.qml" line="129"/>
         <source>The 3D view needs a 3D graphics driver</source>
         <translation>3B görünüm için 3B grafik sürücüsü gerekir</translation>
     </message>

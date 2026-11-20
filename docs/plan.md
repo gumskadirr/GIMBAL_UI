@@ -1,3 +1,5 @@
+> **Tarihî kayıt.** Bu plan 19 Kasım 2026'da tamamlandı. Güncel durum: [`devir.md`](devir.md).
+
 # Plan — frontend'in protokolden bağımsız tamamlanması (18 Kasım 2026)
 
 Dayanak: `docs/inceleme.md`, Mimari v1.1, kullanıcı kararları. Kararlar `docs/kararlar.md`'ye yazılır.
