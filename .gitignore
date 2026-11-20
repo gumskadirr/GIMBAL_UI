@@ -1,0 +1,6 @@
+# Build output and IDE state
+build/
+Generated/
+.qtcreator/
+*.user
+*.user.*
